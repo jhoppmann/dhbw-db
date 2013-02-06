@@ -1,4 +1,4 @@
-package com.dhbw_db;
+package com.dhbw_db.control;
 
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.Button;
@@ -17,6 +17,7 @@ public class MainUI extends UI {
 
 	@Override
 	protected void init(VaadinRequest request) {
+		// TODO remove all code that is considered view rather than control
 		final VerticalLayout layout = new VerticalLayout();
 		layout.setMargin(true);
 		setContent(layout);
