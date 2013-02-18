@@ -1,0 +1,26 @@
+- Startseite
+	- Startseite Admin
+	- Startseite Student
+		- Info ueber noch verfuegbare Laptops
+	- Startseite Dozent
+		- Info ueber offene Antraege
+
+- Neuen Antrag stellen
+	- Fuer sofort, oder spaetere Reservierung
+
+- Antragsstatus
+	- Status Admin (reine Einsicht)
+	- Status Student (Antrag zurueckziehen, wenn noch nicht freigegeben)
+	- Status Dozent (wenn offen, freigeben oder ablehnen)
+	- Moegliche Stati: Abgelaufen, laufend, oder zukuenftig (noch nicht freigegeben oder Reservierung)
+
+- Antragsuebersicht
+	- alle fuer den aktuellen Nutzer einsehbaren Antraege
+
+- Post-Button-Page
+	- Erfolgsmeldung oder Info ueber technische Probleme
+
+- Adminbereich
+	- Defekte Notebooks
+	- Neue Notebooks hinzufuegen
+	- Antraege abbrechen
