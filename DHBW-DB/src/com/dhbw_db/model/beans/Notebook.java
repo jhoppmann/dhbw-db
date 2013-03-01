@@ -10,13 +10,13 @@ package com.dhbw_db.model.beans;
  */
 public class Notebook {
 
-	int iD;
+	private int iD;
 
-	String name;
+	private String name;
 
-	boolean isDefective;
+	private boolean isDefective;
 
-	boolean isAvailable;
+	private boolean isAvailable;
 
 	/**
 	 * @return the iD
