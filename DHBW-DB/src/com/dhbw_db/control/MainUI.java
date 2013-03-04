@@ -15,6 +15,8 @@ import com.vaadin.ui.VerticalLayout;
 @SuppressWarnings("serial")
 public class MainUI extends UI {
 
+	private MainController mc;
+
 	@Override
 	protected void init(VaadinRequest request) {
 		// TODO remove all code that is considered view rather than control
@@ -29,6 +31,12 @@ public class MainUI extends UI {
 			}
 		});
 		layout.addComponent(button);
+
+		mc = new MainController(this);
+	}
+
+	public MainController getController() {
+		return mc;
 	}
 
 }
