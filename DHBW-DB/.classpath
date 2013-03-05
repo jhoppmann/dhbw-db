@@ -10,6 +10,7 @@
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="lib" path="lib/vaadin-client-7.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/vaadin-client-compiler-7.0.0.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/mysql-connector-java-5.1.23-bin.jar"/>
 	<classpathentry kind="src" path="resources"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

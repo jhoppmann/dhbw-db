@@ -132,6 +132,8 @@ public class DataAccess {
 						.append("/")
 						.append(connectionInfo.get("database.database"));
 
+		
+		// TODO Check this
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
