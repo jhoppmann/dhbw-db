@@ -53,6 +53,8 @@ public class Request {
 
 	private String hash;
 
+	private int os;
+
 	/**
 	 * The possible statuses the request can have
 	 * 
@@ -112,6 +114,38 @@ public class Request {
 
 		generateHash();
 		setStatus(Status.OPEN);
+	}
+
+	/**
+	 * @param currentState
+	 * @param status
+	 * @param id
+	 * @param requesterId
+	 * @param approverId
+	 * @param notebookId
+	 * @param created
+	 * @param start
+	 * @param end
+	 * @param until
+	 * @param hash
+	 * @param os
+	 */
+	public Request(RequestState currentState, Status status, int id,
+			int requesterId, int approverId, int notebookId, Date created,
+			Date start, Date end, Date until, String hash, int os) {
+		super();
+		this.currentState = currentState;
+		this.status = status;
+		this.id = id;
+		this.requesterId = requesterId;
+		this.approverId = approverId;
+		this.notebookId = notebookId;
+		this.created = created;
+		this.start = start;
+		this.end = end;
+		this.until = until;
+		this.hash = hash;
+		this.os = os;
 	}
 
 	/**
@@ -377,5 +411,19 @@ public class Request {
 			((MainUI) (MainUI.getCurrent())).getController()
 											.printError(nae.getMessage());
 		}
+	}
+
+	/**
+	 * @return the operatingSystem
+	 */
+	public int getOs() {
+		return os;
+	}
+
+	/**
+	 * @param operatingSystem the operatingSystem to set
+	 */
+	public void setOs(int os) {
+		this.os = os;
 	}
 }
