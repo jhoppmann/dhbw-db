@@ -8,8 +8,11 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Properties;
 
+import com.dhbw_db.model.request.Request;
 import com.dhbw_db.model.settings.Settings;
 
 /**
@@ -132,7 +135,6 @@ public class DataAccess {
 						.append("/")
 						.append(connectionInfo.get("database.database"));
 
-		
 		// TODO Check this
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -374,4 +376,183 @@ public class DataAccess {
 		boolean exists = tables.next();
 		return exists;
 	}
+
+	/*
+	 * Methods which fetch data from the Database
+	 */
+
+	/**
+	 * Gets a request by its id from the database
+	 * 
+	 * @param id The id of the request
+	 * @return Request the corresponding request
+	 */
+
+	public Request getRequestByID(int id) {
+		String selectString = "SELECT RequesterID, ApproverID, NotebookID, Hash, CreationDate, StartDate, EndDate, StatusID, OSID FROM "
+				+ connectionInfo.getProperty("database.database")
+				+ "."
+				+ Table.PROCESS.toString() + " WHERE ID = " + id;
+
+		Request request = null;
+		Statement statement = null;
+
+		try {
+			statement = connection.createStatement();
+			ResultSet rs = statement.executeQuery(selectString);
+
+			if (rs.next()) {
+
+				int rID = rs.getInt("RequesterID");
+				int aID = rs.getInt("ApproverID");
+				int nID = rs.getInt("NotebookID");
+				Date startDate = new Date(rs.getTimestamp("StartDate")
+											.getTime());
+				Date endDate = new Date(rs.getTimestamp("EndDate")
+											.getTime());
+
+				request = new Request(	rID,
+										aID,
+										nID,
+										endDate,
+										startDate);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return request;
+
+	}
+
+	/**
+	 * Gets a request by its hash from the database
+	 * 
+	 * @param id The id of the request
+	 * @return Request the corresponding request
+	 */
+
+	public Request getRequestByHash(String hash) {
+		String selectString = "SELECT ID, RequesterID, ApproverID, NotebookID, Hash, CreationDate, StartDate, EndDate, StatusID, OSID FROM "
+				+ connectionInfo.getProperty("database.database")
+				+ "."
+				+ Table.PROCESS.toString() + " WHERE Hash = " + hash;
+
+		Request request = null;
+		Statement statement = null;
+
+		try {
+			statement = connection.createStatement();
+			ResultSet rs = statement.executeQuery(selectString);
+
+			if (rs.next()) {
+
+				int ID = rs.getInt("ID");
+				int rID = rs.getInt("RequesterID");
+				int aID = rs.getInt("ApproverID");
+				int nID = rs.getInt("NotebookID");
+				Date startDate = new Date(rs.getTimestamp("StartDate")
+											.getTime());
+				Date endDate = new Date(rs.getTimestamp("EndDate")
+											.getTime());
+
+				request = new Request(	rID,
+										aID,
+										nID,
+										endDate,
+										startDate);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return request;
+
+	}
+
+	/**
+	 * 
+	 * Updates a request in the database
+	 * 
+	 * @param Request the request to be updated
+	 */
+
+	public void updateRequest(Request request) {
+		String updateString = "UPDATE "
+				+ connectionInfo.getProperty("database.database") + "."
+				+ Table.PROCESS.toString() + " SET RequesterID = "
+				+ request.getRequesterId() + " , ApproverID = "
+				+ request.getApproverId() + " , NotebookID = "
+				+ request.getNotebookId() + " , Hash = " + request.getHash()
+				+ " , StartDate = " + new Timestamp(request.getStart()
+															.getTime())
+				+ " , EndDate = " + new Timestamp(request.getEnd()
+															.getTime())
+				+ " , StatusID = " + request.getStatus()
+											.getId() + " WHERE ID = "
+				+ request.getId();
+
+		Statement statement = null;
+
+		try {
+			statement = connection.createStatement();
+			statement.executeQuery(updateString);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	/**
+	 * 
+	 * Inserts a request in the database
+	 * 
+	 * @param Request the request to be updated
+	 */
+
+	public void insertRequest(Request request) {
+		String insertString = "INSERT INTO "
+				+ connectionInfo.getProperty("database.database")
+				+ "."
+				+ Table.PROCESS.toString()
+				+ " (RequesterID, ApproverID, NotebookID, Hash, CreationDate, StartDate, EndDate, StatusID) VALUES ("
+				+ request.getRequesterId() + " , " + request.getApproverId()
+				+ " , " + request.getNotebookId() + " , " + request.getHash()
+				+ " , " + new Timestamp(request.getCreated()
+												.getTime()) + " , "
+				+ new Timestamp(request.getStart()
+										.getTime()) + " , "
+				+ new Timestamp(request.getEnd()
+										.getTime()) + " , "
+				+ request.getStatus()
+							.getId() + ")";
+
+		Statement statement = null;
+
+		try {
+			statement = connection.createStatement();
+			statement.executeQuery(insertString);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void testSomeMethods() {
+
+		Request requestOne = getRequestByID(1);
+		System.out.println("Request1 before update: " + requestOne.getId()
+				+ " " + requestOne.getOs());
+
+		requestOne.setOs(5);
+		updateRequest(requestOne);
+		requestOne = getRequestByID(1);
+		System.out.println("Request1 after update: " + requestOne.getId() + " "
+				+ requestOne.getOs());
+
+	}
+
 }
