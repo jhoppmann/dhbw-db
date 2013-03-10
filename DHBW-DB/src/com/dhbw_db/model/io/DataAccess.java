@@ -12,6 +12,8 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Properties;
 
+import com.dhbw_db.model.io.logging.LoggingService;
+import com.dhbw_db.model.io.logging.LoggingService.LogLevel;
 import com.dhbw_db.model.request.Request;
 import com.dhbw_db.model.settings.Settings;
 
@@ -25,6 +27,8 @@ public class DataAccess {
 	private Properties connectionInfo;
 
 	private Connection connection;
+
+	private LoggingService log;
 
 	/**
 	 * The Table enumeration holds an entry for every table used in the project
@@ -57,6 +61,7 @@ public class DataAccess {
 	public DataAccess() {
 		connectionInfo = Settings.getInstance()
 									.getAll();
+		log = LoggingService.getInstance();
 	}
 
 	/**
@@ -93,7 +98,7 @@ public class DataAccess {
 			this.setupProcessTable();
 		}
 
-		System.out.println("createTables method executed");
+		log.log("createTables method executed", LogLevel.INFO);
 
 	}
 

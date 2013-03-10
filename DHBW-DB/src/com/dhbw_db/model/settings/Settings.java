@@ -62,6 +62,17 @@ public class Settings {
 	}
 
 	/**
+	 * isDebugMode checks whether the debugMode property has a value of true
+	 * 
+	 * @return <tt>true</tt> if the debugMode property in the settings has a
+	 *         value of true, <tt>false</tt> otherwise.
+	 */
+	public boolean isDebugMode() {
+		return (prop.getProperty("debugMode") != null && prop.getProperty("debugMode")
+																.equals("true"));
+	}
+
+	/**
 	 * getAll() returns a copy of the full map to keep the original immutable
 	 * 
 	 * @return The whole map of properties read in previously

@@ -7,7 +7,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 
 import com.dhbw_db.model.execution.Executor;
-import com.vaadin.ui.UI;
+import com.dhbw_db.view.ApplicationWindow;
+import com.vaadin.ui.Component;
 
 /**
  * The MainController is responsible for the most common tasks, and those that
@@ -18,12 +19,12 @@ import com.vaadin.ui.UI;
  * @since 0.1
  */
 public class MainController {
-	private UI application;
+	private ApplicationWindow view;
 
 	private Executor executor;
 
-	public MainController(UI application) {
-		this.application = application;
+	public MainController(ApplicationWindow view) {
+		this.view = view;
 		executor = new Executor(2);
 	}
 
@@ -56,6 +57,10 @@ public class MainController {
 	 */
 	public FutureTask<String> execute(Callable<String> call) {
 		return executor.addTask(call);
+	}
+
+	public void changeView(Component c) {
+		view.replaceView(c);
 	}
 
 }

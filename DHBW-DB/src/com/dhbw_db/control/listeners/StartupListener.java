@@ -7,6 +7,9 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import com.dhbw_db.model.io.DataAccess;
+import com.dhbw_db.model.io.logging.ConsoleLogger;
+import com.dhbw_db.model.io.logging.LoggingService;
+import com.dhbw_db.model.io.logging.LoggingService.LogLevel;
 import com.dhbw_db.model.settings.Settings;
 
 /**
@@ -30,13 +33,18 @@ public class StartupListener implements ServletContextListener {
 		// initialize the settings singleton
 		Settings.initializeInstance(config);
 
+		// set up the loggers
+		LoggingService.getInstance()
+						.registerLogger(new ConsoleLogger());
+		LoggingService log = LoggingService.getInstance();
+
 		// initialize the database
 		DataAccess db = new DataAccess();
 		try {
 			db.intializeDatabase();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// TODO think of a way to log a stacktrace
+			log.log(e.getMessage(), LogLevel.ERROR);
 		}
 
 	}
