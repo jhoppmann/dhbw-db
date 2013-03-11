@@ -25,13 +25,13 @@ public class EmailSessionBean {
 
 	private String host = "mail.gmx.net";
 
-	private String from = "moritz.walliser@gmx.de";
+	private String from = "dhbw.notebook-verleih@gmx.de";
 
 	private boolean auth = true;
 
-	private String username = "moritz.walliser@gmx.de";
+	private String username = "dhbw.notebook-verleih@gmx.de";
 
-	private String password = "kfgnm2655";
+	private String password = "o2,f=+34bK.Ea";
 
 	private Protocol protocol = Protocol.SMTPS;
 
