@@ -3,6 +3,8 @@
  */
 package com.dhbw_db.view;
 
+import com.dhbw_db.control.MainUI;
+import com.dhbw_db.model.beans.User;
 import com.vaadin.ui.MenuBar;
 
 /**
@@ -20,19 +22,28 @@ public class NavigationBar extends MenuBar {
 		// build the request items
 		// TODO Add authentication check
 
+		User u = ((MainUI) (MainUI.getCurrent())).getController()
+													.getUser();
+
 		addItem("Start", null);
 
-		addItem("New Request", null);
+		if (u.isStudent())
+			addItem("New Request", null);
 
-		addItem("My Requests", null);
+		if (u.isStudent())
+			addItem("My Requests", null);
 
-		addItem("Approve Requests", null);
+		if (u.isLecturer())
+			addItem("Approve Requests", null);
 
-		addItem("Running Requests", null);
+		if (u.isAdmin())
+			addItem("Running Requests", null);
 
-		addItem("Notebook Statuses", null);
+		if (u.isAdmin())
+			addItem("Notebook Statuses", null);
 
-		addItem("Admin Area", null);
+		if (u.isAdmin())
+			addItem("Admin Area", null);
 
 	}
 
