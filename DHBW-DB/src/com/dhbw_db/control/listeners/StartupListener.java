@@ -34,9 +34,8 @@ public class StartupListener implements ServletContextListener {
 		Settings.initializeInstance(config);
 
 		// set up the loggers
-		LoggingService.getInstance()
-						.registerLogger(new ConsoleLogger());
 		LoggingService log = LoggingService.getInstance();
+		log.registerLogger(new ConsoleLogger());
 
 		// initialize the database
 		DataAccess db = new DataAccess();

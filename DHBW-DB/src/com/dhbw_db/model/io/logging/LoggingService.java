@@ -80,8 +80,9 @@ public class LoggingService {
 	/**
 	 * Removes a specific type of <tt>Logger</tt> from the service.
 	 * 
-	 * @param logger The Logger to be removed, specifically a Logger of the same
-	 *            concrete class as the registered Logger object.
+	 * @param logger The Logger to be removed, specifically a Logger <tt>l</tt>
+	 *            of the same concrete class as the registered Logger rl where
+	 *            l.equals(rl).
 	 */
 	public void removeLogger(Logger logger) {
 		loggers.remove(logger);

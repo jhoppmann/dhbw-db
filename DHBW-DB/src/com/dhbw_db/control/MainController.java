@@ -6,7 +6,10 @@ package com.dhbw_db.control;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 
+import com.dhbw_db.model.authentication.Authenticator;
+import com.dhbw_db.model.beans.User;
 import com.dhbw_db.model.execution.Executor;
+import com.dhbw_db.model.io.logging.LoggingService;
 import com.dhbw_db.view.ApplicationWindow;
 import com.vaadin.ui.Component;
 
@@ -23,9 +26,15 @@ public class MainController {
 
 	private Executor executor;
 
+	private User user;
+
+	LoggingService log;
+
 	public MainController(ApplicationWindow view) {
 		this.view = view;
 		executor = new Executor(2);
+
+		log = LoggingService.getInstance();
 	}
 
 	/**
@@ -59,8 +68,38 @@ public class MainController {
 		return executor.addTask(call);
 	}
 
+	/**
+	 * Replaces the current view in the main space with another one.
+	 * 
+	 * @param c The view to which to switch.
+	 */
 	public void changeView(Component c) {
 		view.replaceView(c);
+	}
+
+	/**
+	 * Returns the current user object.
+	 * 
+	 * @return The current user, or <tt>null</tt> if none is logged in.
+	 */
+	public User getUser() {
+		return this.user;
+	}
+
+	/**
+	 * @param value
+	 * @param value2
+	 */
+	public void authenticate(String username, String password) {
+		this.user = Authenticator.authenticate(username, password);
+		((MainUI) (MainUI.getCurrent())).repaint();
+	}
+
+	/**
+	 * @param view2
+	 */
+	public void setWindow(ApplicationWindow view) {
+		this.view = view;
 	}
 
 }
