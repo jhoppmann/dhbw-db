@@ -1,3 +1,6 @@
+/**
+ * EmailSessionBean.java Created by mwalliser on Mar 11, 2013
+ */
 package com.dhbw_db.model.mail;
 
 import java.util.Date;
@@ -15,11 +18,21 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 /**
- * Session Bean implementation class EmailSessionBean
+ * EmailSessionBean is responsible for e-mail distribution
+ * 
+ * @author mwalliser
+ * @version 0.1
+ * @since
  */
+
 @Stateless
 @LocalBean
 public class EmailSessionBean {
+
+	/**
+	 * e-mails are distributed via dhbw.notebook-verleih@gmx.de pw:
+	 * o2,f=+34bK.Ea
+	 */
 
 	private int port = 465;
 
@@ -36,6 +49,13 @@ public class EmailSessionBean {
 	private Protocol protocol = Protocol.SMTPS;
 
 	private boolean debug = true;
+
+	/**
+	 * 
+	 * @param to Specifies the target e-mail adress
+	 * @param subject Specifies the subject of the e-mail message
+	 * @param body Specifies the body of the e-mail message
+	 */
 
 	@SuppressWarnings("incomplete-switch")
 	public void sendEmail(String to, String subject, String body) {
@@ -76,6 +96,7 @@ public class EmailSessionBean {
 			message.setSubject(subject);
 			message.setSentDate(new Date());
 			message.setText(body);
+
 			Transport.send(message);
 		} catch (MessagingException ex) {
 			ex.printStackTrace();
