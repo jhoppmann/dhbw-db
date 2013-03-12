@@ -1,5 +1,7 @@
 package com.dhbw_db.control;
 
+import com.dhbw_db.model.io.logging.FileLogger;
+import com.dhbw_db.model.io.logging.LoggingService;
 import com.dhbw_db.view.ApplicationWindow;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.UI;
@@ -16,15 +18,22 @@ public class MainUI extends UI {
 
 	@Override
 	protected void init(VaadinRequest request) {
-		ApplicationWindow view = new ApplicationWindow();
-		view.setSizeFull();
-		setContent(view);
 
-		mc = new MainController(view);
+		mc = new MainController(null);
+		repaint();
+		LoggingService.getInstance()
+						.registerLogger(new FileLogger());
 	}
 
 	public MainController getController() {
 		return mc;
+	}
+
+	public void repaint() {
+		ApplicationWindow view = null;
+		mc.setWindow(view);
+		view = new ApplicationWindow();
+		setContent(view);
 	}
 
 }
