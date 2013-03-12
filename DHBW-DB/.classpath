@@ -12,10 +12,5 @@
 	<classpathentry kind="lib" path="lib/vaadin-client-compiler-7.0.0.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/mysql-connector-java-5.1.23-bin.jar"/>
 	<classpathentry kind="src" path="resources"/>
-	<classpathentry kind="lib" path="C:/PRG MORITZ WALLISER/glassfish3/glassfish/glassfish3/glassfish/modules/javax.ejb.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="file:/C:/PRG MORITZ WALLISER/Eclipse/eclipse juno/plugins/oracle.eclipse.tools.doc.javaee6_1.0.0.201106220649/javaee6doc/doc/"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
