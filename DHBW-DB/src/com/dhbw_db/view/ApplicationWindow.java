@@ -35,6 +35,7 @@ public class ApplicationWindow extends Panel {
 			LoginWindow login = new LoginWindow();
 			MainUI.getCurrent()
 					.addWindow(login);
+			login.focus();
 
 		} else {
 

@@ -63,6 +63,5 @@ public class LoginWindow extends Window {
 		vlo.setComponentAlignment(submit, Alignment.MIDDLE_CENTER);
 
 		super.setContent(vlo);
-		super.focus();
 	}
 }
