@@ -3,8 +3,10 @@
  */
 package com.dhbw_db.view;
 
+import com.dhbw_db.control.MainController;
 import com.dhbw_db.control.MainUI;
 import com.dhbw_db.model.beans.User;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.MenuBar;
 
 /**
@@ -16,16 +18,27 @@ public class NavigationBar extends MenuBar {
 
 	private static final long serialVersionUID = 4549157689158759031L;
 
+	private MainController mc;
+
 	public NavigationBar() {
 		this.setWidth("100%");
 
 		// build the request items
 		// TODO Add authentication check
 
-		User u = ((MainUI) (MainUI.getCurrent())).getController()
-													.getUser();
+		mc = ((MainUI) (MainUI.getCurrent())).getController();
 
-		addItem("Start", null);
+		User u = mc.getUser();
+
+		// perhaps remodel to use enums?
+		// always keeping an object of each view is not that good
+
+		if (u.isAdmin())
+			addItem("Start", new ViewChangeCommand(new AdminStartPage()));
+		else if (u.isLecturer())
+			addItem("Start", new ViewChangeCommand(new LecturerStartPage()));
+		else
+			addItem("Start", new ViewChangeCommand(new StudentStartPage()));
 
 		if (u.isStudent())
 			addItem("New Request", null);
@@ -44,6 +57,24 @@ public class NavigationBar extends MenuBar {
 
 		if (u.isAdmin())
 			addItem("Admin Area", null);
+
+	}
+
+	private class ViewChangeCommand implements MenuBar.Command {
+
+		private static final long serialVersionUID = -4984530031416204071L;
+
+		Component c;
+
+		public ViewChangeCommand(Component c) {
+			this.c = c;
+		}
+
+		@Override
+		public void menuSelected(MenuItem selectedItem) {
+			NavigationBar.this.mc.changeView(c);
+
+		}
 
 	}
 
