@@ -4,8 +4,10 @@
 package com.dhbw_db.view;
 
 import com.dhbw_db.control.MainUI;
+import com.dhbw_db.model.beans.User;
 import com.dhbw_db.view.login.LoginWindow;
 import com.vaadin.server.ClassResource;
+import com.vaadin.ui.AbsoluteLayout;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
@@ -38,8 +40,10 @@ public class ApplicationWindow extends Panel {
 			login.focus();
 
 		} else {
-
+			setSizeFull();
 			VerticalLayout vlo = new VerticalLayout();
+			// vlo.setSizeFull();
+			setContent(vlo);
 
 			// build the top panel
 			topPanel = new Panel();
@@ -58,21 +62,34 @@ public class ApplicationWindow extends Panel {
 			menu = new NavigationBar();
 
 			// create the main application space
-			applicationSpace = new Panel(new StudentStartPage());
-			applicationSpace.setSizeFull();
+			applicationSpace = new Panel();
+			applicationSpace.setWidth("100%");
+			applicationSpace.setHeight("700px");
+
+			AbsoluteLayout applicationSpaceLayout = new AbsoluteLayout();
+			User u = ((MainUI) (MainUI.getCurrent())).getController()
+														.getUser();
+			if (u.isAdmin())
+				applicationSpaceLayout.addComponent(new AdminStartPage());
+			else if (u.isLecturer())
+				applicationSpaceLayout.addComponent(new LecturerStartPage());
+			else
+				applicationSpaceLayout.addComponent(new StudentStartPage());
+
+			applicationSpace.setContent(applicationSpaceLayout);
 
 			// add all components to the layout
 			vlo.addComponent(topPanel);
 			vlo.addComponent(menu);
 			vlo.addComponent(applicationSpace);
 
-			setContent(vlo);
-
 		}
 	}
 
 	public void replaceView(Component c) {
-		// applicationSpace.setContent(c);
+		AbsoluteLayout applicationSpaceLayout = new AbsoluteLayout();
+		applicationSpaceLayout.addComponent(c);
+		applicationSpace.setContent(applicationSpaceLayout);
 	}
 
 }
