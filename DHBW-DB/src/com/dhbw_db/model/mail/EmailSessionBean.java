@@ -20,6 +20,8 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import com.dhbw_db.model.request.Request;
+
 /**
  * EmailSessionBean is responsible for e-mail distribution
  * 
@@ -53,19 +55,45 @@ public class EmailSessionBean {
 
 	private boolean debug = true;
 
+	/*
+	 * public void sendMailRequestStudent(String to, String cc, String subject,
+	 * String student, String lecturer, String mtkNumber, String startDate,
+	 * String endDate, String os, String comment, String cancelLink) throws
+	 * MessagingException {
+	 * 
+	 * Multipart multipart = new MimeMultipart("message"); MimeBodyPart textPart
+	 * = new MimeBodyPart(); String textContent = "Hallo " + student + ",\n\n" +
+	 * "Sie haben einen Antrag zum Ausleihen eines Notebooks gestellt." +
+	 * "Ihrem zuständigen Dozenten " + lecturer +
+	 * " wurde der Antrag zur Bearbeitung zugeschickt." +
+	 * "Sie erhalten eine Nachricht, wenn der Antrag bearbeitet wurde.";
+	 * 
+	 * textPart.setText(textContent);
+	 * 
+	 * MimeBodyPart htmlPart = new MimeBodyPart(); String htmlContent =
+	 * "<html><h1>Ihre Antragsdaten:</h1><table border=\"0\">" +
+	 * "<tr><th>Name</th><th>Matrikelnummer</th><th>Zuständiger Dozent</th><th>Ausleihdatum</th><th>Rückgabedatum</th><th>Betriebssystem</th></tr>"
+	 * + "<tr><td>" + student + "</td><td>" + mtkNumber + "</td><td>" + lecturer
+	 * + "</td><td>" + startDate + "</td><td>" + endDate + "</td><td>" + os +
+	 * "</td></tr></table><br>" + "<p>Optionale Bemerkung: " + comment + "</p>"
+	 * + "<p>Zum Stornieren Ihres Antrags klicken Sie bitte hier: " +
+	 * "<a href=\"" + cancelLink + "\"LINK</a></html>";
+	 * 
+	 * htmlPart.setContent(htmlContent, "text/html");
+	 * 
+	 * multipart.addBodyPart(textPart); multipart.addBodyPart(htmlPart);
+	 * sendEmail(to, cc, subject, multipart); }
+	 */
 	public void sendMailRequestStudent(String to, String cc, String subject,
-			String student, String lecturer, String mtkNumber,
-			String startDate, String endDate, String os, String comment,
-			String cancelLink) throws MessagingException {
-
+			Request r) throws MessagingException {
 		Multipart multipart = new MimeMultipart("message");
 		MimeBodyPart textPart = new MimeBodyPart();
 		String textContent = "Hallo "
-				+ student
+				+ "r.getRequesterNameById()"
 				+ ",\n\n"
 				+ "Sie haben einen Antrag zum Ausleihen eines Notebooks gestellt."
 				+ "Ihrem zuständigen Dozenten "
-				+ lecturer
+				+ "r.getApproverNameById()"
 				+ " wurde der Antrag zur Bearbeitung zugeschickt."
 				+ "Sie erhalten eine Nachricht, wenn der Antrag bearbeitet wurde.";
 
@@ -75,23 +103,25 @@ public class EmailSessionBean {
 		String htmlContent = "<html><h1>Ihre Antragsdaten:</h1><table border=\"0\">"
 				+ "<tr><th>Name</th><th>Matrikelnummer</th><th>Zuständiger Dozent</th><th>Ausleihdatum</th><th>Rückgabedatum</th><th>Betriebssystem</th></tr>"
 				+ "<tr><td>"
-				+ student
+				+ "r.getRequesterById()"
 				+ "</td><td>"
-				+ mtkNumber
+				+ "r.getRequesterMatrNrById()"
 				+ "</td><td>"
-				+ lecturer
+				+ "r.getApproverNameById()"
 				+ "</td><td>"
-				+ startDate
+				+ r.getStart()
+					.toString()
 				+ "</td><td>"
-				+ endDate
+				+ r.getEnd()
+					.toString()
 				+ "</td><td>"
-				+ os
+				+ r.getOs()
 				+ "</td></tr></table><br>"
 				+ "<p>Optionale Bemerkung: "
-				+ comment
+				+ "r.getComment()"
 				+ "</p>"
 				+ "<p>Zum Stornieren Ihres Antrags klicken Sie bitte hier: "
-				+ "<a href=\"" + cancelLink + "\"LINK</a></html>";
+				+ "<a href=\"" + "cancelLink" + "\"LINK</a></html>";
 
 		htmlPart.setContent(htmlContent, "text/html");
 
@@ -101,13 +131,11 @@ public class EmailSessionBean {
 	}
 
 	public void sendMailRequestLecturer(String to, String cc, String subject,
-			String student, String lecturer, String mtkNumber,
-			String startDate, String endDate, String os, String comment,
-			String processLink) throws MessagingException {
-
+			Request r) throws MessagingException {
 		Multipart multipart = new MimeMultipart("message");
 		MimeBodyPart textPart = new MimeBodyPart();
-		String textContent = "Hallo " + lecturer + ",\n\n" + student
+		String textContent = "Hallo " + "r.getApproverNameById()" + ",\n\n"
+				+ "r.getRequesterNameById()"
 				+ " hat einen Antrag zum Ausleihen eines Notebooks gestellt.";
 
 		textPart.setText(textContent);
@@ -116,23 +144,25 @@ public class EmailSessionBean {
 		String htmlContent = "<html><h1>Antragsdaten:</h1><table border=\"0\">"
 				+ "<tr><th>Name</th><th>Matrikelnummer</th><th>Ausleihdatum</th><th>Rückgabedatum</th><th>Betriebssystem</th></tr>"
 				+ "<tr><td>"
-				+ student
+				+ "r.getRequesterNameById()"
 				+ "</td><td>"
-				+ mtkNumber
+				+ "r.getRequesterMatrNrId()"
 				+ "</td><td>"
-				+ lecturer
+				+ "r.getApproverNameById()"
 				+ "</td><td>"
-				+ startDate
+				+ r.getStart()
+					.toString()
 				+ "</td><td>"
-				+ endDate
+				+ r.getEnd()
+					.toString()
 				+ "</td><td>"
-				+ os
+				+ r.getOs()
 				+ "</td></tr></table><br>"
 				+ "<p>Optionale Bemerkung: "
-				+ comment
+				+ "r.getComment()"
 				+ "</p>"
 				+ "<p>Zum Genehmigen oder Ablehnen dieses Antrags klicken Sie bitte hier: "
-				+ "<a href=\"" + processLink + "\"LINK</a></html>";
+				+ "<a href=\"" + "processLink" + "\"LINK</a></html>";
 
 		htmlPart.setContent(htmlContent, "text/html");
 
@@ -142,19 +172,17 @@ public class EmailSessionBean {
 	}
 
 	public void sendMailRequestSuccess(String to, String cc, String subject,
-			String student, String lecturer, String mtkNumber,
-			String startDate, String endDate, String os, String comment,
-			String cancelLink) throws MessagingException {
-
+			Request r) throws MessagingException {
 		Multipart multipart = new MimeMultipart("message");
 		MimeBodyPart textPart = new MimeBodyPart();
 		String textContent = "Hallo "
-				+ student
+				+ "r.getRequesterNameById()"
 				+ ",\n\n"
 				+ "Sie haben einen Antrag zum Ausleihen eines Notebooks gestellt."
-				+ "Ihr zuständiger Dozent " + lecturer
+				+ "Ihr zuständiger Dozent " + "r.getApproverNameById()"
 				+ " hat den Antrag genehmigt." + "Sie können das Notebook am "
-				+ startDate + " zur Ausleihe abholen.";
+				+ r.getStart()
+					.toString() + " zur Ausleihe abholen.";
 
 		textPart.setText(textContent);
 
@@ -162,23 +190,25 @@ public class EmailSessionBean {
 		String htmlContent = "<html><h1>Ihre Antragsdaten:</h1><table border=\"0\">"
 				+ "<tr><th>Name</th><th>Matrikelnummer</th><th>Zuständiger Dozent</th><th>Ausleihdatum</th><th>Rückgabedatum</th><th>Betriebssystem</th></tr>"
 				+ "<tr><td>"
-				+ student
+				+ "r.getRequesterById()"
 				+ "</td><td>"
-				+ mtkNumber
+				+ "r.getRequesterMatrNrById()"
 				+ "</td><td>"
-				+ lecturer
+				+ "r.getApproverNameById()"
 				+ "</td><td>"
-				+ startDate
+				+ r.getStart()
+					.toString()
 				+ "</td><td>"
-				+ endDate
+				+ r.getEnd()
+					.toString()
 				+ "</td><td>"
-				+ os
+				+ r.getOs()
 				+ "</td></tr></table><br>"
 				+ "<p>Optionale Bemerkung: "
-				+ comment
+				+ "r.getComment()"
 				+ "</p>"
 				+ "<p>Zum Stornieren Ihres Antrags klicken Sie bitte hier: "
-				+ "<a href=\"" + cancelLink + "\"LINK</a></html>";
+				+ "<a href=\"" + "cancelLink" + "\"LINK</a></html>";
 
 		htmlPart.setContent(htmlContent, "text/html");
 
