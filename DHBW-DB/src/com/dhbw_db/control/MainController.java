@@ -9,6 +9,7 @@ import java.util.concurrent.FutureTask;
 import com.dhbw_db.model.authentication.Authenticator;
 import com.dhbw_db.model.beans.User;
 import com.dhbw_db.model.execution.Executor;
+import com.dhbw_db.model.io.DataAccess;
 import com.dhbw_db.model.io.logging.LoggingService;
 import com.dhbw_db.view.ApplicationWindow;
 import com.vaadin.ui.Component;
@@ -27,6 +28,8 @@ public class MainController {
 	private Executor executor;
 
 	private User user;
+
+	private DataAccess dataAccess;
 
 	LoggingService log;
 
@@ -100,6 +103,10 @@ public class MainController {
 	 */
 	public void setWindow(ApplicationWindow view) {
 		this.view = view;
+	}
+
+	public DataAccess getDataAccess() {
+		return this.dataAccess;
 	}
 
 }
