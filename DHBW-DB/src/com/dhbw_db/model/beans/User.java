@@ -5,8 +5,8 @@ package com.dhbw_db.model.beans;
 
 /**
  * @author Yannic Frank
- * @version 0.1
- * @since 0.1
+ * @version 0.2
+ * @since 0.2
  */
 public class User {
 
@@ -136,6 +136,11 @@ public class User {
 	 */
 	public void setLecturer(boolean isLecturer) {
 		this.isLecturer = isLecturer;
+	}
+
+	public String toString() {
+		return ID + " " + matrNr + " " + firstName + " " + lastName + " "
+				+ eMail + " " + isStudent + " " + isAdmin + " " + isLecturer;
 	}
 
 }
