@@ -3,6 +3,7 @@
  */
 package com.dhbw_db.model.mail;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 
@@ -20,6 +21,8 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import com.dhbw_db.control.MainController;
+import com.dhbw_db.control.MainUI;
 import com.dhbw_db.model.request.Request;
 
 /**
@@ -55,6 +58,10 @@ public class EmailSessionBean {
 
 	private boolean debug = true;
 
+	private MainController mc = ((MainUI) (MainUI.getCurrent())).getController();
+
+	private SimpleDateFormat date = new SimpleDateFormat("dd'.'MM'.'yyyy");
+
 	/*
 	 * public void sendMailRequestStudent(String to, String cc, String subject,
 	 * String student, String lecturer, String mtkNumber, String startDate,
@@ -89,11 +96,13 @@ public class EmailSessionBean {
 		Multipart multipart = new MimeMultipart("message");
 		MimeBodyPart textPart = new MimeBodyPart();
 		String textContent = "Hallo "
-				+ "r.getRequesterNameById()"
+				+ mc.getDataAccess()
+					.getRequesterNameById(r.getRequesterId())
 				+ ",\n\n"
 				+ "Sie haben einen Antrag zum Ausleihen eines Notebooks gestellt."
 				+ "Ihrem zuständigen Dozenten "
-				+ "r.getApproverNameById()"
+				+ mc.getDataAccess()
+					.getApproverNameById(r.getApproverId())
 				+ " wurde der Antrag zur Bearbeitung zugeschickt."
 				+ "Sie erhalten eine Nachricht, wenn der Antrag bearbeitet wurde.";
 
@@ -103,22 +112,25 @@ public class EmailSessionBean {
 		String htmlContent = "<html><h1>Ihre Antragsdaten:</h1><table border=\"0\">"
 				+ "<tr><th>Name</th><th>Matrikelnummer</th><th>Zuständiger Dozent</th><th>Ausleihdatum</th><th>Rückgabedatum</th><th>Betriebssystem</th></tr>"
 				+ "<tr><td>"
-				+ "r.getRequesterById()"
+				+ mc.getDataAccess()
+					.getRequesterNameById(r.getRequesterId())
 				+ "</td><td>"
-				+ "r.getRequesterMatrNrById()"
+				+ mc.getDataAccess()
+					.getMatrNrById(r.getRequesterId())
 				+ "</td><td>"
-				+ "r.getApproverNameById()"
+				+ mc.getDataAccess()
+					.getApproverNameById(r.getApproverId())
 				+ "</td><td>"
-				+ r.getStart()
-					.toString()
+				+ date.format(r.getStart())
+						.toString()
 				+ "</td><td>"
-				+ r.getEnd()
-					.toString()
+				+ date.format(r.getEnd())
+						.toString()
 				+ "</td><td>"
-				+ r.getOs()
+				+ String.valueOf(r.getOs())
 				+ "</td></tr></table><br>"
 				+ "<p>Optionale Bemerkung: "
-				+ "r.getComment()"
+				+ r.getComment()
 				+ "</p>"
 				+ "<p>Zum Stornieren Ihres Antrags klicken Sie bitte hier: "
 				+ "<a href=\"" + "cancelLink" + "\"LINK</a></html>";
@@ -134,8 +146,11 @@ public class EmailSessionBean {
 			Request r) throws MessagingException {
 		Multipart multipart = new MimeMultipart("message");
 		MimeBodyPart textPart = new MimeBodyPart();
-		String textContent = "Hallo " + "r.getApproverNameById()" + ",\n\n"
-				+ "r.getRequesterNameById()"
+		String textContent = "Hallo "
+				+ mc.getDataAccess()
+					.getApproverNameById(r.getApproverId()) + ",\n\n"
+				+ mc.getDataAccess()
+					.getRequesterNameById(r.getRequesterId())
 				+ " hat einen Antrag zum Ausleihen eines Notebooks gestellt.";
 
 		textPart.setText(textContent);
@@ -144,22 +159,25 @@ public class EmailSessionBean {
 		String htmlContent = "<html><h1>Antragsdaten:</h1><table border=\"0\">"
 				+ "<tr><th>Name</th><th>Matrikelnummer</th><th>Ausleihdatum</th><th>Rückgabedatum</th><th>Betriebssystem</th></tr>"
 				+ "<tr><td>"
-				+ "r.getRequesterNameById()"
+				+ mc.getDataAccess()
+					.getRequesterNameById(r.getRequesterId())
 				+ "</td><td>"
-				+ "r.getRequesterMatrNrId()"
+				+ mc.getDataAccess()
+					.getMatrNrById(r.getRequesterId())
 				+ "</td><td>"
-				+ "r.getApproverNameById()"
+				+ mc.getDataAccess()
+					.getApproverNameById(r.getApproverId())
 				+ "</td><td>"
-				+ r.getStart()
-					.toString()
+				+ date.format(r.getStart())
+						.toString()
 				+ "</td><td>"
-				+ r.getEnd()
-					.toString()
+				+ date.format(r.getEnd())
+						.toString()
 				+ "</td><td>"
-				+ r.getOs()
+				+ String.valueOf(r.getOs())
 				+ "</td></tr></table><br>"
 				+ "<p>Optionale Bemerkung: "
-				+ "r.getComment()"
+				+ r.getComment()
 				+ "</p>"
 				+ "<p>Zum Genehmigen oder Ablehnen dieses Antrags klicken Sie bitte hier: "
 				+ "<a href=\"" + "processLink" + "\"LINK</a></html>";
@@ -176,10 +194,13 @@ public class EmailSessionBean {
 		Multipart multipart = new MimeMultipart("message");
 		MimeBodyPart textPart = new MimeBodyPart();
 		String textContent = "Hallo "
-				+ "r.getRequesterNameById()"
+				+ mc.getDataAccess()
+					.getRequesterNameById(r.getRequesterId())
 				+ ",\n\n"
 				+ "Sie haben einen Antrag zum Ausleihen eines Notebooks gestellt."
-				+ "Ihr zuständiger Dozent " + "r.getApproverNameById()"
+				+ "Ihr zuständiger Dozent "
+				+ mc.getDataAccess()
+					.getApproverNameById(r.getApproverId())
 				+ " hat den Antrag genehmigt." + "Sie können das Notebook am "
 				+ r.getStart()
 					.toString() + " zur Ausleihe abholen.";
@@ -190,22 +211,25 @@ public class EmailSessionBean {
 		String htmlContent = "<html><h1>Ihre Antragsdaten:</h1><table border=\"0\">"
 				+ "<tr><th>Name</th><th>Matrikelnummer</th><th>Zuständiger Dozent</th><th>Ausleihdatum</th><th>Rückgabedatum</th><th>Betriebssystem</th></tr>"
 				+ "<tr><td>"
-				+ "r.getRequesterById()"
+				+ mc.getDataAccess()
+					.getRequesterNameById(r.getRequesterId())
 				+ "</td><td>"
-				+ "r.getRequesterMatrNrById()"
+				+ mc.getDataAccess()
+					.getMatrNrById(r.getRequesterId())
 				+ "</td><td>"
-				+ "r.getApproverNameById()"
+				+ mc.getDataAccess()
+					.getApproverNameById(r.getApproverId())
 				+ "</td><td>"
-				+ r.getStart()
-					.toString()
+				+ date.format(r.getStart())
+						.toString()
 				+ "</td><td>"
-				+ r.getEnd()
-					.toString()
+				+ date.format(r.getEnd())
+						.toString()
 				+ "</td><td>"
-				+ r.getOs()
+				+ String.valueOf(r.getOs())
 				+ "</td></tr></table><br>"
 				+ "<p>Optionale Bemerkung: "
-				+ "r.getComment()"
+				+ r.getComment()
 				+ "</p>"
 				+ "<p>Zum Stornieren Ihres Antrags klicken Sie bitte hier: "
 				+ "<a href=\"" + "cancelLink" + "\"LINK</a></html>";
@@ -217,8 +241,54 @@ public class EmailSessionBean {
 		sendEmail(to, cc, subject, multipart);
 	}
 
-	public void sendMailRequestRejected() {
+	public void sendMailRequestRejected(String to, String cc, String subject,
+			Request r) throws MessagingException {
+		Multipart multipart = new MimeMultipart("message");
+		MimeBodyPart textPart = new MimeBodyPart();
+		String textContent = "Hallo "
+				+ mc.getDataAccess()
+					.getRequesterNameById(r.getRequesterId())
+				+ ",\n\n"
+				+ "Sie haben einen Antrag zum Ausleihen eines Notebooks gestellt."
+				+ "Ihr zuständiger Dozent "
+				+ mc.getDataAccess()
+					.getApproverNameById(r.getApproverId())
+				+ " hat den Antrag abgelehnt.";
 
+		textPart.setText(textContent);
+
+		MimeBodyPart htmlPart = new MimeBodyPart();
+		String htmlContent = "<html><h1>Ihre Antragsdaten:</h1><table border=\"0\">"
+				+ "<tr><th>Name</th><th>Matrikelnummer</th><th>Zuständiger Dozent</th><th>Ausleihdatum</th><th>Rückgabedatum</th><th>Betriebssystem</th></tr>"
+				+ "<tr><td>"
+				+ mc.getDataAccess()
+					.getRequesterNameById(r.getRequesterId())
+				+ "</td><td>"
+				+ mc.getDataAccess()
+					.getMatrNrById(r.getRequesterId())
+				+ "</td><td>"
+				+ mc.getDataAccess()
+					.getApproverNameById(r.getApproverId())
+				+ "</td><td>"
+				+ date.format(r.getStart())
+						.toString()
+				+ "</td><td>"
+				+ date.format(r.getEnd())
+						.toString()
+				+ "</td><td>"
+				+ String.valueOf(r.getOs())
+				+ "</td></tr></table><br>"
+				+ "<p>Optionale Bemerkung: "
+				+ r.getComment()
+				+ "</p>"
+				+ "<p>Zum Stornieren Ihres Antrags klicken Sie bitte hier: "
+				+ "<a href=\"" + "cancelLink" + "\"LINK</a></html>";
+
+		htmlPart.setContent(htmlContent, "text/html");
+
+		multipart.addBodyPart(textPart);
+		multipart.addBodyPart(htmlPart);
+		sendEmail(to, cc, subject, multipart);
 	}
 
 	public void sendMailAdminInfo() {
