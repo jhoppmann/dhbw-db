@@ -65,8 +65,8 @@ public class Request {
 	public enum Status {
 		OPEN(1, "Open"),
 		APPROVED(2, "Approved"),
-		RETRACTED(2, "Retracted"),
-		REJECTED(3, "Rejected"),
+		RETRACTED(3, "Retracted"),
+		REJECTED(4, "Rejected"),
 		OVERDUE(5, "Overdue"),
 		COMPLETED(6, "Completed"),
 		ERROR(7, "Error"),
@@ -130,12 +130,11 @@ public class Request {
 	 * @param hash
 	 * @param os
 	 */
-	public Request(RequestState currentState, Status status, int id,
-			int requesterId, int approverId, int notebookId, Date created,
-			Date start, Date end, Date until, String hash, int os) {
+	public Request(int id, int requesterId, int approverId, int notebookId,
+			Date created, Date start, Date end, Date until, String hash,
+			int statusID, int os) {
 		super();
-		this.currentState = currentState;
-		this.status = status;
+
 		this.id = id;
 		this.requesterId = requesterId;
 		this.approverId = approverId;
@@ -145,6 +144,42 @@ public class Request {
 		this.end = end;
 		this.until = until;
 		this.hash = hash;
+
+		/*
+		 * OPEN(1, "Open"), APPROVED(2, "Approved"), RETRACTED(3, "Retracted"),
+		 * REJECTED(4, "Rejected"), OVERDUE(5, "Overdue"), COMPLETED(6,
+		 * "Completed"), ERROR(7, "Error"), CANCELED(8, "Canceled");
+		 */
+
+		switch (statusID) {
+			case 1:
+			setStatus(Status.OPEN);
+				break;
+			case 2:
+			setStatus(Status.APPROVED);
+				break;
+			case 3:
+			setStatus(Status.RETRACTED);
+				break;
+			case 4:
+			setStatus(Status.REJECTED);
+				break;
+			case 5:
+			setStatus(Status.OVERDUE);
+				break;
+			case 6:
+			setStatus(Status.COMPLETED);
+				break;
+			case 8:
+			setStatus(Status.CANCELED);
+				break;
+			case 7:
+			default:
+			setStatus(Status.ERROR);
+				break;
+
+		}
+
 		this.os = os;
 	}
 
