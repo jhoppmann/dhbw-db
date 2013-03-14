@@ -10,6 +10,22 @@ package com.dhbw_db.model.beans;
  */
 public class Notebook {
 
+	public enum NotebookCategory {
+		SHORT("Kurz"),
+		MEDIUM("Mittelfristig"),
+		LONG("Langfristig");
+
+		private String text;
+
+		public String toString() {
+			return text;
+		}
+
+		private NotebookCategory(String text) {
+			this.text = text;
+		}
+	}
+
 	private int iD;
 
 	private String name;

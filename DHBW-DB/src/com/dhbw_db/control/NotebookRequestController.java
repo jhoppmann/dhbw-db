@@ -3,8 +3,12 @@
  */
 package com.dhbw_db.control;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import com.dhbw_db.model.beans.Notebook.NotebookCategory;
 
 /**
  * @author jhoppmann
@@ -14,22 +18,12 @@ import java.util.Map;
 public class NotebookRequestController {
 
 	/**
-	 * This will get a Map of the available notebooks.
+	 * This will return the notebook categories.
 	 * 
-	 * @return A Map with a string representations of notebooks as keys and
-	 *         their unique IDs as values
+	 * @return A List with NotebookCategories.
 	 */
-	public Map<Integer, String> getNotebooks() {
-		HashMap<Integer, String> notebooks = new HashMap<Integer, String>();
-
-		// build dummy data here
-		notebooks.put(1, "Acer Aspire");
-		notebooks.put(2, "MacBook");
-		notebooks.put(3, "ThinkPad R500");
-		notebooks.put(4, "MacBook");
-		notebooks.put(5, "ThinkPad R500");
-
-		return notebooks;
+	public List<NotebookCategory> getNotebooks() {
+		return Arrays.asList(NotebookCategory.values());
 	}
 
 	/**
@@ -38,8 +32,16 @@ public class NotebookRequestController {
 	 * @return A Map with a string representations of operating systems as keys
 	 *         and their unique IDs as values
 	 */
-	public Map<String, Integer> getOperatingSystems() {
-		return null;
+	public Map<Integer, String> getOperatingSystems() {
+		HashMap<Integer, String> operatingSystems = new HashMap<Integer, String>();
+
+		// fill in some dummy data
+		operatingSystems.put(1, "Windows 3.11");
+		operatingSystems.put(2, "Windows 7");
+		operatingSystems.put(3, "Windows 8");
+		operatingSystems.put(4, "MacOS");
+		operatingSystems.put(5, "Kubuntu");
+		return operatingSystems;
 	}
 
 	/**
@@ -48,7 +50,16 @@ public class NotebookRequestController {
 	 * @return A Map with a string representations of approvers as keys and
 	 *         their unique IDs as values
 	 */
-	public Map<String, Integer> getApprovers() {
-		return null;
+	public Map<Integer, String> getApprovers() {
+		HashMap<Integer, String> approvers = new HashMap<Integer, String>();
+
+		// fill in some dummy data
+		approvers.put(1, "Roland 'Zorro' Kuestermann");
+		approvers.put(2, "Katja Wengler");
+		approvers.put(3, "Stefan 'Fledermausmann' Klink");
+		approvers.put(4, "Harald 'Dirty Harry' Haake");
+		approvers.put(5, "Bernd August 'Pornomensch' Scheiderbauer");
+
+		return approvers;
 	}
 }
