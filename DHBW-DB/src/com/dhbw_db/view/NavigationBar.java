@@ -41,7 +41,7 @@ public class NavigationBar extends MenuBar {
 			addItem("Start", new ViewChangeCommand(new StudentStartPage()));
 
 		if (u.isStudent())
-			addItem("New Request", null);
+			addItem("New Request", new ViewChangeCommand(new NotebookRequest()));
 
 		if (u.isStudent())
 			addItem("My Requests", null);

@@ -31,9 +31,9 @@ public class MainUI extends UI {
 
 	public void repaint() {
 		ApplicationWindow view = null;
-		mc.setWindow(view);
 		view = new ApplicationWindow();
 		setContent(view);
+		mc.setWindow(view);
 	}
 
 }
