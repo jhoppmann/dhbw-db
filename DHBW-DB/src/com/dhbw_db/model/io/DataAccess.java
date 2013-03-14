@@ -5,13 +5,22 @@ package com.dhbw_db.model.io;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Properties;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
+import com.dhbw_db.model.beans.EMail;
+import com.dhbw_db.model.beans.Notebook;
+import com.dhbw_db.model.beans.User;
 import com.dhbw_db.model.io.logging.LoggingService;
 import com.dhbw_db.model.io.logging.LoggingService.LogLevel;
 import com.dhbw_db.model.request.Request;
@@ -100,6 +109,7 @@ public class DataAccess {
 
 		log.log("createTables method executed", LogLevel.INFO);
 
+		// testSomeMethods();
 	}
 
 	/**
@@ -391,9 +401,11 @@ public class DataAccess {
 	 * 
 	 * @param id The id of the request
 	 * @return Request the corresponding request
+	 * @deprecated This method uses the old constructor so the request may be
+	 *             not complete
 	 */
 
-	public Request getRequestByID(int id) {
+	public Request getRequestByIDold(int id) {
 		String selectString = "SELECT RequesterID, ApproverID, NotebookID, Hash, CreationDate, StartDate, EndDate, StatusID, OSID FROM "
 				+ connectionInfo.getProperty("database.database")
 				+ "."
@@ -436,9 +448,11 @@ public class DataAccess {
 	 * 
 	 * @param id The id of the request
 	 * @return Request the corresponding request
+	 * @deprecated This method uses the old constructor so the request may be
+	 *             not complete
 	 */
 
-	public Request getRequestByHash(String hash) {
+	public Request getRequestByHashold(String hash) {
 		String selectString = "SELECT ID, RequesterID, ApproverID, NotebookID, Hash, CreationDate, StartDate, EndDate, StatusID, OSID FROM "
 				+ connectionInfo.getProperty("database.database")
 				+ "."
@@ -481,6 +495,8 @@ public class DataAccess {
 	 * 
 	 * Updates a request in the database
 	 * 
+	 * Doesn't use prepared Statements
+	 * 
 	 * @param Request the request to be updated
 	 */
 
@@ -515,6 +531,8 @@ public class DataAccess {
 	 * 
 	 * Inserts a request in the database
 	 * 
+	 * Doesn't use prepared Statements
+	 * 
 	 * @param Request the request to be updated
 	 */
 
@@ -546,17 +564,647 @@ public class DataAccess {
 		}
 	}
 
+	/**
+	 * 
+	 * Gets all lectures
+	 * 
+	 * @return A collection of lectures
+	 */
+
+	public List<User> getLectures() {
+
+		String sql = "SELECT ID, MatrNr, Vorname, Name, EMail, isStudent, isAdmin, isLecturer FROM "
+				+ connectionInfo.getProperty("database.database")
+				+ "."
+				+ Table.USER.toString() + " WHERE IsLecturer = (1)";
+
+		List<User> userList = null;
+
+		try {
+
+			userList = new ArrayList<User>();
+
+			PreparedStatement statement = connection.prepareStatement(sql);
+
+			ResultSet result = statement.executeQuery();
+
+			while (result.next()) {
+				int id = result.getInt("ID");
+				int matrNr = result.getInt("MatrNr");
+				String vorname = result.getString("Vorname");
+				String name = result.getString("Name");
+				String eMail = result.getString("EMail");
+				Boolean isStudent = result.getBoolean("isStudent");
+				Boolean isAdmin = result.getBoolean("isAdmin");
+				Boolean isLecturer = result.getBoolean("isLecturer");
+
+				User user = new User();
+				user.setID(id);
+				user.setMatrNr(matrNr);
+				user.setFirstName(vorname);
+				user.setLastName(name);
+				user.seteMail(eMail);
+				user.setStudent(isStudent);
+				user.setAdmin(isAdmin);
+				user.setLecturer(isLecturer);
+
+				userList.add(user);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return userList;
+
+	}
+
+	/**
+	 * 
+	 * Gets all Admins
+	 * 
+	 * @return A collection of Admins
+	 */
+
+	public List<User> getAdmins() {
+
+		String sql = "SELECT ID, MatrNr, Vorname, Name, EMail, isStudent, isAdmin, isLecturer FROM "
+				+ connectionInfo.getProperty("database.database")
+				+ "."
+				+ Table.USER.toString() + " WHERE IsAdmin = (1)";
+
+		List<User> userList = null;
+
+		try {
+
+			userList = new ArrayList<User>();
+
+			PreparedStatement statement = connection.prepareStatement(sql);
+
+			ResultSet result = statement.executeQuery();
+
+			while (result.next()) {
+				int id = result.getInt("ID");
+				int matrNr = result.getInt("MatrNr");
+				String vorname = result.getString("Vorname");
+				String name = result.getString("Name");
+				String eMail = result.getString("EMail");
+				Boolean isStudent = result.getBoolean("isStudent");
+				Boolean isAdmin = result.getBoolean("isAdmin");
+				Boolean isLecturer = result.getBoolean("isLecturer");
+
+				User user = new User();
+				user.setID(id);
+				user.setMatrNr(matrNr);
+				user.setFirstName(vorname);
+				user.setLastName(name);
+				user.seteMail(eMail);
+				user.setStudent(isStudent);
+				user.setAdmin(isAdmin);
+				user.setLecturer(isLecturer);
+
+				userList.add(user);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return userList;
+
+	}
+
+	/**
+	 * 
+	 * Gets a user object for ID
+	 * 
+	 * @return the requestet user object
+	 */
+
+	public User getUserForID(int id) {
+
+		String sql = "SELECT ID, MatrNr, Vorname, Name, EMail, isStudent, isAdmin, isLecturer FROM "
+				+ connectionInfo.getProperty("database.database")
+				+ "."
+				+ Table.USER.toString() + " WHERE ID = ?";
+
+		User user = null;
+
+		try {
+			user = new User();
+
+			PreparedStatement statement = connection.prepareStatement(sql);
+
+			ResultSet result = statement.executeQuery();
+
+			if (result.next()) {
+				int tempid = result.getInt("ID");
+				int matrNr = result.getInt("MatrNr");
+				String vorname = result.getString("Vorname");
+				String name = result.getString("Name");
+				String eMail = result.getString("EMail");
+				Boolean isStudent = result.getBoolean("isStudent");
+				Boolean isAdmin = result.getBoolean("isAdmin");
+				Boolean isLecturer = result.getBoolean("isLecturer");
+
+				user.setID(tempid);
+				user.setMatrNr(matrNr);
+				user.setFirstName(vorname);
+				user.setLastName(name);
+				user.seteMail(eMail);
+				user.setStudent(isStudent);
+				user.setAdmin(isAdmin);
+				user.setLecturer(isLecturer);
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return user;
+
+	}
+
+	/**
+	 * Gets all requests from the database
+	 * 
+	 * 
+	 * @return List of all Request
+	 */
+
+	public List<Request> getRequests() {
+		String sql = "SELECT ID, RequestID, RequesterID, ApproverID, NotebookID, Hash, CreationDate, StartDate, EndDate, StatusID, OSID FROM "
+				+ connectionInfo.getProperty("database.database")
+				+ "."
+				+ Table.PROCESS.toString();
+
+		List<Request> requestList = null;
+
+		try {
+
+			requestList = new ArrayList<Request>();
+
+			PreparedStatement statement = connection.prepareStatement(sql);
+
+			ResultSet result = statement.executeQuery();
+
+			while (result.next()) {
+				int id = result.getInt("ID");
+
+				int requesterID = result.getInt("RequesterID");
+				int approverID = result.getInt("ApproverID");
+				int notebookID = result.getInt("NotebookID");
+				String hash = result.getString("Hash");
+
+				Date creationDate = new Date(result.getTimestamp("CreationDate")
+													.getTime());
+				Date startDate = new Date(result.getTimestamp("StartDate")
+												.getTime());
+				Date endDate = new Date(result.getTimestamp("EndDate")
+												.getTime());
+				int statusID = result.getInt("StatusID");
+				int osID = result.getInt("OSID");
+
+				Request request = new Request(	id,
+												requesterID,
+												approverID,
+												notebookID,
+												creationDate,
+												startDate,
+												endDate,
+												null,
+												hash,
+												statusID,
+												osID);
+
+				requestList.add(request);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return requestList;
+
+	}
+
+	/**
+	 * Gets a requests for id from the database
+	 * 
+	 * 
+	 * @return really requested Request
+	 */
+
+	public Request getRequestForID(int id) {
+		String sql = "SELECT RequestID, RequesterID, ApproverID, NotebookID, Hash, CreationDate, StartDate, EndDate, StatusID, OSID FROM "
+				+ connectionInfo.getProperty("database.database")
+				+ "."
+				+ Table.PROCESS.toString() + " WHERE ID = ?";
+
+		Request request = null;
+
+		try {
+
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setInt(1, id);
+
+			ResultSet result = statement.executeQuery();
+
+			if (result.next()) {
+
+				int requesterID = result.getInt("RequesterID");
+				int approverID = result.getInt("ApproverID");
+				int notebookID = result.getInt("NotebookID");
+				String hash = result.getString("Hash");
+
+				Date creationDate = new Date(result.getTimestamp("CreationDate")
+													.getTime());
+				Date startDate = new Date(result.getTimestamp("StartDate")
+												.getTime());
+				Date endDate = new Date(result.getTimestamp("EndDate")
+												.getTime());
+				int statusID = result.getInt("StatusID");
+				int osID = result.getInt("OSID");
+
+				request = new Request(	id,
+										requesterID,
+										approverID,
+										notebookID,
+										creationDate,
+										startDate,
+										endDate,
+										null,
+										hash,
+										statusID,
+										osID);
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return request;
+
+	}
+
+	/**
+	 * Gets a requests for hash from the database
+	 * 
+	 * 
+	 * @return really requested Request
+	 */
+
+	public Request getRequestForHash(String hash) {
+		String sql = "SELECT ID, RequestID, RequesterID, ApproverID, NotebookID, CreationDate, StartDate, EndDate, StatusID, OSID FROM "
+				+ connectionInfo.getProperty("database.database")
+				+ "."
+				+ Table.PROCESS.toString() + " WHERE Hash = ?";
+
+		Request request = null;
+
+		try {
+
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setString(1, hash);
+
+			ResultSet result = statement.executeQuery();
+
+			if (result.next()) {
+
+				int id = result.getInt("ID");
+				int requesterID = result.getInt("RequesterID");
+				int approverID = result.getInt("ApproverID");
+				int notebookID = result.getInt("NotebookID");
+				// String hash = result.getString("Hash");
+
+				Date creationDate = new Date(result.getTimestamp("CreationDate")
+													.getTime());
+				Date startDate = new Date(result.getTimestamp("StartDate")
+												.getTime());
+				Date endDate = new Date(result.getTimestamp("EndDate")
+												.getTime());
+				int statusID = result.getInt("StatusID");
+				int osID = result.getInt("OSID");
+
+				request = new Request(	id,
+										requesterID,
+										approverID,
+										notebookID,
+										creationDate,
+										startDate,
+										endDate,
+										null,
+										hash,
+										statusID,
+										osID);
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return request;
+
+	}
+
+	/**
+	 * Gets all notebooks from the database
+	 * 
+	 * 
+	 * @return List of all notebooks
+	 */
+
+	public List<Notebook> getNotebooks() {
+		String sql = "SELECT ID, Name, IsDefective, IsAvailable FROM "
+				+ connectionInfo.getProperty("database.database") + "."
+				+ Table.NOTEBOOK.toString();
+
+		List<Notebook> notebookList = null;
+
+		try {
+
+			notebookList = new ArrayList<Notebook>();
+
+			PreparedStatement statement = connection.prepareStatement(sql);
+
+			ResultSet result = statement.executeQuery();
+
+			while (result.next()) {
+				int id = result.getInt("ID");
+
+				String name = result.getString("Name");
+
+				Boolean isDefective = result.getBoolean("IsDefective");
+				Boolean isAvailable = result.getBoolean("IsAvailable");
+
+				Notebook notebook = new Notebook();
+
+				notebook.setiD(id);
+				notebook.setName(name);
+				notebook.setDefective(isDefective);
+				notebook.setAvailable(isAvailable);
+
+				notebookList.add(notebook);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return notebookList;
+
+	}
+
+	/**
+	 * Inserts a notebook object into the mighty database
+	 * 
+	 * @param the notebook to be inserted
+	 */
+
+	public void insertNotebook(Notebook notebook) {
+		String sql = "INSERT INTO "
+				+ connectionInfo.getProperty("database.database") + "."
+				+ Table.NOTEBOOK.toString()
+				+ " (ID, Name, IsDefective, IsAvailable) VALUES (?,?,?,?)";
+
+		try {
+
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setInt(1, notebook.getiD());
+			statement.setString(2, notebook.getName());
+			statement.setBoolean(3, notebook.isDefective());
+			statement.setBoolean(4, notebook.isAvailable());
+
+			statement.executeQuery();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	/**
+	 * Updates a notebook object on the database
+	 * 
+	 * 
+	 * @param the notebook to be updated
+	 */
+
+	public void updateNotebook(Notebook notebook) {
+		String sql = "UPDATE "
+				+ connectionInfo.getProperty("database.database")
+				+ "."
+				+ Table.NOTEBOOK.toString()
+				+ " SET Name = ?, IsDefective = ?, IsAvailable = ? WHERE ID = ?";
+
+		try {
+
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setString(1, notebook.getName());
+			statement.setBoolean(2, notebook.isDefective());
+			statement.setBoolean(3, notebook.isAvailable());
+			statement.setInt(4, notebook.getiD());
+
+			statement.executeQuery();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	/**
+	 * Inserts a email object into the database
+	 * 
+	 * @param the email to be inserted
+	 */
+
+	public void insertEMail(EMail eMail) {
+		String sql = "INSERT INTO "
+				+ connectionInfo.getProperty("database.database")
+				+ "."
+				+ Table.EMAIL.toString()
+				+ " (ID, ReceiverMail, SenderMail, Header, Body, Date) VALUES (?,?,?,?,?,?)";
+
+		try {
+
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setInt(1, eMail.getiD());
+			statement.setString(2, eMail.getReceiverMail());
+			statement.setString(3, eMail.getSenderMail());
+			statement.setString(4, eMail.getHeader());
+			statement.setString(5, eMail.getBody());
+			statement.setTimestamp(6, new Timestamp(eMail.getDate()
+															.getTime()));
+
+			statement.executeQuery();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	/**
+	 * Gets a map of all operating systems available for the notebooks from the
+	 * database
+	 * 
+	 * 
+	 * @return hashmap of all operating systems
+	 */
+
+	public HashMap<Integer, String> getOSs() {
+		String sql = "SELECT ID, Name FROM "
+				+ connectionInfo.getProperty("database.database") + "."
+				+ Table.OS.toString();
+
+		HashMap<Integer, String> osMap = null;
+
+		try {
+
+			osMap = new HashMap<Integer, String>();
+
+			PreparedStatement statement = connection.prepareStatement(sql);
+
+			ResultSet result = statement.executeQuery();
+
+			while (result.next()) {
+
+				int id = result.getInt("ID");
+				String name = result.getString("Name");
+
+				osMap.put(id, name);
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return osMap;
+
+	}
+
+	/**
+	 * Gets a map of all status values from the database
+	 * 
+	 * 
+	 * @return hashmap of all status values
+	 */
+
+	public HashMap<Integer, String> getStatusses() {
+		String sql = "SELECT ID, Name FROM "
+				+ connectionInfo.getProperty("database.database") + "."
+				+ Table.STATUS.toString();
+
+		HashMap<Integer, String> statusMap = null;
+
+		try {
+
+			statusMap = new HashMap<Integer, String>();
+
+			PreparedStatement statement = connection.prepareStatement(sql);
+
+			ResultSet result = statement.executeQuery();
+
+			while (result.next()) {
+
+				int id = result.getInt("ID");
+				String name = result.getString("Name");
+
+				statusMap.put(id, name);
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return statusMap;
+
+	}
+
+	public User authenticate(String username, String password) {
+		String sql = "SELECT ID, MatrNr, Vorname, Name, EMail, isStudent, isAdmin, isLecturer, Password FROM "
+				+ connectionInfo.getProperty("database.database")
+				+ "."
+				+ Table.USER.toString() + " WHERE Name = ?";
+
+		User user = null;
+		String storedPassword = null;
+
+		try {
+
+			user = new User();
+
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setString(1, username);
+
+			ResultSet result = statement.executeQuery();
+
+			if (result.next()) {
+				int id = result.getInt("ID");
+				int matrNr = result.getInt("MatrNr");
+				String vorname = result.getString("Vorname");
+				String name = result.getString("Name");
+				String eMail = result.getString("EMail");
+				Boolean isStudent = result.getBoolean("isStudent");
+				Boolean isAdmin = result.getBoolean("isAdmin");
+				Boolean isLecturer = result.getBoolean("isLecturer");
+
+				storedPassword = result.getString("Password");
+				// Just for checking whether the as parameter passed password is
+				// valid.
+
+				user.setID(id);
+				user.setMatrNr(matrNr);
+				user.setFirstName(vorname);
+				user.setLastName(name);
+				user.seteMail(eMail);
+				user.setStudent(isStudent);
+				user.setAdmin(isAdmin);
+				user.setLecturer(isLecturer);
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		String hashPassword = DigestUtils.md5Hex(password); // makes a hash out
+															// of the passed
+															// password
+
+		if (hashPassword.equals(storedPassword)) {
+			return user;
+		}
+
+		else {
+			return null;
+		}
+	}
+
 	public void testSomeMethods() {
 
-		Request requestOne = getRequestByID(1);
-		System.out.println("Request1 before update: " + requestOne.getId()
-				+ " " + requestOne.getOs());
+		/*
+		 * Request requestOne = getRequestByID(1);
+		 * System.out.println("Request1 before update: " + requestOne.getId() +
+		 * " " + requestOne.getOs());
+		 * 
+		 * requestOne.setOs(5); updateRequest(requestOne); requestOne =
+		 * getRequestByID(1); System.out.println("Request1 after update: " +
+		 * requestOne.getId() + " " + requestOne.getOs());
+		 */
+		System.out.println(this.getAdmins()
+								.get(0));
 
-		requestOne.setOs(5);
-		updateRequest(requestOne);
-		requestOne = getRequestByID(1);
-		System.out.println("Request1 after update: " + requestOne.getId() + " "
-				+ requestOne.getOs());
+		System.out.println(this.getLectures()
+								.get(0));
+		System.out.println(this.getLectures()
+								.get(1));
 
 	}
 
