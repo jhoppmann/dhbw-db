@@ -41,16 +41,34 @@ public class NavigationBar extends MenuBar {
 			addItem("Start", new ViewChangeCommand(new StudentStartPage()));
 
 		if (u.isStudent())
-			addItem("New Request", new ViewChangeCommand(new NotebookRequest()));
+			addItem("Neuer Leihantrag",
+					new ViewChangeCommand(new NotebookRequest()));
 
 		if (u.isStudent())
-			addItem("My Requests", null);
+			addItem("Eigene Anträge",
+					new ViewChangeCommand(new StudentRequestsPage()));
+
+		if (u.isStudent())
+			addItem("Details", new ViewChangeCommand(new StudentDetailsPage()));
 
 		if (u.isLecturer())
-			addItem("Approve Requests", null);
+			addItem("Offene Anträge",
+					new ViewChangeCommand(new LecturerOpenRequestsPage()));
+
+		if (u.isLecturer())
+			addItem("Alle Anträge",
+					new ViewChangeCommand(new LecturerAllRequestsPage()));
+
+		if (u.isLecturer())
+			addItem("Details", new ViewChangeCommand(new LecturerDetailsPage()));
 
 		if (u.isAdmin())
-			addItem("Running Requests", null);
+			addItem("Ausgabe / Rücknahme",
+					new ViewChangeCommand(new AdminApprovedRequestsPage()));
+
+		if (u.isAdmin())
+			addItem("Alle Anträge",
+					new ViewChangeCommand(new AdminAllRequestsPage()));
 
 		if (u.isAdmin())
 			addItem("Notebook Statuses", null);
