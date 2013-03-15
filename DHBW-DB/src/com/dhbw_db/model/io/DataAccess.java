@@ -263,7 +263,8 @@ public class DataAccess {
 				+ "StartDate TIMESTAMP NOT NULL, "
 				+ "EndDate TIMESTAMP NOT NULL, "
 				+ "UntilDate TIMESTAMP NOT NULL, " + "StatusID INT NOT NULL, "
-				+ "OSID INT NOT NULL, " + "PRIMARY KEY (ID), "
+				+ "OSID INT NOT NULL, " + "Description VARCHAR(240), "
+				+ "PRIMARY KEY (ID), "
 
 				+ "CONSTRAINT UserID1 " + "FOREIGN KEY (RequesterID) "
 				+ "REFERENCES " + connectionInfo.get("database.database") + "."
@@ -496,12 +497,13 @@ public class DataAccess {
 	 * 
 	 * Updates a request in the database
 	 * 
-	 * Doesn't use prepared Statements
+	 * 
 	 * 
 	 * @param Request the request to be updated
+	 * @deprecated Doesn't use prepared Statements
 	 */
 
-	public void updateRequest(Request request) {
+	public void updateRequestold(Request request) {
 		String updateString = "UPDATE "
 				+ connectionInfo.getProperty("database.database") + "."
 				+ Table.PROCESS.toString() + " SET RequesterID = "
@@ -537,9 +539,10 @@ public class DataAccess {
 	 * Doesn't use prepared Statements
 	 * 
 	 * @param Request the request to be updated
+	 * @deprecated Doesn't use prepared Statements
 	 */
 
-	public void insertRequest(Request request) {
+	public void insertRequestold(Request request) {
 		String insertString = "INSERT INTO "
 				+ connectionInfo.getProperty("database.database")
 				+ "."
@@ -683,7 +686,7 @@ public class DataAccess {
 	 * 
 	 * Gets a user object for ID
 	 * 
-	 * @return the requestet user object
+	 * @return the requested user object
 	 */
 
 	public User getUserForID(int id) {
@@ -732,6 +735,94 @@ public class DataAccess {
 	}
 
 	/**
+	 * 
+	 * Inserts a request in the database
+	 * 
+	 * @param Request the request to be updated
+	 * 
+	 */
+
+	public void insertRequest(Request request) {
+		String sql = "INSERT INTO "
+				+ connectionInfo.getProperty("database.database")
+				+ "."
+				+ Table.PROCESS.toString()
+				+ " (ID, RequesterID, ApproverID, NotebookID, Hash, CreationDate, StartDate, EndDate, UntilDate, StatusID, OSID, Description) VALUES ( ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ?, ?)";
+
+		try {
+			PreparedStatement statement = connection.prepareStatement(sql);
+
+			statement.setInt(1, request.getId());
+			statement.setInt(2, request.getRequesterId());
+			statement.setInt(3, request.getApproverId());
+			statement.setInt(4, request.getNotebookId());
+			statement.setString(5, request.getHash());
+			statement.setTimestamp(6, new Timestamp(request.getCreated()
+															.getTime()));
+			statement.setTimestamp(7, new Timestamp(request.getStart()
+															.getTime()));
+			statement.setTimestamp(8, new Timestamp(request.getEnd()
+															.getTime()));
+			statement.setTimestamp(9, new Timestamp(request.getUntil()
+															.getTime()));
+			statement.setInt(10, request.getStatus()
+										.getId());
+			statement.setInt(11, request.getOs());
+
+			statement.setString(12, request.getDescription());
+
+			statement.executeQuery();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 
+	 * Updates a request in the database Creation date cannot be updated because
+	 * its finale
+	 * 
+	 * @param Request the request to be updated
+	 * 
+	 */
+
+	public void updateRequest(Request request) {
+		String sql = "UPDATE "
+				+ connectionInfo.getProperty("database.database")
+				+ "."
+				+ Table.PROCESS.toString()
+				+ " SET RequesterID = ? , ApproverID = ? , NotebookID = ?, Hash = ?, StartDate = ? , EndDate = ? , UntilDate = ? , StatusID = ?, OSID = ?, Description = ? WHERE ID = ?";
+
+		try {
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setInt(1, request.getRequesterId());
+			statement.setInt(2, request.getApproverId());
+			statement.setInt(3, request.getNotebookId());
+			statement.setString(4, request.getHash());
+			statement.setTimestamp(5, new Timestamp(request.getStart()
+															.getTime()));
+			statement.setTimestamp(6, new Timestamp(request.getEnd()
+															.getTime()));
+			statement.setTimestamp(7, new Timestamp(request.getUntil()
+															.getTime()));
+			statement.setInt(8, request.getStatus()
+										.getId());
+			statement.setInt(9, request.getOs());
+
+			statement.setString(10, request.getDescription());
+
+			statement.setInt(11, request.getId());
+
+			statement.executeQuery();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	/**
 	 * Gets all requests from the database
 	 * 
 	 * 
@@ -739,7 +830,7 @@ public class DataAccess {
 	 */
 
 	public List<Request> getRequests() {
-		String sql = "SELECT ID, RequestID, RequesterID, ApproverID, NotebookID, Hash, CreationDate, StartDate, EndDate, UntilDate, StatusID, OSID FROM "
+		String sql = "SELECT ID, RequestID, RequesterID, ApproverID, NotebookID, Hash, CreationDate, StartDate, EndDate, UntilDate, StatusID, OSID, Description FROM "
 				+ connectionInfo.getProperty("database.database")
 				+ "."
 				+ Table.PROCESS.toString();
@@ -774,6 +865,7 @@ public class DataAccess {
 
 				int statusID = result.getInt("StatusID");
 				int osID = result.getInt("OSID");
+				String description = result.getString("Description");
 
 				Request request = new Request(	id,
 												requesterID,
@@ -785,7 +877,8 @@ public class DataAccess {
 												untilDate,
 												hash,
 												statusID,
-												osID);
+												osID,
+												description);
 
 				requestList.add(request);
 			}
@@ -806,7 +899,7 @@ public class DataAccess {
 	 */
 
 	public Request getRequestForID(int id) {
-		String sql = "SELECT RequestID, RequesterID, ApproverID, NotebookID, Hash, CreationDate, StartDate, EndDate, UntilDate, StatusID, OSID FROM "
+		String sql = "SELECT RequestID, RequesterID, ApproverID, NotebookID, Hash, CreationDate, StartDate, EndDate, UntilDate, StatusID, OSID, Description FROM "
 				+ connectionInfo.getProperty("database.database")
 				+ "."
 				+ Table.PROCESS.toString() + " WHERE ID = ?";
@@ -837,6 +930,7 @@ public class DataAccess {
 												.getTime());
 				int statusID = result.getInt("StatusID");
 				int osID = result.getInt("OSID");
+				String description = result.getString("Description");
 
 				request = new Request(	id,
 										requesterID,
@@ -848,7 +942,8 @@ public class DataAccess {
 										untilDate,
 										hash,
 										statusID,
-										osID);
+										osID,
+										description);
 
 			}
 
@@ -868,7 +963,7 @@ public class DataAccess {
 	 */
 
 	public Request getRequestForHash(String hash) {
-		String sql = "SELECT ID, RequestID, RequesterID, ApproverID, NotebookID, CreationDate, StartDate, EndDate, UntilDate, StatusID, OSID FROM "
+		String sql = "SELECT ID, RequestID, RequesterID, ApproverID, NotebookID, CreationDate, StartDate, EndDate, UntilDate, StatusID, OSID, Description FROM "
 				+ connectionInfo.getProperty("database.database")
 				+ "."
 				+ Table.PROCESS.toString() + " WHERE Hash = ?";
@@ -900,6 +995,7 @@ public class DataAccess {
 												.getTime());
 				int statusID = result.getInt("StatusID");
 				int osID = result.getInt("OSID");
+				String description = result.getString("Description");
 
 				request = new Request(	id,
 										requesterID,
@@ -911,7 +1007,8 @@ public class DataAccess {
 										untilDate,
 										hash,
 										statusID,
-										osID);
+										osID,
+										description);
 
 			}
 
