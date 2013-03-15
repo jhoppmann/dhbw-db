@@ -461,4 +461,18 @@ public class Request {
 	public void setOs(int os) {
 		this.os = os;
 	}
+
+	/**
+	 * @return the until
+	 */
+	public Date getUntil() {
+		return until;
+	}
+
+	/**
+	 * @param until the until to set
+	 */
+	public void setUntil(Date until) {
+		this.until = until;
+	}
 }

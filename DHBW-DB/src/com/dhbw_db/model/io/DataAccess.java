@@ -261,7 +261,8 @@ public class DataAccess {
 				+ "NotebookID INT NOT NULL, " + "Hash VARCHAR(32) NOT NULL, "
 				+ "CreationDate TIMESTAMP NOT NULL, "
 				+ "StartDate TIMESTAMP NOT NULL, "
-				+ "EndDate TIMESTAMP NOT NULL, " + "StatusID INT NOT NULL, "
+				+ "EndDate TIMESTAMP NOT NULL, "
+				+ "UntilDate TIMESTAMP NOT NULL, " + "StatusID INT NOT NULL, "
 				+ "OSID INT NOT NULL, " + "PRIMARY KEY (ID), "
 
 				+ "CONSTRAINT UserID1 " + "FOREIGN KEY (RequesterID) "
@@ -511,6 +512,8 @@ public class DataAccess {
 															.getTime())
 				+ " , EndDate = " + new Timestamp(request.getEnd()
 															.getTime())
+				+ " , UntilDate = " + new Timestamp(request.getUntil()
+															.getTime())
 				+ " , StatusID = " + request.getStatus()
 											.getId() + " WHERE ID = "
 				+ request.getId();
@@ -541,7 +544,7 @@ public class DataAccess {
 				+ connectionInfo.getProperty("database.database")
 				+ "."
 				+ Table.PROCESS.toString()
-				+ " (RequesterID, ApproverID, NotebookID, Hash, CreationDate, StartDate, EndDate, StatusID) VALUES ("
+				+ " (RequesterID, ApproverID, NotebookID, Hash, CreationDate, StartDate, EndDate, UntilDate, StatusID) VALUES ("
 				+ request.getRequesterId() + " , " + request.getApproverId()
 				+ " , " + request.getNotebookId() + " , " + request.getHash()
 				+ " , " + new Timestamp(request.getCreated()
@@ -549,6 +552,8 @@ public class DataAccess {
 				+ new Timestamp(request.getStart()
 										.getTime()) + " , "
 				+ new Timestamp(request.getEnd()
+										.getTime()) + " , "
+				+ new Timestamp(request.getUntil()
 										.getTime()) + " , "
 				+ request.getStatus()
 							.getId() + ")";
@@ -734,7 +739,7 @@ public class DataAccess {
 	 */
 
 	public List<Request> getRequests() {
-		String sql = "SELECT ID, RequestID, RequesterID, ApproverID, NotebookID, Hash, CreationDate, StartDate, EndDate, StatusID, OSID FROM "
+		String sql = "SELECT ID, RequestID, RequesterID, ApproverID, NotebookID, Hash, CreationDate, StartDate, EndDate, UntilDate, StatusID, OSID FROM "
 				+ connectionInfo.getProperty("database.database")
 				+ "."
 				+ Table.PROCESS.toString();
@@ -763,6 +768,10 @@ public class DataAccess {
 												.getTime());
 				Date endDate = new Date(result.getTimestamp("EndDate")
 												.getTime());
+
+				Date untilDate = new Date(result.getTimestamp("UntilDate")
+												.getTime());
+
 				int statusID = result.getInt("StatusID");
 				int osID = result.getInt("OSID");
 
@@ -773,7 +782,7 @@ public class DataAccess {
 												creationDate,
 												startDate,
 												endDate,
-												null,
+												untilDate,
 												hash,
 												statusID,
 												osID);
@@ -797,7 +806,7 @@ public class DataAccess {
 	 */
 
 	public Request getRequestForID(int id) {
-		String sql = "SELECT RequestID, RequesterID, ApproverID, NotebookID, Hash, CreationDate, StartDate, EndDate, StatusID, OSID FROM "
+		String sql = "SELECT RequestID, RequesterID, ApproverID, NotebookID, Hash, CreationDate, StartDate, EndDate, UntilDate, StatusID, OSID FROM "
 				+ connectionInfo.getProperty("database.database")
 				+ "."
 				+ Table.PROCESS.toString() + " WHERE ID = ?";
@@ -824,6 +833,8 @@ public class DataAccess {
 												.getTime());
 				Date endDate = new Date(result.getTimestamp("EndDate")
 												.getTime());
+				Date untilDate = new Date(result.getTimestamp("UntilDate")
+												.getTime());
 				int statusID = result.getInt("StatusID");
 				int osID = result.getInt("OSID");
 
@@ -834,7 +845,7 @@ public class DataAccess {
 										creationDate,
 										startDate,
 										endDate,
-										null,
+										untilDate,
 										hash,
 										statusID,
 										osID);
@@ -857,7 +868,7 @@ public class DataAccess {
 	 */
 
 	public Request getRequestForHash(String hash) {
-		String sql = "SELECT ID, RequestID, RequesterID, ApproverID, NotebookID, CreationDate, StartDate, EndDate, StatusID, OSID FROM "
+		String sql = "SELECT ID, RequestID, RequesterID, ApproverID, NotebookID, CreationDate, StartDate, EndDate, UntilDate, StatusID, OSID FROM "
 				+ connectionInfo.getProperty("database.database")
 				+ "."
 				+ Table.PROCESS.toString() + " WHERE Hash = ?";
@@ -885,6 +896,8 @@ public class DataAccess {
 												.getTime());
 				Date endDate = new Date(result.getTimestamp("EndDate")
 												.getTime());
+				Date untilDate = new Date(result.getTimestamp("UntilDate")
+												.getTime());
 				int statusID = result.getInt("StatusID");
 				int osID = result.getInt("OSID");
 
@@ -895,7 +908,7 @@ public class DataAccess {
 										creationDate,
 										startDate,
 										endDate,
-										null,
+										untilDate,
 										hash,
 										statusID,
 										osID);
