@@ -45,6 +45,42 @@ public class Authenticator {
 			u.seteMail("ich@du.com");
 		}
 
+		if (user.equals("student") && password.equals("a")) {
+			u = new User();
+			u.setAdmin(false);
+			u.setStudent(true);
+			u.setLecturer(false);
+			u.setID(-1);
+			u.setMatrNr(1234567);
+			u.setFirstName("Normaler");
+			u.setLastName("Student");
+			u.seteMail("ich@du.com");
+		}
+
+		if (user.equals("admin") && password.equals("a")) {
+			u = new User();
+			u.setAdmin(true);
+			u.setStudent(false);
+			u.setLecturer(false);
+			u.setID(-1);
+			u.setMatrNr(1234567);
+			u.setFirstName("Normaler");
+			u.setLastName("Student");
+			u.seteMail("ich@du.com");
+		}
+
+		if (user.equals("lecturer") && password.equals("a")) {
+			u = new User();
+			u.setAdmin(false);
+			u.setStudent(false);
+			u.setLecturer(true);
+			u.setID(-1);
+			u.setMatrNr(1234567);
+			u.setFirstName("Normaler");
+			u.setLastName("Student");
+			u.seteMail("ich@du.com");
+		}
+
 		if (u != null) {
 			log.log("Authenticated user " + user, LogLevel.INFO);
 		}
