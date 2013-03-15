@@ -55,6 +55,8 @@ public class Request {
 
 	private int os;
 
+	private String description;
+
 	/**
 	 * The possible statuses the request can have
 	 * 
@@ -132,7 +134,7 @@ public class Request {
 	 */
 	public Request(int id, int requesterId, int approverId, int notebookId,
 			Date created, Date start, Date end, Date until, String hash,
-			int statusID, int os) {
+			int statusID, int os, String description) {
 		super();
 
 		this.id = id;
@@ -181,6 +183,7 @@ public class Request {
 		}
 
 		this.os = os;
+		this.description = description;
 	}
 
 	/**
@@ -474,5 +477,19 @@ public class Request {
 	 */
 	public void setUntil(Date until) {
 		this.until = until;
+	}
+
+	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * @param description the description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }
