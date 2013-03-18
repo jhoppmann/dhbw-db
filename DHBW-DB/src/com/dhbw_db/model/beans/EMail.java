@@ -107,4 +107,9 @@ public class EMail {
 	public void setDate(Date date) {
 		this.date = date;
 	}
+
+	@Override
+	public String toString() {
+		return "Mail from " + senderMail + " to " + receiverMail + ": " + body;
+	}
 }

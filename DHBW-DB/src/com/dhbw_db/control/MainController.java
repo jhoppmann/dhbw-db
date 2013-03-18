@@ -9,7 +9,9 @@ import java.util.concurrent.FutureTask;
 import com.dhbw_db.model.authentication.Authenticator;
 import com.dhbw_db.model.beans.User;
 import com.dhbw_db.model.execution.Executor;
-import com.dhbw_db.model.io.DataAccess;
+import com.dhbw_db.model.io.database.AsynchronousWrapper;
+import com.dhbw_db.model.io.database.AsynchronousWrapper.SupportedDatabases;
+import com.dhbw_db.model.io.database.DataAccess;
 import com.dhbw_db.model.io.logging.LoggingService;
 import com.dhbw_db.view.ApplicationWindow;
 import com.vaadin.ui.Component;
@@ -36,6 +38,7 @@ public class MainController {
 	public MainController(ApplicationWindow view) {
 		this.view = view;
 		executor = new Executor(2);
+		dataAccess = AsynchronousWrapper.getDataAccess(SupportedDatabases.MYSQL);
 
 		log = LoggingService.getInstance();
 	}
@@ -90,8 +93,10 @@ public class MainController {
 	}
 
 	/**
-	 * @param value
-	 * @param value2
+	 * Tries to authenticate a user with a given password
+	 * 
+	 * @param username The user's username
+	 * @param password The user's entered password
 	 */
 	public void authenticate(String username, String password) {
 		this.user = Authenticator.authenticate(username, password);
@@ -99,12 +104,19 @@ public class MainController {
 	}
 
 	/**
-	 * @param view2
+	 * Sets the window that belongs to this controller
+	 * 
+	 * @param view The ApplicationWindow to which this controller belongs
 	 */
 	public void setWindow(ApplicationWindow view) {
 		this.view = view;
 	}
 
+	/**
+	 * Returns the application instance's DAO.
+	 * 
+	 * @return The instance's data access object
+	 */
 	public DataAccess getDataAccess() {
 		return this.dataAccess;
 	}

@@ -6,7 +6,9 @@ import java.util.Properties;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import com.dhbw_db.model.io.DataAccess;
+import com.dhbw_db.model.io.database.AsynchronousWrapper;
+import com.dhbw_db.model.io.database.AsynchronousWrapper.SupportedDatabases;
+import com.dhbw_db.model.io.database.DataAccess;
 import com.dhbw_db.model.io.logging.ConsoleLogger;
 import com.dhbw_db.model.io.logging.LoggingService;
 import com.dhbw_db.model.io.logging.LoggingService.LogLevel;
@@ -38,9 +40,9 @@ public class StartupListener implements ServletContextListener {
 		log.registerLogger(new ConsoleLogger());
 
 		// initialize the database
-		DataAccess db = new DataAccess();
+		DataAccess db = AsynchronousWrapper.getDataAccess(SupportedDatabases.MYSQL);
 		try {
-			db.intializeDatabase();
+			db.initializeDatabase();
 		} catch (SQLException e) {
 			// TODO think of a way to log a stacktrace
 			log.log(e.getMessage(), LogLevel.ERROR);

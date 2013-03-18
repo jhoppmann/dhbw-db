@@ -1,7 +1,7 @@
 /**
- * DataAccess.java Created by jhoppmann on 14.02.2013
+ * MySQLAccess.java Created by jhoppmann on 18.03.2013
  */
-package com.dhbw_db.model.io;
+package com.dhbw_db.model.io.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -28,10 +28,11 @@ import com.dhbw_db.model.settings.Settings;
 
 /**
  * @author jhoppmann
+ * @author Yannic Frank
  * @version 0.1
  * @since 0.1
  */
-public class DataAccess {
+public class MySQLAccess implements DataAccess {
 
 	private Properties connectionInfo;
 
@@ -39,35 +40,7 @@ public class DataAccess {
 
 	private LoggingService log;
 
-	/**
-	 * The Table enumeration holds an entry for every table used in the project
-	 * and its name as a string.
-	 * 
-	 * @author jhoppmann
-	 * @version 0.1
-	 * @since 0.1
-	 */
-	private enum Table {
-		// TODO check case and singular / plural
-		USER("User"),
-		PROCESS("Process"),
-		NOTEBOOK("Notebook"),
-		OS("OS"),
-		STATUS("Status"),
-		EMAIL("EMail");
-
-		private String text;
-
-		public String toString() {
-			return text;
-		}
-
-		private Table(String fullText) {
-			this.text = fullText;
-		}
-	};
-
-	public DataAccess() {
+	public MySQLAccess() {
 		connectionInfo = Settings.getInstance()
 									.getAll();
 		log = LoggingService.getInstance();
@@ -112,14 +85,8 @@ public class DataAccess {
 		// testSomeMethods();
 	}
 
-	/**
-	 * Makes sure the database is reachable, the user has the necessary rights
-	 * and all needed tables are present
-	 * 
-	 * @throws SQLException
-	 * 
-	 */
-	public void intializeDatabase() throws SQLException {
+	@Override
+	public void initializeDatabase() throws SQLException {
 		connection = connect();
 		createTables();
 		// destroy reference after we're done
@@ -162,24 +129,6 @@ public class DataAccess {
 
 		return conn;
 	}
-
-	/**
-	 * Sets up the table for the users
-	 */
-
-	/*
-	 * private void setupUserTable() { // this is a sample method that
-	 * demonstrates how table creation methods // should look like
-	 * 
-	 * // TODO Complete method String creationString = "create table " +
-	 * connectionInfo.get("database.database") + "." + Table.USER.toString() +
-	 * " (uid INT (11) NOT NULL AUTO_INCREMENT, " +
-	 * "username VARCHAR(25) DEFAULT NULL, " + "PRIMARY KEY (uid))"; Statement
-	 * statement = null; try { statement = connection.createStatement();
-	 * statement.executeUpdate(creationString);
-	 * 
-	 * } catch (SQLException e) { e.printStackTrace(); } }
-	 */
 
 	/**
 	 * Sets up the EMail Table
@@ -398,187 +347,7 @@ public class DataAccess {
 	 * Methods which fetch data from the Database
 	 */
 
-	/**
-	 * Gets a request by its id from the database
-	 * 
-	 * @param id The id of the request
-	 * @return Request the corresponding request
-	 * @deprecated This method uses the old constructor so the request may be
-	 *             not complete
-	 */
-
-	public Request getRequestByIDold(int id) {
-		String selectString = "SELECT RequesterID, ApproverID, NotebookID, Hash, CreationDate, StartDate, EndDate, StatusID, OSID FROM "
-				+ connectionInfo.getProperty("database.database")
-				+ "."
-				+ Table.PROCESS.toString() + " WHERE ID = " + id;
-
-		Request request = null;
-		Statement statement = null;
-
-		try {
-			statement = connection.createStatement();
-			ResultSet rs = statement.executeQuery(selectString);
-
-			if (rs.next()) {
-
-				int rID = rs.getInt("RequesterID");
-				int aID = rs.getInt("ApproverID");
-				int nID = rs.getInt("NotebookID");
-				Date startDate = new Date(rs.getTimestamp("StartDate")
-											.getTime());
-				Date endDate = new Date(rs.getTimestamp("EndDate")
-											.getTime());
-
-				request = new Request(	rID,
-										aID,
-										nID,
-										endDate,
-										startDate);
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return request;
-
-	}
-
-	/**
-	 * Gets a request by its hash from the database
-	 * 
-	 * @param id The id of the request
-	 * @return Request the corresponding request
-	 * @deprecated This method uses the old constructor so the request may be
-	 *             not complete
-	 */
-
-	public Request getRequestByHashold(String hash) {
-		String selectString = "SELECT ID, RequesterID, ApproverID, NotebookID, Hash, CreationDate, StartDate, EndDate, StatusID, OSID FROM "
-				+ connectionInfo.getProperty("database.database")
-				+ "."
-				+ Table.PROCESS.toString() + " WHERE Hash = " + hash;
-
-		Request request = null;
-		Statement statement = null;
-
-		try {
-			statement = connection.createStatement();
-			ResultSet rs = statement.executeQuery(selectString);
-
-			if (rs.next()) {
-
-				int ID = rs.getInt("ID");
-				int rID = rs.getInt("RequesterID");
-				int aID = rs.getInt("ApproverID");
-				int nID = rs.getInt("NotebookID");
-				Date startDate = new Date(rs.getTimestamp("StartDate")
-											.getTime());
-				Date endDate = new Date(rs.getTimestamp("EndDate")
-											.getTime());
-
-				request = new Request(	rID,
-										aID,
-										nID,
-										endDate,
-										startDate);
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return request;
-
-	}
-
-	/**
-	 * 
-	 * Updates a request in the database
-	 * 
-	 * 
-	 * 
-	 * @param Request the request to be updated
-	 * @deprecated Doesn't use prepared Statements
-	 */
-
-	public void updateRequestold(Request request) {
-		String updateString = "UPDATE "
-				+ connectionInfo.getProperty("database.database") + "."
-				+ Table.PROCESS.toString() + " SET RequesterID = "
-				+ request.getRequesterId() + " , ApproverID = "
-				+ request.getApproverId() + " , NotebookID = "
-				+ request.getNotebookId() + " , Hash = " + request.getHash()
-				+ " , StartDate = " + new Timestamp(request.getStart()
-															.getTime())
-				+ " , EndDate = " + new Timestamp(request.getEnd()
-															.getTime())
-				+ " , UntilDate = " + new Timestamp(request.getUntil()
-															.getTime())
-				+ " , StatusID = " + request.getStatus()
-											.getId() + " WHERE ID = "
-				+ request.getId();
-
-		Statement statement = null;
-
-		try {
-			statement = connection.createStatement();
-			statement.executeQuery(updateString);
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-	}
-
-	/**
-	 * 
-	 * Inserts a request in the database
-	 * 
-	 * Doesn't use prepared Statements
-	 * 
-	 * @param Request the request to be updated
-	 * @deprecated Doesn't use prepared Statements
-	 */
-
-	public void insertRequestold(Request request) {
-		String insertString = "INSERT INTO "
-				+ connectionInfo.getProperty("database.database")
-				+ "."
-				+ Table.PROCESS.toString()
-				+ " (RequesterID, ApproverID, NotebookID, Hash, CreationDate, StartDate, EndDate, UntilDate, StatusID) VALUES ("
-				+ request.getRequesterId() + " , " + request.getApproverId()
-				+ " , " + request.getNotebookId() + " , " + request.getHash()
-				+ " , " + new Timestamp(request.getCreated()
-												.getTime()) + " , "
-				+ new Timestamp(request.getStart()
-										.getTime()) + " , "
-				+ new Timestamp(request.getEnd()
-										.getTime()) + " , "
-				+ new Timestamp(request.getUntil()
-										.getTime()) + " , "
-				+ request.getStatus()
-							.getId() + ")";
-
-		Statement statement = null;
-
-		try {
-			statement = connection.createStatement();
-			statement.executeQuery(insertString);
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * 
-	 * Gets all lectures
-	 * 
-	 * @return A collection of lectures
-	 */
-
+	@Override
 	public List<User> getLectures() {
 
 		String sql = "SELECT ID, MatrNr, Vorname, Name, EMail, isStudent, isAdmin, isLecturer FROM "
@@ -627,13 +396,7 @@ public class DataAccess {
 
 	}
 
-	/**
-	 * 
-	 * Gets all Admins
-	 * 
-	 * @return A collection of Admins
-	 */
-
+	@Override
 	public List<User> getAdmins() {
 
 		String sql = "SELECT ID, MatrNr, Vorname, Name, EMail, isStudent, isAdmin, isLecturer FROM "
@@ -682,13 +445,7 @@ public class DataAccess {
 
 	}
 
-	/**
-	 * 
-	 * Gets a user object for ID
-	 * 
-	 * @return the requested user object
-	 */
-
+	@Override
 	public User getUserForID(int id) {
 
 		String sql = "SELECT ID, MatrNr, Vorname, Name, EMail, isStudent, isAdmin, isLecturer FROM "
@@ -734,14 +491,7 @@ public class DataAccess {
 
 	}
 
-	/**
-	 * 
-	 * Inserts a request in the database
-	 * 
-	 * @param Request the request to be updated
-	 * 
-	 */
-
+	@Override
 	public void insertRequest(Request request) {
 		String sql = "INSERT INTO "
 				+ connectionInfo.getProperty("database.database")
@@ -778,15 +528,7 @@ public class DataAccess {
 		}
 	}
 
-	/**
-	 * 
-	 * Updates a request in the database Creation date cannot be updated because
-	 * its finale
-	 * 
-	 * @param Request the request to be updated
-	 * 
-	 */
-
+	@Override
 	public void updateRequest(Request request) {
 		String sql = "UPDATE "
 				+ connectionInfo.getProperty("database.database")
@@ -822,13 +564,7 @@ public class DataAccess {
 
 	}
 
-	/**
-	 * Gets all requests from the database
-	 * 
-	 * 
-	 * @return List of all Request
-	 */
-
+	@Override
 	public List<Request> getRequests() {
 		String sql = "SELECT ID, RequestID, RequesterID, ApproverID, NotebookID, Hash, CreationDate, StartDate, EndDate, UntilDate, StatusID, OSID, Description FROM "
 				+ connectionInfo.getProperty("database.database")
@@ -891,13 +627,7 @@ public class DataAccess {
 
 	}
 
-	/**
-	 * Gets a requests for id from the database
-	 * 
-	 * 
-	 * @return really requested Request
-	 */
-
+	@Override
 	public Request getRequestForID(int id) {
 		String sql = "SELECT RequestID, RequesterID, ApproverID, NotebookID, Hash, CreationDate, StartDate, EndDate, UntilDate, StatusID, OSID, Description FROM "
 				+ connectionInfo.getProperty("database.database")
@@ -955,13 +685,7 @@ public class DataAccess {
 
 	}
 
-	/**
-	 * Gets a requests for hash from the database
-	 * 
-	 * 
-	 * @return really requested Request
-	 */
-
+	@Override
 	public Request getRequestForHash(String hash) {
 		String sql = "SELECT ID, RequestID, RequesterID, ApproverID, NotebookID, CreationDate, StartDate, EndDate, UntilDate, StatusID, OSID, Description FROM "
 				+ connectionInfo.getProperty("database.database")
@@ -1020,13 +744,7 @@ public class DataAccess {
 
 	}
 
-	/**
-	 * Gets all notebooks from the database
-	 * 
-	 * 
-	 * @return List of all notebooks
-	 */
-
+	@Override
 	public List<Notebook> getNotebooks() {
 		String sql = "SELECT ID, Name, IsDefective, IsAvailable FROM "
 				+ connectionInfo.getProperty("database.database") + "."
@@ -1068,12 +786,7 @@ public class DataAccess {
 
 	}
 
-	/**
-	 * Inserts a notebook object into the mighty database
-	 * 
-	 * @param the notebook to be inserted
-	 */
-
+	@Override
 	public void insertNotebook(Notebook notebook) {
 		String sql = "INSERT INTO "
 				+ connectionInfo.getProperty("database.database") + "."
@@ -1096,13 +809,7 @@ public class DataAccess {
 
 	}
 
-	/**
-	 * Updates a notebook object on the database
-	 * 
-	 * 
-	 * @param the notebook to be updated
-	 */
-
+	@Override
 	public void updateNotebook(Notebook notebook) {
 		String sql = "UPDATE "
 				+ connectionInfo.getProperty("database.database")
@@ -1126,12 +833,7 @@ public class DataAccess {
 
 	}
 
-	/**
-	 * Inserts a email object into the database
-	 * 
-	 * @param the email to be inserted
-	 */
-
+	@Override
 	public void insertEMail(EMail eMail) {
 		String sql = "INSERT INTO "
 				+ connectionInfo.getProperty("database.database")
@@ -1158,14 +860,7 @@ public class DataAccess {
 
 	}
 
-	/**
-	 * Gets a map of all operating systems available for the notebooks from the
-	 * database
-	 * 
-	 * 
-	 * @return hashmap of all operating systems
-	 */
-
+	@Override
 	public HashMap<Integer, String> getOSs() {
 		String sql = "SELECT ID, Name FROM "
 				+ connectionInfo.getProperty("database.database") + "."
@@ -1198,13 +893,7 @@ public class DataAccess {
 
 	}
 
-	/**
-	 * Gets a map of all status values from the database
-	 * 
-	 * 
-	 * @return hashmap of all status values
-	 */
-
+	@Override
 	public HashMap<Integer, String> getStatusses() {
 		String sql = "SELECT ID, Name FROM "
 				+ connectionInfo.getProperty("database.database") + "."
@@ -1237,6 +926,7 @@ public class DataAccess {
 
 	}
 
+	@Override
 	public User authenticate(String username, String password) {
 		String sql = "SELECT ID, MatrNr, Vorname, Name, EMail, isStudent, isAdmin, isLecturer, Password FROM "
 				+ connectionInfo.getProperty("database.database")
