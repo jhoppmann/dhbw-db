@@ -3,6 +3,7 @@ package com.dhbw_db.control;
 import com.dhbw_db.model.io.logging.FileLogger;
 import com.dhbw_db.model.io.logging.LoggingService;
 import com.dhbw_db.view.ApplicationWindow;
+import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.UI;
 
@@ -12,6 +13,7 @@ import com.vaadin.ui.UI;
  * @author jhoppmann
  */
 @SuppressWarnings("serial")
+@Theme("ourTheme")
 public class MainUI extends UI {
 
 	private MainController mc;
