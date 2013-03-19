@@ -65,6 +65,7 @@ public class MySQLAccess implements DataAccess {
 
 		if (!tableExists(Table.OS.toString())) {
 			this.setupOSTable();
+			this.insertOSData();
 		}
 
 		if (!tableExists(Table.STATUS.toString())) {
@@ -122,6 +123,7 @@ public class MySQLAccess implements DataAccess {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
+			log.log(e.getMessage(), LogLevel.ERROR);
 		}
 
 		conn = DriverManager.getConnection(	connectionString.toString(),
@@ -142,15 +144,14 @@ public class MySQLAccess implements DataAccess {
 				+ "Body VARCHAR(45) NULL, " + "Date TIMESTAMP NULL, "
 				+ "PRIMARY KEY (ID))";
 
-		System.out.println("Table is being created: " + creationString);
-
 		Statement statement = null;
 		try {
 			statement = connection.createStatement();
 			statement.executeUpdate(creationString);
-
+			log.log("Created table " + Table.EMAIL, LogLevel.INFO);
 		} catch (SQLException e) {
 			e.printStackTrace();
+			log.log(e.getMessage(), LogLevel.ERROR);
 		}
 	}
 
@@ -164,15 +165,14 @@ public class MySQLAccess implements DataAccess {
 				+ "Name VARCHAR(45) NOT NULL, " + "IsDefective BIT NOT NULL, "
 				+ "IsAvailable BIT NOT NULL, " + "PRIMARY KEY (ID))";
 
-		System.out.println("Table is being created: " + creationString);
-
 		Statement statement = null;
 		try {
 			statement = connection.createStatement();
 			statement.executeUpdate(creationString);
-
+			log.log("Created table " + Table.NOTEBOOK, LogLevel.INFO);
 		} catch (SQLException e) {
 			e.printStackTrace();
+			log.log(e.getMessage(), LogLevel.ERROR);
 		}
 	}
 
@@ -185,15 +185,14 @@ public class MySQLAccess implements DataAccess {
 				+ Table.OS.toString() + "(ID INT NOT NULL AUTO_INCREMENT, "
 				+ "Name VARCHAR(45) NOT NULL, " + "PRIMARY KEY (ID))";
 
-		System.out.println("Table is being created: " + creationString);
-
 		Statement statement = null;
 		try {
 			statement = connection.createStatement();
 			statement.executeUpdate(creationString);
-
+			log.log("Created table " + Table.OS, LogLevel.INFO);
 		} catch (SQLException e) {
 			e.printStackTrace();
+			log.log(e.getMessage(), LogLevel.ERROR);
 		}
 	}
 
@@ -240,15 +239,14 @@ public class MySQLAccess implements DataAccess {
 				+ Table.STATUS.toString() + " (ID) " + "ON DELETE NO ACTION "
 				+ "ON UPDATE NO ACTION) ";
 
-		System.out.println("Table is being created: " + creationString);
-
 		Statement statement = null;
 		try {
 			statement = connection.createStatement();
 			statement.executeUpdate(creationString);
-
+			log.log("Created table " + Table.PROCESS, LogLevel.INFO);
 		} catch (SQLException e) {
 			e.printStackTrace();
+			log.log(e.getMessage(), LogLevel.ERROR);
 		}
 	}
 
@@ -261,15 +259,14 @@ public class MySQLAccess implements DataAccess {
 				+ Table.STATUS.toString() + "(ID INT NOT NULL, "
 				+ "Name VARCHAR(45) NOT NULL, " + "PRIMARY KEY (ID))";
 
-		System.out.println("Table is being created: " + creationString);
-
 		Statement statement = null;
 		try {
 			statement = connection.createStatement();
 			statement.executeUpdate(creationString);
-
+			log.log("Created table " + Table.STATUS, LogLevel.INFO);
 		} catch (SQLException e) {
 			e.printStackTrace();
+			log.log(e.getMessage(), LogLevel.ERROR);
 		}
 	}
 
@@ -286,15 +283,14 @@ public class MySQLAccess implements DataAccess {
 				+ "IsAdmin BIT NOT NULL, " + "IsLecturer BIT NOT NULL, "
 				+ "Password VARCHAR(45) NOT NULL, " + "PRIMARY KEY (ID))";
 
-		System.out.println("Table is being created: " + creationString);
-
 		Statement statement = null;
 		try {
 			statement = connection.createStatement();
 			statement.executeUpdate(creationString);
-
+			log.log("Created table " + Table.USER, LogLevel.INFO);
 		} catch (SQLException e) {
 			e.printStackTrace();
+			log.log(e.getMessage(), LogLevel.ERROR);
 		}
 	}
 
@@ -310,22 +306,55 @@ public class MySQLAccess implements DataAccess {
 		for (String s : status) {
 			i++;
 
-			String creationString = "insert into "
+			String insertionString = "insert into "
 					+ connectionInfo.get("database.database") + "."
 					+ Table.STATUS.toString() + " (ID, Name) VALUES (" + i
 					+ "," + s + ")";
 
-			System.out.println("Inserted: " + creationString);
+			Statement statement = null;
+			try {
+				statement = connection.createStatement();
+				statement.executeUpdate(insertionString);
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+				log.log(e.getMessage(), LogLevel.ERROR);
+			}
+			log.log("Inserted " + s + " into " + Table.STATUS.toString(),
+					LogLevel.INFO);
+		}
+	}
+
+	/**
+	 * 
+	 */
+	private void insertOSData() {
+		// define the available operating systems
+		String[] operatingSystems = { "'Windows 7'", "'Windows 8'",
+				"'MacOS Mountain Lion'", "'Windows 3.11'", "'SUSE Linux 12.3'" };
+
+		int i = 0;
+		for (String s : operatingSystems) {
+			i++;
+
+			String insertionString = "insert into "
+					+ connectionInfo.get("database.database") + "."
+					+ Table.OS.toString() + " (ID, Name) VALUES (" + i + ","
+					+ s + ")";
 
 			Statement statement = null;
 			try {
 				statement = connection.createStatement();
-				statement.executeUpdate(creationString);
+				statement.executeUpdate(insertionString);
 
 			} catch (SQLException e) {
 				e.printStackTrace();
+				log.log(e.getMessage(), LogLevel.ERROR);
 			}
+			log.log("Inserted " + s + " into " + Table.STATUS.toString(),
+					LogLevel.INFO);
 		}
+
 	}
 
 	/**
@@ -390,6 +419,7 @@ public class MySQLAccess implements DataAccess {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			log.log(e.getMessage(), LogLevel.ERROR);
 		}
 
 		return userList;
@@ -439,6 +469,7 @@ public class MySQLAccess implements DataAccess {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			log.log(e.getMessage(), LogLevel.ERROR);
 		}
 
 		return userList;
@@ -485,6 +516,7 @@ public class MySQLAccess implements DataAccess {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			log.log(e.getMessage(), LogLevel.ERROR);
 		}
 
 		return user;
@@ -525,6 +557,7 @@ public class MySQLAccess implements DataAccess {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			log.log(e.getMessage(), LogLevel.ERROR);
 		}
 	}
 
@@ -560,6 +593,7 @@ public class MySQLAccess implements DataAccess {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			log.log(e.getMessage(), LogLevel.ERROR);
 		}
 
 	}
@@ -621,6 +655,7 @@ public class MySQLAccess implements DataAccess {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			log.log(e.getMessage(), LogLevel.ERROR);
 		}
 
 		return requestList;
@@ -679,6 +714,7 @@ public class MySQLAccess implements DataAccess {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			log.log(e.getMessage(), LogLevel.ERROR);
 		}
 
 		return request;
@@ -738,6 +774,7 @@ public class MySQLAccess implements DataAccess {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			log.log(e.getMessage(), LogLevel.ERROR);
 		}
 
 		return request;
@@ -780,10 +817,10 @@ public class MySQLAccess implements DataAccess {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			log.log(e.getMessage(), LogLevel.ERROR);
 		}
 
 		return notebookList;
-
 	}
 
 	@Override
@@ -805,8 +842,8 @@ public class MySQLAccess implements DataAccess {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			log.log(e.getMessage(), LogLevel.ERROR);
 		}
-
 	}
 
 	@Override
@@ -829,8 +866,8 @@ public class MySQLAccess implements DataAccess {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			log.log(e.getMessage(), LogLevel.ERROR);
 		}
-
 	}
 
 	@Override
@@ -856,8 +893,8 @@ public class MySQLAccess implements DataAccess {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			log.log(e.getMessage(), LogLevel.ERROR);
 		}
-
 	}
 
 	@Override
@@ -866,12 +903,11 @@ public class MySQLAccess implements DataAccess {
 				+ connectionInfo.getProperty("database.database") + "."
 				+ Table.OS.toString();
 
-		HashMap<Integer, String> osMap = null;
+		// initialize HashMap here, so that an empty map is returned in case of
+		// error
+		HashMap<Integer, String> osMap = new HashMap<Integer, String>();
 
 		try {
-
-			osMap = new HashMap<Integer, String>();
-
 			PreparedStatement statement = connection.prepareStatement(sql);
 
 			ResultSet result = statement.executeQuery();
@@ -882,15 +918,14 @@ public class MySQLAccess implements DataAccess {
 				String name = result.getString("Name");
 
 				osMap.put(id, name);
-
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			log.log(e.getMessage(), LogLevel.ERROR);
 		}
 
 		return osMap;
-
 	}
 
 	@Override
@@ -899,31 +934,25 @@ public class MySQLAccess implements DataAccess {
 				+ connectionInfo.getProperty("database.database") + "."
 				+ Table.STATUS.toString();
 
-		HashMap<Integer, String> statusMap = null;
+		// initialize HashMap here, so that an empty map is returned in case of
+		// error
+		HashMap<Integer, String> statusMap = new HashMap<Integer, String>();
 
 		try {
-
-			statusMap = new HashMap<Integer, String>();
-
 			PreparedStatement statement = connection.prepareStatement(sql);
 
 			ResultSet result = statement.executeQuery();
 
 			while (result.next()) {
-
-				int id = result.getInt("ID");
-				String name = result.getString("Name");
-
-				statusMap.put(id, name);
-
+				statusMap.put(result.getInt("ID"), result.getString("Name"));
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			log.log(e.getMessage(), LogLevel.ERROR);
 		}
 
 		return statusMap;
-
 	}
 
 	@Override
@@ -934,11 +963,10 @@ public class MySQLAccess implements DataAccess {
 				+ Table.USER.toString() + " WHERE Name = ?";
 
 		User user = null;
-		String storedPassword = null;
 
 		try {
 
-			user = new User();
+			user = null;
 
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setString(1, username);
@@ -946,45 +974,29 @@ public class MySQLAccess implements DataAccess {
 			ResultSet result = statement.executeQuery();
 
 			if (result.next()) {
-				int id = result.getInt("ID");
-				int matrNr = result.getInt("MatrNr");
-				String vorname = result.getString("Vorname");
-				String name = result.getString("Name");
-				String eMail = result.getString("EMail");
-				Boolean isStudent = result.getBoolean("isStudent");
-				Boolean isAdmin = result.getBoolean("isAdmin");
-				Boolean isLecturer = result.getBoolean("isLecturer");
+				// perform password check before any other work is done
+				if (result.getString("Password")
+							.equals(DigestUtils.md5Hex(password))) {
 
-				storedPassword = result.getString("Password");
-				// Just for checking whether the as parameter passed password is
-				// valid.
-
-				user.setID(id);
-				user.setMatrNr(matrNr);
-				user.setFirstName(vorname);
-				user.setLastName(name);
-				user.seteMail(eMail);
-				user.setStudent(isStudent);
-				user.setAdmin(isAdmin);
-				user.setLecturer(isLecturer);
+					user = new User();
+					user.setID(result.getInt("ID"));
+					user.setMatrNr(result.getInt("MatrNr"));
+					user.setFirstName(result.getString("Vorname"));
+					user.setLastName(result.getString("Name"));
+					user.seteMail(result.getString("EMail"));
+					user.setStudent(result.getBoolean("isStudent"));
+					user.setAdmin(result.getBoolean("isAdmin"));
+					user.setLecturer(result.getBoolean("isLecturer"));
+				}
 
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			log.log(e.getMessage(), LogLevel.ERROR);
 		}
 
-		String hashPassword = DigestUtils.md5Hex(password); // makes a hash out
-															// of the passed
-															// password
-
-		if (hashPassword.equals(storedPassword)) {
-			return user;
-		}
-
-		else {
-			return null;
-		}
+		return user;
 	}
 
 	public void testSomeMethods() {
