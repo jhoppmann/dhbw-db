@@ -112,6 +112,7 @@ public class StudentStartPage extends CustomComponent {
 
 		// headlineLabel
 		headlineLabel = new Label();
+		headlineLabel.setStyleName("headline");
 		headlineLabel.setImmediate(false);
 		headlineLabel.setWidth("-1px");
 		headlineLabel.setHeight("-1px");

@@ -1,0 +1,22 @@
+@CHARSET "ISO-8859-1";
+
+@import "../reindeer/styles.css";
+@import "../reindeer/legacy-styles.css";
+
+.v-menubar {
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#F7F7F7), to(#C3C3C3));
+    background: -moz-linear-gradient(0% 6% 270deg,#F7F7F7, #C3C3C3);
+	color: black;
+}
+.v-menubar-menuitem.v-menubar-menuitem-selected {
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#F7F7F7), to(#C3C3C3));
+    background: -moz-linear-gradient(0% 6% 270deg,#F7F7F7, #C3C3C3);
+	color: red;
+}
+.v-menubar .v-menubar-menuitem:hover {
+    color: red;
+}
+.headline {
+	color: red;
+	font-size:15px;
+}
