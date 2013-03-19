@@ -117,8 +117,6 @@ public class MySQLAccess implements DataAccess {
 						.append(connectionInfo.get("database.port"))
 						.append("/")
 						.append(connectionInfo.get("database.database"));
-
-		// TODO Check this
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
@@ -144,9 +142,8 @@ public class MySQLAccess implements DataAccess {
 				+ "Body VARCHAR(45) NULL, " + "Date TIMESTAMP NULL, "
 				+ "PRIMARY KEY (ID))";
 
-		Statement statement = null;
 		try {
-			statement = connection.createStatement();
+			Statement statement = connection.createStatement();
 			statement.executeUpdate(creationString);
 			log.log("Created table " + Table.EMAIL, LogLevel.INFO);
 		} catch (SQLException e) {
@@ -165,9 +162,8 @@ public class MySQLAccess implements DataAccess {
 				+ "Name VARCHAR(45) NOT NULL, " + "IsDefective BIT NOT NULL, "
 				+ "IsAvailable BIT NOT NULL, " + "PRIMARY KEY (ID))";
 
-		Statement statement = null;
 		try {
-			statement = connection.createStatement();
+			Statement statement = connection.createStatement();
 			statement.executeUpdate(creationString);
 			log.log("Created table " + Table.NOTEBOOK, LogLevel.INFO);
 		} catch (SQLException e) {
@@ -185,9 +181,8 @@ public class MySQLAccess implements DataAccess {
 				+ Table.OS.toString() + "(ID INT NOT NULL AUTO_INCREMENT, "
 				+ "Name VARCHAR(45) NOT NULL, " + "PRIMARY KEY (ID))";
 
-		Statement statement = null;
 		try {
-			statement = connection.createStatement();
+			Statement statement = connection.createStatement();
 			statement.executeUpdate(creationString);
 			log.log("Created table " + Table.OS, LogLevel.INFO);
 		} catch (SQLException e) {
@@ -239,9 +234,8 @@ public class MySQLAccess implements DataAccess {
 				+ Table.STATUS.toString() + " (ID) " + "ON DELETE NO ACTION "
 				+ "ON UPDATE NO ACTION) ";
 
-		Statement statement = null;
 		try {
-			statement = connection.createStatement();
+			Statement statement = connection.createStatement();
 			statement.executeUpdate(creationString);
 			log.log("Created table " + Table.PROCESS, LogLevel.INFO);
 		} catch (SQLException e) {
@@ -259,9 +253,8 @@ public class MySQLAccess implements DataAccess {
 				+ Table.STATUS.toString() + "(ID INT NOT NULL, "
 				+ "Name VARCHAR(45) NOT NULL, " + "PRIMARY KEY (ID))";
 
-		Statement statement = null;
 		try {
-			statement = connection.createStatement();
+			Statement statement = connection.createStatement();
 			statement.executeUpdate(creationString);
 			log.log("Created table " + Table.STATUS, LogLevel.INFO);
 		} catch (SQLException e) {
@@ -279,13 +272,13 @@ public class MySQLAccess implements DataAccess {
 				+ Table.USER.toString() + "(ID INT NOT NULL AUTO_INCREMENT, "
 				+ "MatrNr INT NOT NULL, " + "Vorname VARCHAR(45) NOT NULL, "
 				+ "Name VARCHAR(45) NOT NULL, "
-				+ "EMail VARCHAR(45) NOT NULL, " + "IsStudent BIT NOT NULL, "
-				+ "IsAdmin BIT NOT NULL, " + "IsLecturer BIT NOT NULL, "
-				+ "Password VARCHAR(45) NOT NULL, " + "PRIMARY KEY (ID))";
+				+ "EMail VARCHAR(45) NOT NULL, "
+				+ "IsStudent TINYINT NOT NULL, " + "IsAdmin TINYINT NOT NULL, "
+				+ "IsLecturer TINYINT NOT NULL, "
+				+ "Password VARCHAR(32) NOT NULL, " + "PRIMARY KEY (ID))";
 
-		Statement statement = null;
 		try {
-			statement = connection.createStatement();
+			Statement statement = connection.createStatement();
 			statement.executeUpdate(creationString);
 			log.log("Created table " + Table.USER, LogLevel.INFO);
 		} catch (SQLException e) {
@@ -311,9 +304,8 @@ public class MySQLAccess implements DataAccess {
 					+ Table.STATUS.toString() + " (ID, Name) VALUES (" + i
 					+ "," + s + ")";
 
-			Statement statement = null;
 			try {
-				statement = connection.createStatement();
+				Statement statement = connection.createStatement();
 				statement.executeUpdate(insertionString);
 
 			} catch (SQLException e) {
@@ -342,9 +334,8 @@ public class MySQLAccess implements DataAccess {
 					+ Table.OS.toString() + " (ID, Name) VALUES (" + i + ","
 					+ s + ")";
 
-			Statement statement = null;
 			try {
-				statement = connection.createStatement();
+				Statement statement = connection.createStatement();
 				statement.executeUpdate(insertionString);
 
 			} catch (SQLException e) {
@@ -384,12 +375,9 @@ public class MySQLAccess implements DataAccess {
 				+ "."
 				+ Table.USER.toString() + " WHERE IsLecturer = (1)";
 
-		List<User> userList = null;
+		List<User> userList = new ArrayList<User>();
 
 		try {
-
-			userList = new ArrayList<User>();
-
 			PreparedStatement statement = connection.prepareStatement(sql);
 
 			ResultSet result = statement.executeQuery();
@@ -423,7 +411,6 @@ public class MySQLAccess implements DataAccess {
 		}
 
 		return userList;
-
 	}
 
 	@Override
@@ -434,12 +421,9 @@ public class MySQLAccess implements DataAccess {
 				+ "."
 				+ Table.USER.toString() + " WHERE IsAdmin = (1)";
 
-		List<User> userList = null;
+		List<User> userList = new ArrayList<User>();
 
 		try {
-
-			userList = new ArrayList<User>();
-
 			PreparedStatement statement = connection.prepareStatement(sql);
 
 			ResultSet result = statement.executeQuery();
@@ -473,7 +457,6 @@ public class MySQLAccess implements DataAccess {
 		}
 
 		return userList;
-
 	}
 
 	@Override
@@ -520,7 +503,6 @@ public class MySQLAccess implements DataAccess {
 		}
 
 		return user;
-
 	}
 
 	@Override
@@ -595,7 +577,6 @@ public class MySQLAccess implements DataAccess {
 			e.printStackTrace();
 			log.log(e.getMessage(), LogLevel.ERROR);
 		}
-
 	}
 
 	@Override
@@ -605,12 +586,9 @@ public class MySQLAccess implements DataAccess {
 				+ "."
 				+ Table.PROCESS.toString();
 
-		List<Request> requestList = null;
+		List<Request> requestList = new ArrayList<Request>();
 
 		try {
-
-			requestList = new ArrayList<Request>();
-
 			PreparedStatement statement = connection.prepareStatement(sql);
 
 			ResultSet result = statement.executeQuery();
@@ -659,7 +637,6 @@ public class MySQLAccess implements DataAccess {
 		}
 
 		return requestList;
-
 	}
 
 	@Override
@@ -718,7 +695,6 @@ public class MySQLAccess implements DataAccess {
 		}
 
 		return request;
-
 	}
 
 	@Override
@@ -1019,5 +995,4 @@ public class MySQLAccess implements DataAccess {
 								.get(1));
 
 	}
-
 }
