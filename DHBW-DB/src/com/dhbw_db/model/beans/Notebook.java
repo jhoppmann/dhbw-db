@@ -90,4 +90,8 @@ public class Notebook {
 		this.isAvailable = isAvailable;
 	}
 
+	public String toString() {
+		return this.name + (isDefective ? " (defective)" : "");
+	}
+
 }
