@@ -4,8 +4,8 @@
 package com.dhbw_db.model.io.database;
 
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.dhbw_db.model.beans.EMail;
 import com.dhbw_db.model.beans.Notebook;
@@ -62,7 +62,7 @@ public interface DataAccess {
 	 * 
 	 * @return A List of lectures
 	 */
-	public List<User> getLectures();
+	public List<User> getLecturers();
 
 	/**
 	 * 
@@ -155,7 +155,7 @@ public interface DataAccess {
 	 * 
 	 * @return hashmap of all operating systems
 	 */
-	public HashMap<Integer, String> getOSs();
+	public Map<Integer, String> getOSs();
 
 	/**
 	 * Gets a map of all status values from the database
@@ -163,7 +163,7 @@ public interface DataAccess {
 	 * 
 	 * @return hashmap of all status values
 	 */
-	public HashMap<Integer, String> getStatusses();
+	public Map<Integer, String> getStatusses();
 
 	/**
 	 * Tries to authenticate a user from the database. If the user exists and

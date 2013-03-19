@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -88,10 +89,10 @@ public class MySQLAccess implements DataAccess {
 
 	@Override
 	public void initializeDatabase() throws SQLException {
-		connection = connect();
+		connect();
 		createTables();
 		// destroy reference after we're done
-		connection = null;
+		disconnect();
 	}
 
 	/**
@@ -127,6 +128,7 @@ public class MySQLAccess implements DataAccess {
 		conn = DriverManager.getConnection(	connectionString.toString(),
 											connectionProps);
 
+		this.connection = conn;
 		return conn;
 	}
 
@@ -368,49 +370,42 @@ public class MySQLAccess implements DataAccess {
 	 */
 
 	@Override
-	public List<User> getLectures() {
+	public List<User> getLecturers() {
 
 		String sql = "SELECT ID, MatrNr, Vorname, Name, EMail, isStudent, isAdmin, isLecturer FROM "
 				+ connectionInfo.getProperty("database.database")
 				+ "."
 				+ Table.USER.toString() + " WHERE IsLecturer = (1)";
 
-		List<User> userList = new ArrayList<User>();
+		List<User> lecturers = new ArrayList<User>();
 
 		try {
+			connect();
 			PreparedStatement statement = connection.prepareStatement(sql);
 
 			ResultSet result = statement.executeQuery();
 
 			while (result.next()) {
-				int id = result.getInt("ID");
-				int matrNr = result.getInt("MatrNr");
-				String vorname = result.getString("Vorname");
-				String name = result.getString("Name");
-				String eMail = result.getString("EMail");
-				Boolean isStudent = result.getBoolean("isStudent");
-				Boolean isAdmin = result.getBoolean("isAdmin");
-				Boolean isLecturer = result.getBoolean("isLecturer");
-
 				User user = new User();
-				user.setID(id);
-				user.setMatrNr(matrNr);
-				user.setFirstName(vorname);
-				user.setLastName(name);
-				user.seteMail(eMail);
-				user.setStudent(isStudent);
-				user.setAdmin(isAdmin);
-				user.setLecturer(isLecturer);
+				user.setID(result.getInt("ID"));
+				user.setMatrNr(result.getInt("MatrNr"));
+				user.setFirstName(result.getString("Vorname"));
+				user.setLastName(result.getString("Name"));
+				user.seteMail(result.getString("EMail"));
+				user.setStudent(result.getBoolean("isStudent"));
+				user.setAdmin(result.getBoolean("isAdmin"));
+				user.setLecturer(result.getBoolean("isLecturer"));
 
-				userList.add(user);
+				lecturers.add(user);
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 			log.log(e.getMessage(), LogLevel.ERROR);
+		} finally {
+			disconnect();
 		}
-
-		return userList;
+		return lecturers;
 	}
 
 	@Override
@@ -424,6 +419,8 @@ public class MySQLAccess implements DataAccess {
 		List<User> userList = new ArrayList<User>();
 
 		try {
+			connect();
+
 			PreparedStatement statement = connection.prepareStatement(sql);
 
 			ResultSet result = statement.executeQuery();
@@ -454,6 +451,8 @@ public class MySQLAccess implements DataAccess {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			log.log(e.getMessage(), LogLevel.ERROR);
+		} finally {
+			disconnect();
 		}
 
 		return userList;
@@ -470,6 +469,8 @@ public class MySQLAccess implements DataAccess {
 		User user = null;
 
 		try {
+			connect();
+
 			user = new User();
 
 			PreparedStatement statement = connection.prepareStatement(sql);
@@ -500,6 +501,8 @@ public class MySQLAccess implements DataAccess {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			log.log(e.getMessage(), LogLevel.ERROR);
+		} finally {
+			disconnect();
 		}
 
 		return user;
@@ -514,6 +517,7 @@ public class MySQLAccess implements DataAccess {
 				+ " (ID, RequesterID, ApproverID, NotebookID, Hash, CreationDate, StartDate, EndDate, UntilDate, StatusID, OSID, Description) VALUES ( ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ?, ?)";
 
 		try {
+			connect();
 			PreparedStatement statement = connection.prepareStatement(sql);
 
 			statement.setInt(1, request.getId());
@@ -540,6 +544,8 @@ public class MySQLAccess implements DataAccess {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			log.log(e.getMessage(), LogLevel.ERROR);
+		} finally {
+			disconnect();
 		}
 	}
 
@@ -552,6 +558,7 @@ public class MySQLAccess implements DataAccess {
 				+ " SET RequesterID = ? , ApproverID = ? , NotebookID = ?, Hash = ?, StartDate = ? , EndDate = ? , UntilDate = ? , StatusID = ?, OSID = ?, Description = ? WHERE ID = ?";
 
 		try {
+			connect();
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setInt(1, request.getRequesterId());
 			statement.setInt(2, request.getApproverId());
@@ -576,6 +583,8 @@ public class MySQLAccess implements DataAccess {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			log.log(e.getMessage(), LogLevel.ERROR);
+		} finally {
+			disconnect();
 		}
 	}
 
@@ -589,6 +598,7 @@ public class MySQLAccess implements DataAccess {
 		List<Request> requestList = new ArrayList<Request>();
 
 		try {
+			connect();
 			PreparedStatement statement = connection.prepareStatement(sql);
 
 			ResultSet result = statement.executeQuery();
@@ -634,6 +644,8 @@ public class MySQLAccess implements DataAccess {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			log.log(e.getMessage(), LogLevel.ERROR);
+		} finally {
+			disconnect();
 		}
 
 		return requestList;
@@ -649,7 +661,7 @@ public class MySQLAccess implements DataAccess {
 		Request request = null;
 
 		try {
-
+			connect();
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setInt(1, id);
 
@@ -692,6 +704,8 @@ public class MySQLAccess implements DataAccess {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			log.log(e.getMessage(), LogLevel.ERROR);
+		} finally {
+			disconnect();
 		}
 
 		return request;
@@ -707,7 +721,7 @@ public class MySQLAccess implements DataAccess {
 		Request request = null;
 
 		try {
-
+			connect();
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setString(1, hash);
 
@@ -751,6 +765,8 @@ public class MySQLAccess implements DataAccess {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			log.log(e.getMessage(), LogLevel.ERROR);
+		} finally {
+			disconnect();
 		}
 
 		return request;
@@ -766,7 +782,7 @@ public class MySQLAccess implements DataAccess {
 		List<Notebook> notebookList = null;
 
 		try {
-
+			connect();
 			notebookList = new ArrayList<Notebook>();
 
 			PreparedStatement statement = connection.prepareStatement(sql);
@@ -794,6 +810,8 @@ public class MySQLAccess implements DataAccess {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			log.log(e.getMessage(), LogLevel.ERROR);
+		} finally {
+			disconnect();
 		}
 
 		return notebookList;
@@ -807,7 +825,7 @@ public class MySQLAccess implements DataAccess {
 				+ " (ID, Name, IsDefective, IsAvailable) VALUES (?,?,?,?)";
 
 		try {
-
+			connect();
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setInt(1, notebook.getiD());
 			statement.setString(2, notebook.getName());
@@ -819,6 +837,8 @@ public class MySQLAccess implements DataAccess {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			log.log(e.getMessage(), LogLevel.ERROR);
+		} finally {
+			disconnect();
 		}
 	}
 
@@ -831,7 +851,7 @@ public class MySQLAccess implements DataAccess {
 				+ " SET Name = ?, IsDefective = ?, IsAvailable = ? WHERE ID = ?";
 
 		try {
-
+			connect();
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setString(1, notebook.getName());
 			statement.setBoolean(2, notebook.isDefective());
@@ -843,6 +863,8 @@ public class MySQLAccess implements DataAccess {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			log.log(e.getMessage(), LogLevel.ERROR);
+		} finally {
+			disconnect();
 		}
 	}
 
@@ -855,7 +877,7 @@ public class MySQLAccess implements DataAccess {
 				+ " (ID, ReceiverMail, SenderMail, Header, Body, Date) VALUES (?,?,?,?,?,?)";
 
 		try {
-
+			connect();
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setInt(1, eMail.getiD());
 			statement.setString(2, eMail.getReceiverMail());
@@ -870,11 +892,13 @@ public class MySQLAccess implements DataAccess {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			log.log(e.getMessage(), LogLevel.ERROR);
+		} finally {
+			disconnect();
 		}
 	}
 
 	@Override
-	public HashMap<Integer, String> getOSs() {
+	public Map<Integer, String> getOSs() {
 		String sql = "SELECT ID, Name FROM "
 				+ connectionInfo.getProperty("database.database") + "."
 				+ Table.OS.toString();
@@ -884,6 +908,7 @@ public class MySQLAccess implements DataAccess {
 		HashMap<Integer, String> osMap = new HashMap<Integer, String>();
 
 		try {
+			connection = connect();
 			PreparedStatement statement = connection.prepareStatement(sql);
 
 			ResultSet result = statement.executeQuery();
@@ -899,13 +924,15 @@ public class MySQLAccess implements DataAccess {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			log.log(e.getMessage(), LogLevel.ERROR);
+		} finally {
+			disconnect();
 		}
 
 		return osMap;
 	}
 
 	@Override
-	public HashMap<Integer, String> getStatusses() {
+	public Map<Integer, String> getStatusses() {
 		String sql = "SELECT ID, Name FROM "
 				+ connectionInfo.getProperty("database.database") + "."
 				+ Table.STATUS.toString();
@@ -915,6 +942,7 @@ public class MySQLAccess implements DataAccess {
 		HashMap<Integer, String> statusMap = new HashMap<Integer, String>();
 
 		try {
+			connect();
 			PreparedStatement statement = connection.prepareStatement(sql);
 
 			ResultSet result = statement.executeQuery();
@@ -926,6 +954,8 @@ public class MySQLAccess implements DataAccess {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			log.log(e.getMessage(), LogLevel.ERROR);
+		} finally {
+			disconnect();
 		}
 
 		return statusMap;
@@ -941,7 +971,7 @@ public class MySQLAccess implements DataAccess {
 		User user = null;
 
 		try {
-
+			connect();
 			user = null;
 
 			PreparedStatement statement = connection.prepareStatement(sql);
@@ -970,6 +1000,8 @@ public class MySQLAccess implements DataAccess {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			log.log(e.getMessage(), LogLevel.ERROR);
+		} finally {
+			disconnect();
 		}
 
 		return user;
@@ -989,10 +1021,21 @@ public class MySQLAccess implements DataAccess {
 		System.out.println(this.getAdmins()
 								.get(0));
 
-		System.out.println(this.getLectures()
-								.get(0));
-		System.out.println(this.getLectures()
-								.get(1));
+	}
 
+	/**
+	 * Tries to close the object's connection, and sets it to null afterwards.
+	 */
+	private void disconnect() {
+		if (connection != null) {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				log.log(e.getMessage(), LogLevel.ERROR);
+			} finally {
+				connection = null;
+			}
+		}
 	}
 }

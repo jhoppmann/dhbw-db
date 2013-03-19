@@ -4,8 +4,8 @@
 package com.dhbw_db.model.io.database;
 
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 import com.dhbw_db.control.MainController;
@@ -68,9 +68,9 @@ public class AsynchronousWrapper implements DataAccess {
 	}
 
 	@Override
-	public List<User> getLectures() {
+	public List<User> getLecturers() {
 		// Just hand the call down to the wrapped object
-		return wrappedAccess.getLectures();
+		return wrappedAccess.getLecturers();
 	}
 
 	@Override
@@ -181,13 +181,13 @@ public class AsynchronousWrapper implements DataAccess {
 	}
 
 	@Override
-	public HashMap<Integer, String> getOSs() {
+	public Map<Integer, String> getOSs() {
 		// Just hand the call down to the wrapped object
 		return wrappedAccess.getOSs();
 	}
 
 	@Override
-	public HashMap<Integer, String> getStatusses() {
+	public Map<Integer, String> getStatusses() {
 		// Just hand the call down to the wrapped object
 		return wrappedAccess.getStatusses();
 	}
