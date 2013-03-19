@@ -4,18 +4,34 @@
 package com.dhbw_db.control;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.dhbw_db.model.beans.Notebook.NotebookCategory;
+import com.dhbw_db.model.beans.User;
+import com.dhbw_db.model.io.database.DataAccess;
+import com.dhbw_db.view.NotebookRequest;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 
 /**
  * @author jhoppmann
  * @version 0.1
  * @since 0.1
  */
-public class NotebookRequestController {
+public class NotebookRequestController implements ClickListener {
+
+	private static final long serialVersionUID = 1L;
+
+	private DataAccess dao;
+
+	private NotebookRequest controlledView;
+
+	public NotebookRequestController(NotebookRequest controlledView) {
+		this.dao = MainController.get()
+									.getDataAccess();
+		this.controlledView = controlledView;
+	}
 
 	/**
 	 * This will return the notebook categories.
@@ -33,15 +49,7 @@ public class NotebookRequestController {
 	 *         and their unique IDs as values
 	 */
 	public Map<Integer, String> getOperatingSystems() {
-		HashMap<Integer, String> operatingSystems = new HashMap<Integer, String>();
-
-		// fill in some dummy data
-		operatingSystems.put(1, "Windows 3.11");
-		operatingSystems.put(2, "Windows 7");
-		operatingSystems.put(3, "Windows 8");
-		operatingSystems.put(4, "MacOS");
-		operatingSystems.put(5, "Kubuntu");
-		return operatingSystems;
+		return dao.getOSs();
 	}
 
 	/**
@@ -50,16 +58,17 @@ public class NotebookRequestController {
 	 * @return A Map with a string representations of approvers as keys and
 	 *         their unique IDs as values
 	 */
-	public Map<Integer, String> getApprovers() {
-		HashMap<Integer, String> approvers = new HashMap<Integer, String>();
+	public List<User> getApprovers() {
+		return dao.getLecturers();
+	}
 
-		// fill in some dummy data
-		approvers.put(1, "Roland 'Zorro' Kuestermann");
-		approvers.put(2, "Katja Wengler");
-		approvers.put(3, "Stefan 'Fledermausmann' Klink");
-		approvers.put(4, "Harald 'Dirty Harry' Haake");
-		approvers.put(5, "Bernd August 'Pornomensch' Scheiderbauer");
+	@Override
+	public void buttonClick(ClickEvent event) {
+		if (event.getButton()
+					.getCaption()
+					.equals("Zurücksetzen")) {
+			controlledView.reset();
+		}
 
-		return approvers;
 	}
 }

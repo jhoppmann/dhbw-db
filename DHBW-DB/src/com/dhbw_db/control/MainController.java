@@ -121,4 +121,13 @@ public class MainController {
 		return this.dataAccess;
 	}
 
+	/**
+	 * The main controller belonging to this application instance.
+	 * 
+	 * @return Returns the current main controller for this instance
+	 */
+	public static MainController get() {
+		return ((MainUI) (MainUI.getCurrent())).getController();
+	}
+
 }
