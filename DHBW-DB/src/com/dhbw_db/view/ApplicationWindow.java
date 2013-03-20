@@ -40,7 +40,10 @@ public class ApplicationWindow extends Panel {
 			login.focus();
 
 		} else {
-			setSizeFull();
+			// setSizeFull();
+			setWidth("1200px");
+			setHeight("880px");
+
 			VerticalLayout vlo = new VerticalLayout();
 			// vlo.setSizeFull();
 			setContent(vlo);
