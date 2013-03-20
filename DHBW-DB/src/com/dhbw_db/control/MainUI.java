@@ -21,6 +21,8 @@ public class MainUI extends UI {
 	@Override
 	protected void init(VaadinRequest request) {
 
+		getPage().setTitle("DHBW - Notebookverleih");
+
 		mc = new MainController(null);
 		repaint();
 		LoggingService.getInstance()
