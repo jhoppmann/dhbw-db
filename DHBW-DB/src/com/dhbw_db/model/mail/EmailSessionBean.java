@@ -97,12 +97,22 @@ public class EmailSessionBean {
 		MimeBodyPart textPart = new MimeBodyPart();
 		String textContent = "Hallo "
 				+ mc.getDataAccess()
-					.getRequesterNameById(r.getRequesterId())
+					.getUserForID(r.getRequesterId())
+					.getFirstName()
+				+ " "
+				+ mc.getDataAccess()
+					.getUserForID(r.getRequesterId())
+					.getLastName()
 				+ ",\n\n"
 				+ "Sie haben einen Antrag zum Ausleihen eines Notebooks gestellt."
 				+ "Ihrem zuständigen Dozenten "
 				+ mc.getDataAccess()
-					.getApproverNameById(r.getApproverId())
+					.getUserForID(r.getApproverId())
+					.getFirstName()
+				+ " "
+				+ mc.getDataAccess()
+					.getUserForID(r.getApproverId())
+					.getLastName()
 				+ " wurde der Antrag zur Bearbeitung zugeschickt."
 				+ "Sie erhalten eine Nachricht, wenn der Antrag bearbeitet wurde.";
 
@@ -113,13 +123,24 @@ public class EmailSessionBean {
 				+ "<tr><th>Name</th><th>Matrikelnummer</th><th>Zuständiger Dozent</th><th>Ausleihdatum</th><th>Rückgabedatum</th><th>Betriebssystem</th></tr>"
 				+ "<tr><td>"
 				+ mc.getDataAccess()
-					.getRequesterNameById(r.getRequesterId())
+					.getUserForID(r.getRequesterId())
+					.getFirstName()
+				+ " "
+				+ mc.getDataAccess()
+					.getUserForID(r.getRequesterId())
+					.getLastName()
 				+ "</td><td>"
 				+ mc.getDataAccess()
-					.getMatrNrById(r.getRequesterId())
+					.getUserForID(r.getRequesterId())
+					.getMatrNr()
 				+ "</td><td>"
 				+ mc.getDataAccess()
-					.getApproverNameById(r.getApproverId())
+					.getUserForID(r.getApproverId())
+					.getFirstName()
+				+ " "
+				+ mc.getDataAccess()
+					.getUserForID(r.getApproverId())
+					.getLastName()
 				+ "</td><td>"
 				+ date.format(r.getStart())
 						.toString()
@@ -130,7 +151,7 @@ public class EmailSessionBean {
 				+ String.valueOf(r.getOs())
 				+ "</td></tr></table><br>"
 				+ "<p>Optionale Bemerkung: "
-				+ r.getComment()
+				+ r.getDescription()
 				+ "</p>"
 				+ "<p>Zum Stornieren Ihres Antrags klicken Sie bitte hier: "
 				+ "<a href=\"" + "cancelLink" + "\"LINK</a></html>";
@@ -146,11 +167,18 @@ public class EmailSessionBean {
 			Request r) throws MessagingException {
 		Multipart multipart = new MimeMultipart("message");
 		MimeBodyPart textPart = new MimeBodyPart();
-		String textContent = "Hallo "
+		String textContent = "Hallo " + mc.getDataAccess()
+											.getUserForID(r.getApproverId())
+											.getFirstName() + " "
 				+ mc.getDataAccess()
-					.getApproverNameById(r.getApproverId()) + ",\n\n"
+					.getUserForID(r.getApproverId())
+					.getLastName() + ",\n\n"
 				+ mc.getDataAccess()
-					.getRequesterNameById(r.getRequesterId())
+					.getUserForID(r.getRequesterId())
+					.getFirstName() + " "
+				+ mc.getDataAccess()
+					.getUserForID(r.getRequesterId())
+					.getLastName()
 				+ " hat einen Antrag zum Ausleihen eines Notebooks gestellt.";
 
 		textPart.setText(textContent);
@@ -160,13 +188,16 @@ public class EmailSessionBean {
 				+ "<tr><th>Name</th><th>Matrikelnummer</th><th>Ausleihdatum</th><th>Rückgabedatum</th><th>Betriebssystem</th></tr>"
 				+ "<tr><td>"
 				+ mc.getDataAccess()
-					.getRequesterNameById(r.getRequesterId())
+					.getUserForID(r.getRequesterId())
+					.getFirstName()
+				+ " "
+				+ mc.getDataAccess()
+					.getUserForID(r.getRequesterId())
+					.getLastName()
 				+ "</td><td>"
 				+ mc.getDataAccess()
-					.getMatrNrById(r.getRequesterId())
-				+ "</td><td>"
-				+ mc.getDataAccess()
-					.getApproverNameById(r.getApproverId())
+					.getUserForID(r.getRequesterId())
+					.getMatrNr()
 				+ "</td><td>"
 				+ date.format(r.getStart())
 						.toString()
@@ -177,7 +208,7 @@ public class EmailSessionBean {
 				+ String.valueOf(r.getOs())
 				+ "</td></tr></table><br>"
 				+ "<p>Optionale Bemerkung: "
-				+ r.getComment()
+				+ r.getDescription()
 				+ "</p>"
 				+ "<p>Zum Genehmigen oder Ablehnen dieses Antrags klicken Sie bitte hier: "
 				+ "<a href=\"" + "processLink" + "\"LINK</a></html>";
@@ -195,15 +226,24 @@ public class EmailSessionBean {
 		MimeBodyPart textPart = new MimeBodyPart();
 		String textContent = "Hallo "
 				+ mc.getDataAccess()
-					.getRequesterNameById(r.getRequesterId())
+					.getUserForID(r.getRequesterId())
+					.getFirstName()
+				+ " "
+				+ mc.getDataAccess()
+					.getUserForID(r.getRequesterId())
+					.getLastName()
 				+ ",\n\n"
 				+ "Sie haben einen Antrag zum Ausleihen eines Notebooks gestellt."
 				+ "Ihr zuständiger Dozent "
 				+ mc.getDataAccess()
-					.getApproverNameById(r.getApproverId())
-				+ " hat den Antrag genehmigt." + "Sie können das Notebook am "
-				+ r.getStart()
-					.toString() + " zur Ausleihe abholen.";
+					.getUserForID(r.getApproverId())
+					.getFirstName() + " "
+				+ mc.getDataAccess()
+					.getUserForID(r.getApproverId())
+					.getLastName() + " hat den Antrag genehmigt."
+				+ "Sie können das Notebook am " + date.format(r.getStart())
+														.toString()
+				+ " zur Ausleihe abholen.";
 
 		textPart.setText(textContent);
 
@@ -212,13 +252,24 @@ public class EmailSessionBean {
 				+ "<tr><th>Name</th><th>Matrikelnummer</th><th>Zuständiger Dozent</th><th>Ausleihdatum</th><th>Rückgabedatum</th><th>Betriebssystem</th></tr>"
 				+ "<tr><td>"
 				+ mc.getDataAccess()
-					.getRequesterNameById(r.getRequesterId())
+					.getUserForID(r.getRequesterId())
+					.getFirstName()
+				+ " "
+				+ mc.getDataAccess()
+					.getUserForID(r.getRequesterId())
+					.getLastName()
 				+ "</td><td>"
 				+ mc.getDataAccess()
-					.getMatrNrById(r.getRequesterId())
+					.getUserForID(r.getRequesterId())
+					.getMatrNr()
 				+ "</td><td>"
 				+ mc.getDataAccess()
-					.getApproverNameById(r.getApproverId())
+					.getUserForID(r.getApproverId())
+					.getFirstName()
+				+ " "
+				+ mc.getDataAccess()
+					.getUserForID(r.getApproverId())
+					.getLastName()
 				+ "</td><td>"
 				+ date.format(r.getStart())
 						.toString()
@@ -229,7 +280,7 @@ public class EmailSessionBean {
 				+ String.valueOf(r.getOs())
 				+ "</td></tr></table><br>"
 				+ "<p>Optionale Bemerkung: "
-				+ r.getComment()
+				+ r.getDescription()
 				+ "</p>"
 				+ "<p>Zum Stornieren Ihres Antrags klicken Sie bitte hier: "
 				+ "<a href=\"" + "cancelLink" + "\"LINK</a></html>";
@@ -247,13 +298,21 @@ public class EmailSessionBean {
 		MimeBodyPart textPart = new MimeBodyPart();
 		String textContent = "Hallo "
 				+ mc.getDataAccess()
-					.getRequesterNameById(r.getRequesterId())
+					.getUserForID(r.getRequesterId())
+					.getFirstName()
+				+ " "
+				+ mc.getDataAccess()
+					.getUserForID(r.getRequesterId())
+					.getLastName()
 				+ ",\n\n"
 				+ "Sie haben einen Antrag zum Ausleihen eines Notebooks gestellt."
 				+ "Ihr zuständiger Dozent "
 				+ mc.getDataAccess()
-					.getApproverNameById(r.getApproverId())
-				+ " hat den Antrag abgelehnt.";
+					.getUserForID(r.getApproverId())
+					.getFirstName() + " "
+				+ mc.getDataAccess()
+					.getUserForID(r.getApproverId())
+					.getLastName() + " hat den Antrag abgelehnt.";
 
 		textPart.setText(textContent);
 
@@ -262,13 +321,24 @@ public class EmailSessionBean {
 				+ "<tr><th>Name</th><th>Matrikelnummer</th><th>Zuständiger Dozent</th><th>Ausleihdatum</th><th>Rückgabedatum</th><th>Betriebssystem</th></tr>"
 				+ "<tr><td>"
 				+ mc.getDataAccess()
-					.getRequesterNameById(r.getRequesterId())
+					.getUserForID(r.getRequesterId())
+					.getFirstName()
+				+ " "
+				+ mc.getDataAccess()
+					.getUserForID(r.getRequesterId())
+					.getLastName()
 				+ "</td><td>"
 				+ mc.getDataAccess()
-					.getMatrNrById(r.getRequesterId())
+					.getUserForID(r.getRequesterId())
+					.getMatrNr()
 				+ "</td><td>"
 				+ mc.getDataAccess()
-					.getApproverNameById(r.getApproverId())
+					.getUserForID(r.getApproverId())
+					.getFirstName()
+				+ " "
+				+ mc.getDataAccess()
+					.getUserForID(r.getApproverId())
+					.getLastName()
 				+ "</td><td>"
 				+ date.format(r.getStart())
 						.toString()
@@ -279,7 +349,7 @@ public class EmailSessionBean {
 				+ String.valueOf(r.getOs())
 				+ "</td></tr></table><br>"
 				+ "<p>Optionale Bemerkung: "
-				+ r.getComment()
+				+ r.getDescription()
 				+ "</p>"
 				+ "<p>Zum Stornieren Ihres Antrags klicken Sie bitte hier: "
 				+ "<a href=\"" + "cancelLink" + "\"LINK</a></html>";
@@ -291,20 +361,234 @@ public class EmailSessionBean {
 		sendEmail(to, cc, subject, multipart);
 	}
 
-	public void sendMailAdminInfo() {
+	public void sendMailAdminInfo(String to, String cc, String subject,
+			Request r) throws MessagingException {
+		Multipart multipart = new MimeMultipart("message");
+		MimeBodyPart textPart = new MimeBodyPart();
+		String textContent = "An die Administratoren des Notebookverleihs: \n\n"
+				+ mc.getDataAccess()
+					.getUserForID(r.getApproverId())
+					.getFirstName()
+				+ " "
+				+ mc.getDataAccess()
+					.getUserForID(r.getApproverId())
+					.getLastName()
+				+ " hat einen Antrag zum Ausleihen eines Notebooks genehmigt.";
 
+		textPart.setText(textContent);
+
+		MimeBodyPart htmlPart = new MimeBodyPart();
+		String htmlContent = "<html><h1>Antragsdaten:</h1><table border=\"0\">"
+				+ "<tr><th>Name</th><th>Matrikelnummer</th><th>Ausleihdatum</th><th>Rückgabedatum</th><th>Betriebssystem</th></tr>"
+				+ "<tr><td>" + mc.getDataAccess()
+									.getUserForID(r.getRequesterId())
+									.getFirstName() + " "
+				+ mc.getDataAccess()
+					.getUserForID(r.getRequesterId())
+					.getLastName() + "</td><td>"
+				+ mc.getDataAccess()
+					.getUserForID(r.getRequesterId())
+					.getMatrNr() + "</td><td>" + date.format(r.getStart())
+														.toString()
+				+ "</td><td>" + date.format(r.getEnd())
+									.toString() + "</td><td>"
+				+ String.valueOf(r.getOs()) + "</td></tr></table><br>"
+				+ "<p>Optionale Bemerkung: " + r.getDescription()
+				+ "</p></html>";
+
+		htmlPart.setContent(htmlContent, "text/html");
+
+		multipart.addBodyPart(textPart);
+		multipart.addBodyPart(htmlPart);
+		sendEmail(to, cc, subject, multipart);
 	}
 
-	public void sendMailOverdueWarning() {
+	public void sendMailOverdueWarning(String to, String cc, String subject,
+			Request r) throws MessagingException {
+		Multipart multipart = new MimeMultipart("message");
+		MimeBodyPart textPart = new MimeBodyPart();
+		String textContent = "Hallo "
+				+ mc.getDataAccess()
+					.getUserForID(r.getRequesterId())
+					.getFirstName()
+				+ " "
+				+ mc.getDataAccess()
+					.getUserForID(r.getRequesterId())
+					.getLastName()
+				+ ",\n\n"
+				+ "Sie haben am "
+				+ date.format(r.getStart())
+						.toString()
+				+ " ein Notebook vom Notebookverleih "
+				+ "ausgeliehen. Die Leihfrist für das Notebook ist am "
+				+ date.format(r.getEnd())
+						.toString()
+				+ " abgelaufen.\n"
+				+ "Bitte geben Sie das Notebook schnellstmöglich zurück."
+				+ "Beim Überschreiten der Leihfrist fallen Mahngebühren an. Die jeweilige Höhe ist der Gebührenordnung zu entnehmen.";
 
+		textPart.setText(textContent);
+
+		MimeBodyPart htmlPart = new MimeBodyPart();
+		String htmlContent = "<html><h1>Ihre Antragsdaten:</h1><table border=\"0\">"
+				+ "<tr><th>Name</th><th>Matrikelnummer</th><th>Zuständiger Dozent</th><th>Ausleihdatum</th><th>Rückgabedatum</th><th>Betriebssystem</th></tr>"
+				+ "<tr><td>"
+				+ mc.getDataAccess()
+					.getUserForID(r.getRequesterId())
+					.getFirstName()
+				+ " "
+				+ mc.getDataAccess()
+					.getUserForID(r.getRequesterId())
+					.getLastName()
+				+ "</td><td>"
+				+ mc.getDataAccess()
+					.getUserForID(r.getRequesterId())
+					.getMatrNr()
+				+ "</td><td>"
+				+ mc.getDataAccess()
+					.getUserForID(r.getApproverId())
+					.getFirstName()
+				+ " "
+				+ mc.getDataAccess()
+					.getUserForID(r.getApproverId())
+					.getLastName()
+				+ "</td><td>"
+				+ date.format(r.getStart())
+						.toString()
+				+ "</td><td>"
+				+ date.format(r.getEnd())
+						.toString()
+				+ "</td><td>"
+				+ String.valueOf(r.getOs())
+				+ "</td></tr></table><br>"
+				+ "<p>Optionale Bemerkung: "
+				+ r.getDescription()
+				+ "</p></html>";
+
+		htmlPart.setContent(htmlContent, "text/html");
+
+		multipart.addBodyPart(textPart);
+		multipart.addBodyPart(htmlPart);
+		sendEmail(to, cc, subject, multipart);
 	}
 
-	public void sendMailRequestCancelledStudent() {
+	public void sendMailRequestCancelledStudent(String to, String cc,
+			String subject, Request r) throws MessagingException {
+		Multipart multipart = new MimeMultipart("message");
+		MimeBodyPart textPart = new MimeBodyPart();
+		String textContent = "Hallo "
+				+ mc.getDataAccess()
+					.getUserForID(r.getRequesterId())
+					.getFirstName()
+				+ " "
+				+ mc.getDataAccess()
+					.getUserForID(r.getRequesterId())
+					.getLastName()
+				+ ",\n\n"
+				+ "Sie haben am "
+				+ date.format(r.getCreated())
+						.toString()
+				+ " einen Antrag zum Ausleihen eines Notebooks "
+				+ "gestellt. Ihnen wird hiermit bestätigt, dass Sie diesen Antrag storniert haben.";
 
+		textPart.setText(textContent);
+
+		MimeBodyPart htmlPart = new MimeBodyPart();
+		String htmlContent = "<html><h1>Ihre Antragsdaten:</h1><table border=\"0\">"
+				+ "<tr><th>Name</th><th>Matrikelnummer</th><th>Zuständiger Dozent</th><th>Ausleihdatum</th><th>Rückgabedatum</th><th>Betriebssystem</th></tr>"
+				+ "<tr><td>"
+				+ mc.getDataAccess()
+					.getUserForID(r.getRequesterId())
+					.getFirstName()
+				+ " "
+				+ mc.getDataAccess()
+					.getUserForID(r.getRequesterId())
+					.getLastName()
+				+ "</td><td>"
+				+ mc.getDataAccess()
+					.getUserForID(r.getRequesterId())
+					.getMatrNr()
+				+ "</td><td>"
+				+ mc.getDataAccess()
+					.getUserForID(r.getApproverId())
+					.getFirstName()
+				+ " "
+				+ mc.getDataAccess()
+					.getUserForID(r.getApproverId())
+					.getLastName()
+				+ "</td><td>"
+				+ date.format(r.getStart())
+						.toString()
+				+ "</td><td>"
+				+ date.format(r.getEnd())
+						.toString()
+				+ "</td><td>"
+				+ String.valueOf(r.getOs())
+				+ "</td></tr></table><br>"
+				+ "<p>Optionale Bemerkung: "
+				+ r.getDescription()
+				+ "</p></html>";
+
+		htmlPart.setContent(htmlContent, "text/html");
+
+		multipart.addBodyPart(textPart);
+		multipart.addBodyPart(htmlPart);
+		sendEmail(to, cc, subject, multipart);
 	}
 
-	public void sendMailRequestCancelledLecturer() {
+	public void sendMailRequestCancelledLecturer(String to, String cc,
+			String subject, Request r) throws MessagingException {
+		Multipart multipart = new MimeMultipart("message");
+		MimeBodyPart textPart = new MimeBodyPart();
+		String textContent = "Hallo "
+				+ mc.getDataAccess()
+					.getUserForID(r.getApproverId())
+					.getFirstName()
+				+ " "
+				+ mc.getDataAccess()
+					.getUserForID(r.getApproverId())
+					.getLastName()
+				+ ",\n\n"
+				+ "Am "
+				+ date.format(r.getCreated())
+						.toString()
+				+ " hat "
+				+ mc.getDataAccess()
+					.getUserForID(r.getRequesterId())
+					.getFirstName()
+				+ " "
+				+ mc.getDataAccess()
+					.getUserForID(r.getRequesterId())
+					.getLastName()
+				+ " einen Antrag zum Ausleihen eines Notebooks "
+				+ "gestellt. Dieser Antrag wurde vom Antragsteller zurückgezogen.";
 
+		textPart.setText(textContent);
+
+		MimeBodyPart htmlPart = new MimeBodyPart();
+		String htmlContent = "<html><h1>Antragsdaten:</h1><table border=\"0\">"
+				+ "<tr><th>Name</th><th>Matrikelnummer</th><th>Ausleihdatum</th><th>Rückgabedatum</th><th>Betriebssystem</th></tr>"
+				+ "<tr><td>" + mc.getDataAccess()
+									.getUserForID(r.getRequesterId())
+									.getFirstName() + " "
+				+ mc.getDataAccess()
+					.getUserForID(r.getRequesterId())
+					.getLastName() + "</td><td>"
+				+ mc.getDataAccess()
+					.getUserForID(r.getRequesterId())
+					.getMatrNr() + "</td><td>" + date.format(r.getStart())
+														.toString()
+				+ "</td><td>" + date.format(r.getEnd())
+									.toString() + "</td><td>"
+				+ String.valueOf(r.getOs()) + "</td></tr></table><br>"
+				+ "<p>Optionale Bemerkung: " + r.getDescription()
+				+ "</p></html>";
+
+		htmlPart.setContent(htmlContent, "text/html");
+
+		multipart.addBodyPart(textPart);
+		multipart.addBodyPart(htmlPart);
+		sendEmail(to, cc, subject, multipart);
 	}
 
 	/**
