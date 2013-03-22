@@ -141,7 +141,7 @@ public class MySQLAccess implements DataAccess {
 				+ Table.EMAIL.toString() + " (ID INT NOT NULL AUTO_INCREMENT, "
 				+ "ReceiverMail VARCHAR(45) NULL, "
 				+ "SenderMail VARCHAR(45) NULL, " + "Header VARCHAR(45) NULL, "
-				+ "Body VARCHAR(45) NULL, " + "Date TIMESTAMP NULL, "
+				+ "Body VARCHAR(45) NULL, " + "Date TIMESTAMP, "
 				+ "PRIMARY KEY (ID))";
 
 		try {
@@ -203,10 +203,11 @@ public class MySQLAccess implements DataAccess {
 				+ Table.PROCESS.toString()
 				+ " (ID INT NOT NULL AUTO_INCREMENT, " + "RequesterID INT, "
 				+ "ApproverID INT, " + "NotebookID INT, "
-				+ "Hash VARCHAR(32), " + "CreationDate TIMESTAMP, "
-				+ "StartDate TIMESTAMP, " + "EndDate TIMESTAMP, "
-				+ "UntilDate TIMESTAMP, " + "StatusID INT, " + "OSID INT, "
-				+ "Description VARCHAR(240), " + "PRIMARY KEY (ID), "
+				+ "Hash VARCHAR(32), " + "CreationDate TIMESTAMP NULL, "
+				+ "StartDate TIMESTAMP NULL, " + "EndDate TIMESTAMP NULL, "
+				+ "UntilDate TIMESTAMP NULL, " + "StatusID INT, "
+				+ "OSID INT, " + "Description VARCHAR(240), "
+				+ "PRIMARY KEY (ID), "
 
 				+ "CONSTRAINT UserID1 " + "FOREIGN KEY (RequesterID) "
 				+ "REFERENCES " + connectionInfo.get("database.database") + "."
@@ -466,6 +467,7 @@ public class MySQLAccess implements DataAccess {
 			user = new User();
 
 			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setInt(1, id);
 
 			ResultSet result = statement.executeQuery();
 
@@ -538,7 +540,7 @@ public class MySQLAccess implements DataAccess {
 
 			statement.setString(11, request.getDescription());
 
-			statement.executeQuery();
+			statement.executeUpdate();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -583,7 +585,7 @@ public class MySQLAccess implements DataAccess {
 
 			statement.setInt(11, request.getId());
 
-			statement.executeQuery();
+			statement.executeUpdate();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -1044,7 +1046,7 @@ public class MySQLAccess implements DataAccess {
 			statement.setBoolean(2, notebook.isDefective());
 			statement.setBoolean(3, notebook.isAvailable());
 
-			statement.executeQuery();
+			statement.executeUpdate();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -1070,7 +1072,7 @@ public class MySQLAccess implements DataAccess {
 			statement.setBoolean(3, notebook.isAvailable());
 			statement.setInt(4, notebook.getiD());
 
-			statement.executeQuery();
+			statement.executeUpdate();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -1086,7 +1088,7 @@ public class MySQLAccess implements DataAccess {
 				+ connectionInfo.getProperty("database.database")
 				+ "."
 				+ Table.EMAIL.toString()
-				+ " (ReceiverMail, SenderMail, Header, Body, Date) VALUES (?,?,?,?,?,?)";
+				+ " (ReceiverMail, SenderMail, Header, Body, Date) VALUES (?,?,?,?,?)";
 
 		try {
 			connect();
@@ -1096,10 +1098,12 @@ public class MySQLAccess implements DataAccess {
 			statement.setString(2, eMail.getSenderMail());
 			statement.setString(3, eMail.getHeader());
 			statement.setString(4, eMail.getBody());
-			statement.setTimestamp(5, new Timestamp(eMail.getDate()
-															.getTime()));
+			statement.setTimestamp(	5,
+									(eMail.getDate() != null) ? new Timestamp(eMail.getDate()
+																					.getTime())
+											: null);
 
-			statement.executeQuery();
+			statement.executeUpdate();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -1230,8 +1234,121 @@ public class MySQLAccess implements DataAccess {
 		 * getRequestByID(1); System.out.println("Request1 after update: " +
 		 * requestOne.getId() + " " + requestOne.getOs());
 		 */
+
+		Notebook notebook = new Notebook();
+		notebook.setAvailable(true);
+		notebook.setDefective(false);
+		notebook.setName("great notebook");
+		notebook.setiD(1);
+
+		this.insertNotebook(notebook);
+
+		Request a1 = new Request(	1,
+									2,
+									12,
+									1,
+									null,
+									null,
+									null,
+									null,
+									"sdf32",
+									1,
+									1,
+									"This is a Request with id 1 from approver 12 and requester 2");
+
+		Request a2 = new Request(	2,
+									3,
+									14,
+									1,
+									null,
+									null,
+									null,
+									null,
+									"sdf32",
+									1,
+									1,
+									"This is a Request from approver 14 and requester 3");
+
+		Request a3 = new Request(	3,
+									4,
+									15,
+									1,
+									null,
+									null,
+									null,
+									null,
+									"hiiamahash",
+									1,
+									1,
+									"This is a Request with  approver id 15 requester id 4 hash: hiiamahash");
+
+		this.insertRequest(a1);
+		this.insertRequest(a2);
+		this.insertRequest(a3);
+
+		a1.setDescription("new description for: This is a Request with id 1 from approver 12 and requester 2");
+		this.updateRequest(a1);
+
+		Request b = this.getRequestForHash("hiiamahash");
+		Request c = this.getRequestForID(1);
+
+		Request d = this.getRequestsForApproverForID(14)
+						.get(0);
+		Request e = this.getRequestsForRequesterForID(2)
+						.get(0);
+
+		System.out.println("hash hiiamahash: " + b.getDescription());
+
+		if (c != null) {
+			System.out.println("id 1 und new description: "
+					+ c.getDescription());
+		} else {
+			System.out.println("c is null");
+		}
+
+		System.out.println("approver 14: " + d.getDescription());
+		System.out.println("requester 2: " + e.getDescription());
+		System.out.println("new description: " + this.getRequests()
+														.get(0)
+														.getId());
+
+		EMail mail = new EMail();
+		mail.setBody("Hi this is the body");
+		mail.setHeader("This is the header");
+		mail.setReceiverMail("asd@dsf.w");
+		mail.setSenderMail("sender@asd.wd");
+		this.insertEMail(mail);
+
+		System.out.println(this.getNotebooks()
+								.get(0)
+								.getName());
+
+		notebook.setName("small notebook");
+
+		this.updateNotebook(notebook);
+
+		System.out.println(this.getNotebooks()
+								.get(0)
+								.getName());
+		System.out.println(this.getNotebooks()
+								.get(0)
+								.isAvailable());
+		System.out.println(this.getNotebooks()
+								.get(0)
+								.isDefective());
+
+		System.out.println(this.getLecturers()
+								.get(0)
+								.getLastName());
 		System.out.println(this.getAdmins()
-								.get(0));
+								.get(0)
+								.getLastName());
+		System.out.println(this.getOSs()
+								.get(1));
+		System.out.println(this.getStatusses()
+								.get(1));
+		System.out.println(this.getUserForID(1)
+								.getFirstName());
 
 	}
 

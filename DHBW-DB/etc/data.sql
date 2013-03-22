@@ -158,7 +158,7 @@ CREATE TABLE IF NOT EXISTS `User` (
 -- Dumping data for table `User`
 --
 
-INSERT INTO `User` (`ID`, `MatrNr`, `Vorname`, `Name`, `EMail`, `IsStudent`, `IsAdmin`, `IsLecturer`, `Password`) VALUES
+INSERT INTO `User` (`ID`, `MatrNo`, `Firstname`, `Name`, `EMail`, `IsStudent`, `IsAdmin`, `IsLecturer`, `Password`) VALUES
 (1, 100001, 'testuser1', 'Mueller', 'user1@dhbwstudent.com', 1, 0, 0, '6eda13efe1a69db8d7fa7c7d543ef9a5'),
 (2, 100002, 'testuser2', 'Mueller', 'user2@dhbwstudent.com', 1, 0, 0, 'bf0da2e43d368123ed4de055ffcb934a'),
 (3, 100003, 'testuser3', 'Mueller', 'user3@dhbwstudent.com', 1, 0, 0, 'e2d0b663499d6785b5a91783c74f9bee'),
