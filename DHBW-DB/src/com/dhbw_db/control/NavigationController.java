@@ -15,12 +15,22 @@ import com.dhbw_db.view.StudentStartPage;
 import com.vaadin.ui.Component;
 
 /**
+ * The NavigationController controls the view changes initiated by a click on
+ * the navbar.
+ * 
  * @author jhoppmann
  * @version 0.1
  * @since 0.1
  */
 public class NavigationController {
 
+	/**
+	 * Every view that is reachable by the nav bar has an entry here
+	 * 
+	 * @author jhoppmann
+	 * @version 0.1
+	 * @since 0.1
+	 */
 	public enum View {
 		START_ADMIN,
 		START_STUDENT,
@@ -33,10 +43,16 @@ public class NavigationController {
 		ADMIN_REQUESTS,
 	};
 
+	/**
+	 * Is responsible for causing the main controller to change to a view
+	 * 
+	 * @param v The view to change to
+	 */
 	public void changeView(View v) {
 		MainController mc = MainController.get();
 
 		Component c = null;
+
 		switch (v) {
 			case START_ADMIN:
 				c = new AdminStartPage();

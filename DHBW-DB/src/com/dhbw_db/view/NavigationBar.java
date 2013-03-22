@@ -25,14 +25,13 @@ public class NavigationBar extends MenuBar {
 	public NavigationBar() {
 		this.setWidth("100%");
 
-		// build the request items
-
 		mc = MainController.get();
 
 		User u = mc.getUser();
 
 		control = new NavigationController();
 
+		// build the navigation items
 		if (u.isAdmin())
 			addItem("Start", new ViewChangeCommand(View.START_ADMIN));
 		else if (u.isLecturer())
@@ -68,11 +67,18 @@ public class NavigationBar extends MenuBar {
 
 	}
 
+	/**
+	 * Holds a view to change to on a click
+	 * 
+	 * @author jhoppmann
+	 * @version 0.1
+	 * @since 0,1
+	 */
 	private class ViewChangeCommand implements MenuBar.Command {
 
 		private static final long serialVersionUID = -4984530031416204071L;
 
-		View v;
+		private View v;
 
 		public ViewChangeCommand(View v) {
 			this.v = v;
