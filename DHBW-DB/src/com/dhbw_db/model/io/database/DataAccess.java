@@ -176,4 +176,20 @@ public interface DataAccess {
 	 */
 	public User authenticate(String username, String password);
 
+	/**
+	 * Gets all requests for the passed approver ID
+	 * 
+	 * @param approverID
+	 * @return The list of the requests a approver is assigned to
+	 */
+	public List<Request> getRequestsForApproverForID(int approverID);
+
+	/**
+	 * Gets all requests for the passed requester ID
+	 * 
+	 * @param requesterID
+	 * @return The list of the requests a requester is assigned to
+	 */
+	public List<Request> getRequestsForRequesterForID(int requesterID);
+
 }
