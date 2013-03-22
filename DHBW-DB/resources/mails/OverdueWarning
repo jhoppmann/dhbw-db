@@ -1,0 +1,13 @@
+Hallo $requester,
+
+Sie haben am $request.start ein Notebook vom Notebookverleih ausgeliehen.
+Die Leihfrist für das Notebook ist am $request.end abgelaufen.
+Bitte geben Sie das Notebook schnellstmöglich zurück.
+Beim Überschreiten der Leihfrist fallen Mahngebühren an. Die jeweilige Höhe ist der Gebührenordnung zu entnehmen.
+				
+<html><h1>Ihre Antragsdaten:</h1><table border=0>
+<tr><th>Name</th><th>Matrikelnummer</th><th>Zuständiger Dozent</th><th>Ausleihdatum</th><th>Rückgabedatum</th><th>Betriebssystem</th></tr>
+<tr><td>$requester</td><td>$matrNr</td><td>$lecturer</td><td>$request.start</td><td>$request.end</td><td>$request.os</td></tr></table>
+<br>
+<p>Optionale Bemerkung: $request.description</p>
+</html>

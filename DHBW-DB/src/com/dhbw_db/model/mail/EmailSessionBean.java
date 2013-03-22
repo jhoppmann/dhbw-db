@@ -62,35 +62,16 @@ public class EmailSessionBean {
 
 	private SimpleDateFormat date = new SimpleDateFormat("dd'.'MM'.'yyyy");
 
-	/*
-	 * public void sendMailRequestStudent(String to, String cc, String subject,
-	 * String student, String lecturer, String mtkNumber, String startDate,
-	 * String endDate, String os, String comment, String cancelLink) throws
-	 * MessagingException {
+	/**
+	 * Sends a confirmation email to the requesting student
 	 * 
-	 * Multipart multipart = new MimeMultipart("message"); MimeBodyPart textPart
-	 * = new MimeBodyPart(); String textContent = "Hallo " + student + ",\n\n" +
-	 * "Sie haben einen Antrag zum Ausleihen eines Notebooks gestellt." +
-	 * "Ihrem zuständigen Dozenten " + lecturer +
-	 * " wurde der Antrag zur Bearbeitung zugeschickt." +
-	 * "Sie erhalten eine Nachricht, wenn der Antrag bearbeitet wurde.";
-	 * 
-	 * textPart.setText(textContent);
-	 * 
-	 * MimeBodyPart htmlPart = new MimeBodyPart(); String htmlContent =
-	 * "<html><h1>Ihre Antragsdaten:</h1><table border=\"0\">" +
-	 * "<tr><th>Name</th><th>Matrikelnummer</th><th>Zuständiger Dozent</th><th>Ausleihdatum</th><th>Rückgabedatum</th><th>Betriebssystem</th></tr>"
-	 * + "<tr><td>" + student + "</td><td>" + mtkNumber + "</td><td>" + lecturer
-	 * + "</td><td>" + startDate + "</td><td>" + endDate + "</td><td>" + os +
-	 * "</td></tr></table><br>" + "<p>Optionale Bemerkung: " + comment + "</p>"
-	 * + "<p>Zum Stornieren Ihres Antrags klicken Sie bitte hier: " +
-	 * "<a href=\"" + cancelLink + "\"LINK</a></html>";
-	 * 
-	 * htmlPart.setContent(htmlContent, "text/html");
-	 * 
-	 * multipart.addBodyPart(textPart); multipart.addBodyPart(htmlPart);
-	 * sendEmail(to, cc, subject, multipart); }
+	 * @param to Specifies the target e-mail adress of recipient
+	 * @param cc Specifies the target e-mail adress of recipient in cc
+	 * @param subject Specifies the subject of the e-mail message
+	 * @param r The corresponding request object, to which the messages refer to
+	 * @throws MessagingException
 	 */
+
 	public void sendMailRequestStudent(String to, String cc, String subject,
 			Request r) throws MessagingException {
 		Multipart multipart = new MimeMultipart("message");
@@ -163,6 +144,15 @@ public class EmailSessionBean {
 		sendEmail(to, cc, subject, multipart);
 	}
 
+	/**
+	 * Sends an email with a students request to his/her appropriate lecturer
+	 * 
+	 * @param to Specifies the target e-mail adress of recipient
+	 * @param cc Specifies the target e-mail adress of recipient in cc
+	 * @param subject Specifies the subject of the e-mail message
+	 * @param r The corresponding request object, to which the messages refer to
+	 */
+
 	public void sendMailRequestLecturer(String to, String cc, String subject,
 			Request r) throws MessagingException {
 		Multipart multipart = new MimeMultipart("message");
@@ -219,6 +209,16 @@ public class EmailSessionBean {
 		multipart.addBodyPart(htmlPart);
 		sendEmail(to, cc, subject, multipart);
 	}
+
+	/**
+	 * Sends an email to the requesting student with notice of success
+	 * 
+	 * @param to Specifies the target e-mail adress of recipient
+	 * @param cc Specifies the target e-mail adress of recipient in cc
+	 * @param subject Specifies the subject of the e-mail message
+	 * @param r The corresponding request object, to which the messages refer to
+	 * @throws MessagingException
+	 */
 
 	public void sendMailRequestSuccess(String to, String cc, String subject,
 			Request r) throws MessagingException {
@@ -292,6 +292,16 @@ public class EmailSessionBean {
 		sendEmail(to, cc, subject, multipart);
 	}
 
+	/**
+	 * Sends an email to the requesting student with notice of rejection
+	 * 
+	 * @param to Specifies the target e-mail adress of recipient
+	 * @param cc Specifies the target e-mail adress of recipient in cc
+	 * @param subject Specifies the subject of the e-mail message
+	 * @param r The corresponding request object, to which the messages refer to
+	 * @throws MessagingException
+	 */
+
 	public void sendMailRequestRejected(String to, String cc, String subject,
 			Request r) throws MessagingException {
 		Multipart multipart = new MimeMultipart("message");
@@ -350,9 +360,7 @@ public class EmailSessionBean {
 				+ "</td></tr></table><br>"
 				+ "<p>Optionale Bemerkung: "
 				+ r.getDescription()
-				+ "</p>"
-				+ "<p>Zum Stornieren Ihres Antrags klicken Sie bitte hier: "
-				+ "<a href=\"" + "cancelLink" + "\"LINK</a></html>";
+				+ "</p></html>";
 
 		htmlPart.setContent(htmlContent, "text/html");
 
@@ -360,6 +368,17 @@ public class EmailSessionBean {
 		multipart.addBodyPart(htmlPart);
 		sendEmail(to, cc, subject, multipart);
 	}
+
+	/**
+	 * Sends an email to an administrator with information of the approved
+	 * request
+	 * 
+	 * @param to Specifies the target e-mail adress of recipient
+	 * @param cc Specifies the target e-mail adress of recipient in cc
+	 * @param subject Specifies the subject of the e-mail message
+	 * @param r The corresponding request object, to which the messages refer to
+	 * @throws MessagingException
+	 */
 
 	public void sendMailAdminInfo(String to, String cc, String subject,
 			Request r) throws MessagingException {
@@ -402,6 +421,16 @@ public class EmailSessionBean {
 		multipart.addBodyPart(htmlPart);
 		sendEmail(to, cc, subject, multipart);
 	}
+
+	/**
+	 * Sends an email to a student who lent a notebook which is overdue
+	 * 
+	 * @param to Specifies the target e-mail adress of recipient
+	 * @param cc Specifies the target e-mail adress of recipient in cc
+	 * @param subject Specifies the subject of the e-mail message
+	 * @param r The corresponding request object, to which the messages refer to
+	 * @throws MessagingException
+	 */
 
 	public void sendMailOverdueWarning(String to, String cc, String subject,
 			Request r) throws MessagingException {
@@ -472,6 +501,17 @@ public class EmailSessionBean {
 		sendEmail(to, cc, subject, multipart);
 	}
 
+	/**
+	 * Sends a confirmation email to the requesting student who cancelled
+	 * his/her request
+	 * 
+	 * @param to Specifies the target e-mail adress of recipient
+	 * @param cc Specifies the target e-mail adress of recipient in cc
+	 * @param subject Specifies the subject of the e-mail message
+	 * @param r The corresponding request object, to which the messages refer to
+	 * @throws MessagingException
+	 */
+
 	public void sendMailRequestCancelledStudent(String to, String cc,
 			String subject, Request r) throws MessagingException {
 		Multipart multipart = new MimeMultipart("message");
@@ -536,6 +576,17 @@ public class EmailSessionBean {
 		sendEmail(to, cc, subject, multipart);
 	}
 
+	/**
+	 * Sends an email to the appropriate lecturer of the requesting student who
+	 * cancelled his/her request
+	 * 
+	 * @param to Specifies the target e-mail adress of recipient
+	 * @param cc Specifies the target e-mail adress of recipient in cc
+	 * @param subject Specifies the subject of the e-mail message
+	 * @param r The corresponding request object, to which the messages refer to
+	 * @throws MessagingException
+	 */
+
 	public void sendMailRequestCancelledLecturer(String to, String cc,
 			String subject, Request r) throws MessagingException {
 		Multipart multipart = new MimeMultipart("message");
@@ -592,11 +643,15 @@ public class EmailSessionBean {
 	}
 
 	/**
+	 * sendEmail is only called by sendMailRequestStudent,
+	 * sendMailRequestLecturer, sendMailRequestSuccess, sendMailRequestRejected,
+	 * sendMailAdminInfo, sendMailOverdueWarning,
+	 * sendMailRequestCancelledStudent, sendMailRequestCancelledLecturer
 	 * 
 	 * @param to Specifies the target e-mail adress of recipient
 	 * @param cc Specifies the target e-mail adress of recipient in cc
 	 * @param subject Specifies the subject of the e-mail message
-	 * @param body Specifies the body of the e-mail message
+	 * @param multipart The contents of the message in text and/or html format
 	 */
 
 	@SuppressWarnings("incomplete-switch")
@@ -607,10 +662,10 @@ public class EmailSessionBean {
 		props.put("mail.smtp.port", port);
 		switch (protocol) {
 			case SMTPS:
-			props.put("mail.smtp.ssl.enable", true);
+				props.put("mail.smtp.ssl.enable", true);
 				break;
 			case TLS:
-			props.put("mail.smtp.starttls.enable", true);
+				props.put("mail.smtp.starttls.enable", true);
 				break;
 		}
 
