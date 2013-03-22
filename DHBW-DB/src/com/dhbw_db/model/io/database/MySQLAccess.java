@@ -160,7 +160,8 @@ public class MySQLAccess implements DataAccess {
 	private void setupNotebookTable() {
 		String creationString = "create table "
 				+ connectionInfo.get("database.database") + "."
-				+ Table.NOTEBOOK.toString() + "(ID INT NOT NULL, "
+				+ Table.NOTEBOOK.toString()
+				+ "(ID INT NOT NULL AUTO_INCREMENT, "
 				+ "Name VARCHAR(45) NOT NULL, " + "IsDefective BIT NOT NULL, "
 				+ "IsAvailable BIT NOT NULL, " + "PRIMARY KEY (ID))";
 
@@ -200,16 +201,12 @@ public class MySQLAccess implements DataAccess {
 		String creationString = "create table "
 				+ connectionInfo.get("database.database") + "."
 				+ Table.PROCESS.toString()
-				+ " (ID INT NOT NULL AUTO_INCREMENT, "
-				+ "RequestID VARCHAR(45) NOT NULL, "
-				+ "RequesterID INT NOT NULL, " + "ApproverID INT NOT NULL, "
-				+ "NotebookID INT NOT NULL, " + "Hash VARCHAR(32) NOT NULL, "
-				+ "CreationDate TIMESTAMP NOT NULL, "
-				+ "StartDate TIMESTAMP NOT NULL, "
-				+ "EndDate TIMESTAMP NOT NULL, "
-				+ "UntilDate TIMESTAMP NOT NULL, " + "StatusID INT NOT NULL, "
-				+ "OSID INT NOT NULL, " + "Description VARCHAR(240), "
-				+ "PRIMARY KEY (ID), "
+				+ " (ID INT NOT NULL AUTO_INCREMENT, " + "RequesterID INT, "
+				+ "ApproverID INT, " + "NotebookID INT, "
+				+ "Hash VARCHAR(32), " + "CreationDate TIMESTAMP, "
+				+ "StartDate TIMESTAMP, " + "EndDate TIMESTAMP, "
+				+ "UntilDate TIMESTAMP, " + "StatusID INT, " + "OSID INT, "
+				+ "Description VARCHAR(240), " + "PRIMARY KEY (ID), "
 
 				+ "CONSTRAINT UserID1 " + "FOREIGN KEY (RequesterID) "
 				+ "REFERENCES " + connectionInfo.get("database.database") + "."
@@ -252,7 +249,7 @@ public class MySQLAccess implements DataAccess {
 	private void setupStatusTable() {
 		String creationString = "create table "
 				+ connectionInfo.get("database.database") + "."
-				+ Table.STATUS.toString() + "(ID INT NOT NULL, "
+				+ Table.STATUS.toString() + "(ID INT NOT NULL AUTO_INCREMENT, "
 				+ "Name VARCHAR(45) NOT NULL, " + "PRIMARY KEY (ID))";
 
 		try {
@@ -272,7 +269,7 @@ public class MySQLAccess implements DataAccess {
 		String creationString = "create table "
 				+ connectionInfo.get("database.database") + "."
 				+ Table.USER.toString() + "(ID INT NOT NULL AUTO_INCREMENT, "
-				+ "MatrNr INT NOT NULL, " + "Vorname VARCHAR(45) NOT NULL, "
+				+ "MatrNo INT NOT NULL, " + "Firstname VARCHAR(45) NOT NULL, "
 				+ "Name VARCHAR(45) NOT NULL, "
 				+ "EMail VARCHAR(45) NOT NULL, "
 				+ "IsStudent TINYINT NOT NULL, " + "IsAdmin TINYINT NOT NULL, "
@@ -293,18 +290,16 @@ public class MySQLAccess implements DataAccess {
 	 * Inserts Status data
 	 */
 	private void insertStatusData() {
-		int i = 0;
+
 		String[] status = { "'OPEN'", "'APPROVED'", "'RETRACTED'",
 				"'REJECTED'", "'OVERDUE'", "'COMPLETED'", "'ERROR'",
 				"'CANCELED'" };
 
 		for (String s : status) {
-			i++;
 
 			String insertionString = "insert into "
 					+ connectionInfo.get("database.database") + "."
-					+ Table.STATUS.toString() + " (ID, Name) VALUES (" + i
-					+ "," + s + ")";
+					+ Table.STATUS.toString() + " (Name) VALUES (" + s + ")";
 
 			try {
 				Statement statement = connection.createStatement();
@@ -327,14 +322,11 @@ public class MySQLAccess implements DataAccess {
 		String[] operatingSystems = { "'Windows 7'", "'Windows 8'",
 				"'MacOS Mountain Lion'", "'Windows 3.11'", "'SUSE Linux 12.3'" };
 
-		int i = 0;
 		for (String s : operatingSystems) {
-			i++;
 
 			String insertionString = "insert into "
 					+ connectionInfo.get("database.database") + "."
-					+ Table.OS.toString() + " (ID, Name) VALUES (" + i + ","
-					+ s + ")";
+					+ Table.OS.toString() + " (Name) VALUES (" + s + ")";
 
 			try {
 				Statement statement = connection.createStatement();
@@ -372,7 +364,7 @@ public class MySQLAccess implements DataAccess {
 	@Override
 	public List<User> getLecturers() {
 
-		String sql = "SELECT ID, MatrNr, Vorname, Name, EMail, isStudent, isAdmin, isLecturer FROM "
+		String sql = "SELECT ID, MatrNo, Firstname, Name, EMail, isStudent, isAdmin, isLecturer FROM "
 				+ connectionInfo.getProperty("database.database")
 				+ "."
 				+ Table.USER.toString() + " WHERE IsLecturer = (1)";
@@ -388,8 +380,8 @@ public class MySQLAccess implements DataAccess {
 			while (result.next()) {
 				User user = new User();
 				user.setID(result.getInt("ID"));
-				user.setMatrNr(result.getInt("MatrNr"));
-				user.setFirstName(result.getString("Vorname"));
+				user.setMatrNr(result.getInt("MatrNo"));
+				user.setFirstName(result.getString("Firstname"));
 				user.setLastName(result.getString("Name"));
 				user.seteMail(result.getString("EMail"));
 				user.setStudent(result.getBoolean("isStudent"));
@@ -411,7 +403,7 @@ public class MySQLAccess implements DataAccess {
 	@Override
 	public List<User> getAdmins() {
 
-		String sql = "SELECT ID, MatrNr, Vorname, Name, EMail, isStudent, isAdmin, isLecturer FROM "
+		String sql = "SELECT ID, MatrNo, Firstname, Name, EMail, isStudent, isAdmin, isLecturer FROM "
 				+ connectionInfo.getProperty("database.database")
 				+ "."
 				+ Table.USER.toString() + " WHERE IsAdmin = (1)";
@@ -427,8 +419,8 @@ public class MySQLAccess implements DataAccess {
 
 			while (result.next()) {
 				int id = result.getInt("ID");
-				int matrNr = result.getInt("MatrNr");
-				String vorname = result.getString("Vorname");
+				int matrNo = result.getInt("MatrNo");
+				String firstname = result.getString("Firstname");
 				String name = result.getString("Name");
 				String eMail = result.getString("EMail");
 				Boolean isStudent = result.getBoolean("isStudent");
@@ -437,8 +429,8 @@ public class MySQLAccess implements DataAccess {
 
 				User user = new User();
 				user.setID(id);
-				user.setMatrNr(matrNr);
-				user.setFirstName(vorname);
+				user.setMatrNr(matrNo);
+				user.setFirstName(firstname);
 				user.setLastName(name);
 				user.seteMail(eMail);
 				user.setStudent(isStudent);
@@ -461,7 +453,7 @@ public class MySQLAccess implements DataAccess {
 	@Override
 	public User getUserForID(int id) {
 
-		String sql = "SELECT ID, MatrNr, Vorname, Name, EMail, isStudent, isAdmin, isLecturer FROM "
+		String sql = "SELECT ID, MatrNo, Firstname, Name, EMail, isStudent, isAdmin, isLecturer FROM "
 				+ connectionInfo.getProperty("database.database")
 				+ "."
 				+ Table.USER.toString() + " WHERE ID = ?";
@@ -479,8 +471,8 @@ public class MySQLAccess implements DataAccess {
 
 			if (result.next()) {
 				int tempid = result.getInt("ID");
-				int matrNr = result.getInt("MatrNr");
-				String vorname = result.getString("Vorname");
+				int matrNo = result.getInt("MatrNo");
+				String firstname = result.getString("Firstname");
 				String name = result.getString("Name");
 				String eMail = result.getString("EMail");
 				Boolean isStudent = result.getBoolean("isStudent");
@@ -488,8 +480,8 @@ public class MySQLAccess implements DataAccess {
 				Boolean isLecturer = result.getBoolean("isLecturer");
 
 				user.setID(tempid);
-				user.setMatrNr(matrNr);
-				user.setFirstName(vorname);
+				user.setMatrNr(matrNo);
+				user.setFirstName(firstname);
 				user.setLastName(name);
 				user.seteMail(eMail);
 				user.setStudent(isStudent);
@@ -514,30 +506,37 @@ public class MySQLAccess implements DataAccess {
 				+ connectionInfo.getProperty("database.database")
 				+ "."
 				+ Table.PROCESS.toString()
-				+ " (ID, RequesterID, ApproverID, NotebookID, Hash, CreationDate, StartDate, EndDate, UntilDate, StatusID, OSID, Description) VALUES ( ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ?, ?)";
+				+ " (RequesterID, ApproverID, NotebookID, Hash, CreationDate, StartDate, EndDate, UntilDate, StatusID, OSID, Description) VALUES (? , ? , ? , ? , ? , ? , ? , ? , ? , ?, ?)";
 
 		try {
 			connect();
 			PreparedStatement statement = connection.prepareStatement(sql);
 
-			statement.setInt(1, request.getId());
-			statement.setInt(2, request.getRequesterId());
-			statement.setInt(3, request.getApproverId());
-			statement.setInt(4, request.getNotebookId());
-			statement.setString(5, request.getHash());
-			statement.setTimestamp(6, new Timestamp(request.getCreated()
-															.getTime()));
-			statement.setTimestamp(7, new Timestamp(request.getStart()
-															.getTime()));
-			statement.setTimestamp(8, new Timestamp(request.getEnd()
-															.getTime()));
-			statement.setTimestamp(9, new Timestamp(request.getUntil()
-															.getTime()));
-			statement.setInt(10, request.getStatus()
+			statement.setInt(1, request.getRequesterId());
+			statement.setInt(2, request.getApproverId());
+			statement.setInt(3, request.getNotebookId());
+			statement.setString(4, request.getHash());
+			statement.setTimestamp(	5,
+									(request.getCreated() != null) ? new Timestamp(request.getCreated()
+																							.getTime())
+											: null);
+			statement.setTimestamp(	6,
+									(request.getStart() != null) ? new Timestamp(request.getStart()
+																						.getTime())
+											: null);
+			statement.setTimestamp(	7,
+									(request.getEnd() != null) ? new Timestamp(request.getEnd()
+																						.getTime())
+											: null);
+			statement.setTimestamp(	8,
+									(request.getUntil() != null) ? new Timestamp(request.getUntil()
+																						.getTime())
+											: null);
+			statement.setInt(9, request.getStatus()
 										.getId());
-			statement.setInt(11, request.getOs());
+			statement.setInt(10, request.getOs());
 
-			statement.setString(12, request.getDescription());
+			statement.setString(11, request.getDescription());
 
 			statement.executeQuery();
 
@@ -564,12 +563,18 @@ public class MySQLAccess implements DataAccess {
 			statement.setInt(2, request.getApproverId());
 			statement.setInt(3, request.getNotebookId());
 			statement.setString(4, request.getHash());
-			statement.setTimestamp(5, new Timestamp(request.getStart()
-															.getTime()));
-			statement.setTimestamp(6, new Timestamp(request.getEnd()
-															.getTime()));
-			statement.setTimestamp(7, new Timestamp(request.getUntil()
-															.getTime()));
+			statement.setTimestamp(	5,
+									(request.getStart() != null) ? new Timestamp(request.getStart()
+																						.getTime())
+											: null);
+			statement.setTimestamp(	6,
+									(request.getEnd() != null) ? new Timestamp(request.getEnd()
+																						.getTime())
+											: null);
+			statement.setTimestamp(	7,
+									(request.getUntil() != null) ? new Timestamp(request.getUntil()
+																						.getTime())
+											: null);
 			statement.setInt(8, request.getStatus()
 										.getId());
 			statement.setInt(9, request.getOs());
@@ -590,7 +595,7 @@ public class MySQLAccess implements DataAccess {
 
 	@Override
 	public List<Request> getRequests() {
-		String sql = "SELECT ID, RequestID, RequesterID, ApproverID, NotebookID, Hash, CreationDate, StartDate, EndDate, UntilDate, StatusID, OSID, Description FROM "
+		String sql = "SELECT ID, RequesterID, ApproverID, NotebookID, Hash, CreationDate, StartDate, EndDate, UntilDate, StatusID, OSID, Description FROM "
 				+ connectionInfo.getProperty("database.database")
 				+ "."
 				+ Table.PROCESS.toString();
@@ -611,15 +616,188 @@ public class MySQLAccess implements DataAccess {
 				int notebookID = result.getInt("NotebookID");
 				String hash = result.getString("Hash");
 
-				Date creationDate = new Date(result.getTimestamp("CreationDate")
-													.getTime());
-				Date startDate = new Date(result.getTimestamp("StartDate")
-												.getTime());
-				Date endDate = new Date(result.getTimestamp("EndDate")
-												.getTime());
+				Date creationDate = null;
+				Date startDate = null;
+				Date endDate = null;
+				Date untilDate = null;
 
-				Date untilDate = new Date(result.getTimestamp("UntilDate")
+				if (result.getTimestamp("CreationDate") != null) {
+					creationDate = new Date(result.getTimestamp("CreationDate")
+													.getTime());
+				}
+
+				if (result.getTimestamp("StartDate") != null) {
+					startDate = new Date(result.getTimestamp("StartDate")
 												.getTime());
+				}
+
+				if (result.getTimestamp("EndDate") != null) {
+					endDate = new Date(result.getTimestamp("EndDate")
+												.getTime());
+				}
+
+				if (result.getTimestamp("UntilDate") != null) {
+					untilDate = new Date(result.getTimestamp("UntilDate")
+												.getTime());
+				}
+
+				int statusID = result.getInt("StatusID");
+				int osID = result.getInt("OSID");
+				String description = result.getString("Description");
+
+				Request request = new Request(	id,
+												requesterID,
+												approverID,
+												notebookID,
+												creationDate,
+												startDate,
+												endDate,
+												untilDate,
+												hash,
+												statusID,
+												osID,
+												description);
+
+				requestList.add(request);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			log.log(e.getMessage(), LogLevel.ERROR);
+		} finally {
+			disconnect();
+		}
+
+		return requestList;
+	}
+
+	@Override
+	public List<Request> getRequestsForApproverForID(int approverID) {
+		String sql = "SELECT ID, RequesterID, ApproverID, NotebookID, Hash, CreationDate, StartDate, EndDate, UntilDate, StatusID, OSID, Description FROM "
+				+ connectionInfo.getProperty("database.database")
+				+ "."
+				+ Table.PROCESS.toString() + " WHERE ApproverID = ?";
+
+		List<Request> requestList = new ArrayList<Request>();
+
+		try {
+			connect();
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setInt(1, approverID);
+
+			ResultSet result = statement.executeQuery();
+
+			while (result.next()) {
+
+				int id = result.getInt("ID");
+				int requesterID = result.getInt("RequesterID");
+
+				int notebookID = result.getInt("NotebookID");
+				String hash = result.getString("Hash");
+
+				Date creationDate = null;
+				Date startDate = null;
+				Date endDate = null;
+				Date untilDate = null;
+
+				if (result.getTimestamp("CreationDate") != null) {
+					creationDate = new Date(result.getTimestamp("CreationDate")
+													.getTime());
+				}
+
+				if (result.getTimestamp("StartDate") != null) {
+					startDate = new Date(result.getTimestamp("StartDate")
+												.getTime());
+				}
+
+				if (result.getTimestamp("EndDate") != null) {
+					endDate = new Date(result.getTimestamp("EndDate")
+												.getTime());
+				}
+
+				if (result.getTimestamp("UntilDate") != null) {
+					untilDate = new Date(result.getTimestamp("UntilDate")
+												.getTime());
+				}
+
+				int statusID = result.getInt("StatusID");
+				int osID = result.getInt("OSID");
+				String description = result.getString("Description");
+
+				Request request = new Request(	id,
+												requesterID,
+												approverID,
+												notebookID,
+												creationDate,
+												startDate,
+												endDate,
+												untilDate,
+												hash,
+												statusID,
+												osID,
+												description);
+
+				requestList.add(request);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			log.log(e.getMessage(), LogLevel.ERROR);
+		} finally {
+			disconnect();
+		}
+
+		return requestList;
+	}
+
+	@Override
+	public List<Request> getRequestsForRequesterForID(int requesterID) {
+		String sql = "SELECT ID, RequesterID, ApproverID, NotebookID, Hash, CreationDate, StartDate, EndDate, UntilDate, StatusID, OSID, Description FROM "
+				+ connectionInfo.getProperty("database.database")
+				+ "."
+				+ Table.PROCESS.toString() + " WHERE RequesterID = ?";
+
+		List<Request> requestList = new ArrayList<Request>();
+
+		try {
+			connect();
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setInt(1, requesterID);
+
+			ResultSet result = statement.executeQuery();
+
+			while (result.next()) {
+
+				int id = result.getInt("ID");
+				int approverID = result.getInt("ApproverID");
+
+				int notebookID = result.getInt("NotebookID");
+				String hash = result.getString("Hash");
+
+				Date creationDate = null;
+				Date startDate = null;
+				Date endDate = null;
+				Date untilDate = null;
+
+				if (result.getTimestamp("CreationDate") != null) {
+					creationDate = new Date(result.getTimestamp("CreationDate")
+													.getTime());
+				}
+
+				if (result.getTimestamp("StartDate") != null) {
+					startDate = new Date(result.getTimestamp("StartDate")
+												.getTime());
+				}
+
+				if (result.getTimestamp("EndDate") != null) {
+					endDate = new Date(result.getTimestamp("EndDate")
+												.getTime());
+				}
+
+				if (result.getTimestamp("UntilDate") != null) {
+					untilDate = new Date(result.getTimestamp("UntilDate")
+												.getTime());
+				}
 
 				int statusID = result.getInt("StatusID");
 				int osID = result.getInt("OSID");
@@ -653,7 +831,7 @@ public class MySQLAccess implements DataAccess {
 
 	@Override
 	public Request getRequestForID(int id) {
-		String sql = "SELECT RequestID, RequesterID, ApproverID, NotebookID, Hash, CreationDate, StartDate, EndDate, UntilDate, StatusID, OSID, Description FROM "
+		String sql = "SELECT RequesterID, ApproverID, NotebookID, Hash, CreationDate, StartDate, EndDate, UntilDate, StatusID, OSID, Description FROM "
 				+ connectionInfo.getProperty("database.database")
 				+ "."
 				+ Table.PROCESS.toString() + " WHERE ID = ?";
@@ -674,14 +852,31 @@ public class MySQLAccess implements DataAccess {
 				int notebookID = result.getInt("NotebookID");
 				String hash = result.getString("Hash");
 
-				Date creationDate = new Date(result.getTimestamp("CreationDate")
+				Date creationDate = null;
+				Date startDate = null;
+				Date endDate = null;
+				Date untilDate = null;
+
+				if (result.getTimestamp("CreationDate") != null) {
+					creationDate = new Date(result.getTimestamp("CreationDate")
 													.getTime());
-				Date startDate = new Date(result.getTimestamp("StartDate")
+				}
+
+				if (result.getTimestamp("StartDate") != null) {
+					startDate = new Date(result.getTimestamp("StartDate")
 												.getTime());
-				Date endDate = new Date(result.getTimestamp("EndDate")
+				}
+
+				if (result.getTimestamp("EndDate") != null) {
+					endDate = new Date(result.getTimestamp("EndDate")
 												.getTime());
-				Date untilDate = new Date(result.getTimestamp("UntilDate")
+				}
+
+				if (result.getTimestamp("UntilDate") != null) {
+					untilDate = new Date(result.getTimestamp("UntilDate")
 												.getTime());
+				}
+
 				int statusID = result.getInt("StatusID");
 				int osID = result.getInt("OSID");
 				String description = result.getString("Description");
@@ -713,7 +908,7 @@ public class MySQLAccess implements DataAccess {
 
 	@Override
 	public Request getRequestForHash(String hash) {
-		String sql = "SELECT ID, RequestID, RequesterID, ApproverID, NotebookID, CreationDate, StartDate, EndDate, UntilDate, StatusID, OSID, Description FROM "
+		String sql = "SELECT ID, RequesterID, ApproverID, NotebookID, CreationDate, StartDate, EndDate, UntilDate, StatusID, OSID, Description FROM "
 				+ connectionInfo.getProperty("database.database")
 				+ "."
 				+ Table.PROCESS.toString() + " WHERE Hash = ?";
@@ -735,14 +930,31 @@ public class MySQLAccess implements DataAccess {
 				int notebookID = result.getInt("NotebookID");
 				// String hash = result.getString("Hash");
 
-				Date creationDate = new Date(result.getTimestamp("CreationDate")
+				Date creationDate = null;
+				Date startDate = null;
+				Date endDate = null;
+				Date untilDate = null;
+
+				if (result.getTimestamp("CreationDate") != null) {
+					creationDate = new Date(result.getTimestamp("CreationDate")
 													.getTime());
-				Date startDate = new Date(result.getTimestamp("StartDate")
+				}
+
+				if (result.getTimestamp("StartDate") != null) {
+					startDate = new Date(result.getTimestamp("StartDate")
 												.getTime());
-				Date endDate = new Date(result.getTimestamp("EndDate")
+				}
+
+				if (result.getTimestamp("EndDate") != null) {
+					endDate = new Date(result.getTimestamp("EndDate")
 												.getTime());
-				Date untilDate = new Date(result.getTimestamp("UntilDate")
+				}
+
+				if (result.getTimestamp("UntilDate") != null) {
+					untilDate = new Date(result.getTimestamp("UntilDate")
 												.getTime());
+				}
+
 				int statusID = result.getInt("StatusID");
 				int osID = result.getInt("OSID");
 				String description = result.getString("Description");
@@ -822,15 +1034,15 @@ public class MySQLAccess implements DataAccess {
 		String sql = "INSERT INTO "
 				+ connectionInfo.getProperty("database.database") + "."
 				+ Table.NOTEBOOK.toString()
-				+ " (ID, Name, IsDefective, IsAvailable) VALUES (?,?,?,?)";
+				+ " (Name, IsDefective, IsAvailable) VALUES (?,?,?)";
 
 		try {
 			connect();
 			PreparedStatement statement = connection.prepareStatement(sql);
-			statement.setInt(1, notebook.getiD());
-			statement.setString(2, notebook.getName());
-			statement.setBoolean(3, notebook.isDefective());
-			statement.setBoolean(4, notebook.isAvailable());
+
+			statement.setString(1, notebook.getName());
+			statement.setBoolean(2, notebook.isDefective());
+			statement.setBoolean(3, notebook.isAvailable());
 
 			statement.executeQuery();
 
@@ -874,17 +1086,17 @@ public class MySQLAccess implements DataAccess {
 				+ connectionInfo.getProperty("database.database")
 				+ "."
 				+ Table.EMAIL.toString()
-				+ " (ID, ReceiverMail, SenderMail, Header, Body, Date) VALUES (?,?,?,?,?,?)";
+				+ " (ReceiverMail, SenderMail, Header, Body, Date) VALUES (?,?,?,?,?,?)";
 
 		try {
 			connect();
 			PreparedStatement statement = connection.prepareStatement(sql);
-			statement.setInt(1, eMail.getiD());
-			statement.setString(2, eMail.getReceiverMail());
-			statement.setString(3, eMail.getSenderMail());
-			statement.setString(4, eMail.getHeader());
-			statement.setString(5, eMail.getBody());
-			statement.setTimestamp(6, new Timestamp(eMail.getDate()
+
+			statement.setString(1, eMail.getReceiverMail());
+			statement.setString(2, eMail.getSenderMail());
+			statement.setString(3, eMail.getHeader());
+			statement.setString(4, eMail.getBody());
+			statement.setTimestamp(5, new Timestamp(eMail.getDate()
 															.getTime()));
 
 			statement.executeQuery();
@@ -963,7 +1175,7 @@ public class MySQLAccess implements DataAccess {
 
 	@Override
 	public User authenticate(String username, String password) {
-		String sql = "SELECT ID, MatrNr, Vorname, Name, EMail, isStudent, isAdmin, isLecturer, Password FROM "
+		String sql = "SELECT ID, MatrNo, Firstname, Name, EMail, isStudent, isAdmin, isLecturer, Password FROM "
 				+ connectionInfo.getProperty("database.database")
 				+ "."
 				+ Table.USER.toString() + " WHERE Name = ?";
@@ -986,8 +1198,8 @@ public class MySQLAccess implements DataAccess {
 
 					user = new User();
 					user.setID(result.getInt("ID"));
-					user.setMatrNr(result.getInt("MatrNr"));
-					user.setFirstName(result.getString("Vorname"));
+					user.setMatrNr(result.getInt("MatrNo"));
+					user.setFirstName(result.getString("Firstname"));
 					user.setLastName(result.getString("Name"));
 					user.seteMail(result.getString("EMail"));
 					user.setStudent(result.getBoolean("isStudent"));
