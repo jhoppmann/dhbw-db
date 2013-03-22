@@ -4,9 +4,9 @@
 package com.dhbw_db.view;
 
 import com.dhbw_db.control.MainController;
-import com.dhbw_db.control.MainUI;
+import com.dhbw_db.control.NavigationController;
+import com.dhbw_db.control.NavigationController.View;
 import com.dhbw_db.model.beans.User;
-import com.vaadin.ui.Component;
 import com.vaadin.ui.MenuBar;
 
 /**
@@ -20,55 +20,44 @@ public class NavigationBar extends MenuBar {
 
 	private MainController mc;
 
+	private NavigationController control;
+
 	public NavigationBar() {
 		this.setWidth("100%");
 
-		// build the request items
-		// TODO Add authentication check
-
-		mc = ((MainUI) (MainUI.getCurrent())).getController();
+		mc = MainController.get();
 
 		User u = mc.getUser();
 
-		// perhaps remodel to use enums?
-		// always keeping an object of each view is not that good
+		control = new NavigationController();
 
+		// build the navigation items
 		if (u.isAdmin())
-			addItem("Start", new ViewChangeCommand(new AdminStartPage()));
+			addItem("Start", new ViewChangeCommand(View.START_ADMIN));
 		else if (u.isLecturer())
-			addItem("Start", new ViewChangeCommand(new LecturerStartPage()));
+			addItem("Start", new ViewChangeCommand(View.START_LECTURER));
 		else
-			addItem("Start", new ViewChangeCommand(new StudentStartPage()));
+			addItem("Start", new ViewChangeCommand(View.START_STUDENT));
 
 		if (u.isStudent())
-			addItem("Neuer Leihantrag",
-					new ViewChangeCommand(new NotebookRequest()));
+			addItem("Neuer Leihantrag", new ViewChangeCommand(View.NEW_REQUEST));
 
 		if (u.isStudent())
 			addItem("Eigene Anträge",
-					new ViewChangeCommand(new StudentRequestsPage()));
-
-		if (u.isStudent())
-			addItem("Details", new ViewChangeCommand(new StudentDetailsPage()));
+					new ViewChangeCommand(View.STUDENT_REQUEST));
 
 		if (u.isLecturer())
-			addItem("Offene Anträge",
-					new ViewChangeCommand(new LecturerOpenRequestsPage()));
+			addItem("Offene Anträge", new ViewChangeCommand(View.LECTURER_OPEN));
 
 		if (u.isLecturer())
-			addItem("Alle Anträge",
-					new ViewChangeCommand(new LecturerAllRequestsPage()));
-
-		if (u.isLecturer())
-			addItem("Details", new ViewChangeCommand(new LecturerDetailsPage()));
+			addItem("Alle Anträge", new ViewChangeCommand(View.LECTURER_ALL));
 
 		if (u.isAdmin())
 			addItem("Ausgabe / Rücknahme",
-					new ViewChangeCommand(new AdminApprovedRequestsPage()));
+					new ViewChangeCommand(View.ADMIN_CHECKOUT));
 
 		if (u.isAdmin())
-			addItem("Alle Anträge",
-					new ViewChangeCommand(new AdminAllRequestsPage()));
+			addItem("Alle Anträge", new ViewChangeCommand(View.ADMIN_REQUESTS));
 
 		if (u.isAdmin())
 			addItem("Notebook Statuses", null);
@@ -78,19 +67,26 @@ public class NavigationBar extends MenuBar {
 
 	}
 
+	/**
+	 * Holds a view to change to on a click
+	 * 
+	 * @author jhoppmann
+	 * @version 0.1
+	 * @since 0,1
+	 */
 	private class ViewChangeCommand implements MenuBar.Command {
 
 		private static final long serialVersionUID = -4984530031416204071L;
 
-		Component c;
+		private View v;
 
-		public ViewChangeCommand(Component c) {
-			this.c = c;
+		public ViewChangeCommand(View v) {
+			this.v = v;
 		}
 
 		@Override
 		public void menuSelected(MenuItem selectedItem) {
-			NavigationBar.this.mc.changeView(c);
+			NavigationBar.this.control.changeView(v);
 
 		}
 
