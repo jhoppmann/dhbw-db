@@ -198,4 +198,14 @@ public class AsynchronousWrapper implements DataAccess {
 		return wrappedAccess.authenticate(username, password);
 	}
 
+	@Override
+	public List<Request> getRequestsForApproverForID(int approverID) {
+		return wrappedAccess.getRequestsForApproverForID(approverID);
+	}
+
+	@Override
+	public List<Request> getRequestsForRequesterForID(int requesterID) {
+		return wrappedAccess.getRequestsForRequesterForID(requesterID);
+	}
+
 }
