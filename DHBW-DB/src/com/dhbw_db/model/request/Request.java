@@ -106,13 +106,11 @@ public class Request {
 		}
 	};
 
-	public Request(int requesterId, int approverId, int notebookId, Date until,
-			Date start) {
+	public Request(int requesterId, int approverId) {
 		this.created = new Date();
+		this.end = null;
 		this.requesterId = requesterId;
 		this.approverId = approverId;
-		this.until = until;
-		this.start = start;
 
 		generateHash();
 		setStatus(Status.OPEN);
