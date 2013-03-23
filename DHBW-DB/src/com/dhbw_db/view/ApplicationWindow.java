@@ -5,7 +5,10 @@ package com.dhbw_db.view;
 
 import com.dhbw_db.control.MainUI;
 import com.dhbw_db.model.beans.User;
+import com.dhbw_db.view.admin.AdminStartPage;
+import com.dhbw_db.view.lecturer.LecturerStartPage;
 import com.dhbw_db.view.login.LoginWindow;
+import com.dhbw_db.view.student.StudentStartPage;
 import com.vaadin.server.ClassResource;
 import com.vaadin.ui.AbsoluteLayout;
 import com.vaadin.ui.Alignment;

@@ -135,10 +135,9 @@ public class UnitTestJH {
 		Date inTwoDays = cal.getTime();
 
 		Request rq = new Request(	1,
-									1,
-									1,
-									new Date(),
-									inTwoDays);
+									1);
+		rq.setStart(new Date());
+		rq.setEnd(inTwoDays);
 
 		System.out.println(rq.getStatus()
 								.toString());

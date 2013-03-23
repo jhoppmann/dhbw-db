@@ -10,7 +10,8 @@ import java.util.Map;
 import com.dhbw_db.model.beans.Notebook.NotebookCategory;
 import com.dhbw_db.model.beans.User;
 import com.dhbw_db.model.io.database.DataAccess;
-import com.dhbw_db.view.NotebookRequest;
+import com.dhbw_db.model.request.Request;
+import com.dhbw_db.view.student.NotebookRequest;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 
@@ -68,6 +69,11 @@ public class NotebookRequestController implements ClickListener {
 					.getCaption()
 					.equals("Zurücksetzen")) {
 			controlledView.reset();
+		} else if (event.getButton()
+						.getCaption()
+						.equals("Beantragen")) {
+			Request r = controlledView.getRequest();
+			dao.insertRequest(r);
 		}
 
 	}
