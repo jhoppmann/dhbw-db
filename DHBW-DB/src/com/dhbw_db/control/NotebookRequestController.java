@@ -11,7 +11,7 @@ import com.dhbw_db.model.beans.Notebook.NotebookCategory;
 import com.dhbw_db.model.beans.User;
 import com.dhbw_db.model.io.database.DataAccess;
 import com.dhbw_db.model.request.Request;
-import com.dhbw_db.view.NotebookRequest;
+import com.dhbw_db.view.student.NotebookRequest;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 

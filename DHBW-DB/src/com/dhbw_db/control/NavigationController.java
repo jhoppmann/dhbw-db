@@ -3,15 +3,15 @@
  */
 package com.dhbw_db.control;
 
-import com.dhbw_db.view.AdminAllRequestsPage;
-import com.dhbw_db.view.AdminApprovedRequestsPage;
-import com.dhbw_db.view.AdminStartPage;
-import com.dhbw_db.view.LecturerAllRequestsPage;
-import com.dhbw_db.view.LecturerOpenRequestsPage;
-import com.dhbw_db.view.LecturerStartPage;
-import com.dhbw_db.view.NotebookRequest;
-import com.dhbw_db.view.StudentRequestsPage;
-import com.dhbw_db.view.StudentStartPage;
+import com.dhbw_db.view.admin.AdminAllRequestsPage;
+import com.dhbw_db.view.admin.AdminApprovedRequestsPage;
+import com.dhbw_db.view.admin.AdminStartPage;
+import com.dhbw_db.view.lecturer.LecturerAllRequestsPage;
+import com.dhbw_db.view.lecturer.LecturerOpenRequestsPage;
+import com.dhbw_db.view.lecturer.LecturerStartPage;
+import com.dhbw_db.view.student.NotebookRequest;
+import com.dhbw_db.view.student.StudentRequestsPage;
+import com.dhbw_db.view.student.StudentStartPage;
 import com.vaadin.ui.Component;
 
 /**
