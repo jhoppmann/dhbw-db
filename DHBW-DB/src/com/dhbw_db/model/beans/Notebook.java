@@ -17,7 +17,7 @@ public class Notebook {
 
 		private String text;
 
-		public String toString() {
+		public String getText() {
 			return text;
 		}
 
