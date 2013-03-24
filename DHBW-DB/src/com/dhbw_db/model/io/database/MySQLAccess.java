@@ -82,6 +82,10 @@ public class MySQLAccess implements DataAccess {
 			this.setupProcessTable();
 		}
 
+		if (!tableExists(Table.NOTEBOOKCOUNT.toString())) {
+			this.setupNotebookCountTable();
+		}
+
 		log.log("createTables method executed", LogLevel.INFO);
 
 		// testSomeMethods();
@@ -188,6 +192,27 @@ public class MySQLAccess implements DataAccess {
 			Statement statement = connection.createStatement();
 			statement.executeUpdate(creationString);
 			log.log("Created table " + Table.OS, LogLevel.INFO);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			log.log(e.getMessage(), LogLevel.ERROR);
+		}
+	}
+
+	/**
+	 * Sets up the availableNotebooks Table
+	 */
+	private void setupNotebookCountTable() {
+		String creationString = "create table "
+				+ connectionInfo.get("database.database") + "."
+				+ Table.NOTEBOOKCOUNT.toString()
+				+ "(ID INT NOT NULL AUTO_INCREMENT, "
+				+ "Name VARCHAR(45) NOT NULL, Count INT, "
+				+ "PRIMARY KEY (ID))";
+
+		try {
+			Statement statement = connection.createStatement();
+			statement.executeUpdate(creationString);
+			log.log("Created table " + Table.NOTEBOOKCOUNT, LogLevel.INFO);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			log.log(e.getMessage(), LogLevel.ERROR);
@@ -1178,6 +1203,60 @@ public class MySQLAccess implements DataAccess {
 	}
 
 	@Override
+	public Map<String, Integer> getNotebookCount() {
+		String sql = "SELECT Name, Count FROM "
+				+ connectionInfo.getProperty("database.database") + "."
+				+ Table.NOTEBOOKCOUNT.toString();
+
+		HashMap<String, Integer> notebooksMap = new HashMap<String, Integer>();
+
+		try {
+			connect();
+
+			PreparedStatement statement = connection.prepareStatement(sql);
+
+			ResultSet result = statement.executeQuery();
+
+			while (result.next()) {
+				notebooksMap.put(	result.getString("Name"),
+									result.getInt("Count"));
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			log.log(e.getMessage(), LogLevel.ERROR);
+		} finally {
+			disconnect();
+		}
+
+		return notebooksMap;
+	}
+
+	@Override
+	public void updateNotebookCount(String name, int addedNotebooks) {
+		String sql = "UPDATE "
+				+ connectionInfo.getProperty("database.database") + "."
+				+ Table.NOTEBOOKCOUNT.toString()
+				+ " SET COUNT = COUNT + ? WHERE NAME = ?";
+
+		try {
+			connect();
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setInt(1, addedNotebooks);
+			statement.setString(2, name);
+
+			statement.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			log.log(e.getMessage(), LogLevel.ERROR);
+		} finally {
+			disconnect();
+		}
+	}
+
+	@Override
 	public User authenticate(String username, String password) {
 		String sql = "SELECT ID, MatrNo, Firstname, Name, EMail, isStudent, isAdmin, isLecturer, Password FROM "
 				+ connectionInfo.getProperty("database.database")
@@ -1235,120 +1314,79 @@ public class MySQLAccess implements DataAccess {
 		 * requestOne.getId() + " " + requestOne.getOs());
 		 */
 
-		Notebook notebook = new Notebook();
-		notebook.setAvailable(true);
-		notebook.setDefective(false);
-		notebook.setName("great notebook");
-		notebook.setiD(1);
+		/*
+		 * Notebook notebook = new Notebook(); notebook.setAvailable(true);
+		 * notebook.setDefective(false); notebook.setName("great notebook");
+		 * notebook.setiD(1);
+		 * 
+		 * this.insertNotebook(notebook);
+		 * 
+		 * Request a1 = new Request( 1, 2, 12, 1, null, null, null, null,
+		 * "sdf32", 1, 1,
+		 * "This is a Request with id 1 from approver 12 and requester 2");
+		 * 
+		 * Request a2 = new Request( 2, 3, 14, 1, null, null, null, null,
+		 * "sdf32", 1, 1, "This is a Request from approver 14 and requester 3");
+		 * 
+		 * Request a3 = new Request( 3, 4, 15, 1, null, null, null, null,
+		 * "hiiamahash", 1, 1,
+		 * "This is a Request with  approver id 15 requester id 4 hash: hiiamahash"
+		 * );
+		 * 
+		 * this.insertRequest(a1); this.insertRequest(a2);
+		 * this.insertRequest(a3);
+		 * 
+		 * a1.setDescription(
+		 * "new description for: This is a Request with id 1 from approver 12 and requester 2"
+		 * ); this.updateRequest(a1);
+		 * 
+		 * Request b = this.getRequestForHash("hiiamahash"); Request c =
+		 * this.getRequestForID(1);
+		 * 
+		 * Request d = this.getRequestsForApproverForID(14) .get(0); Request e =
+		 * this.getRequestsForRequesterForID(2) .get(0);
+		 * 
+		 * System.out.println("hash hiiamahash: " + b.getDescription());
+		 * 
+		 * if (c != null) { System.out.println("id 1 und new description: " +
+		 * c.getDescription()); } else { System.out.println("c is null"); }
+		 * 
+		 * System.out.println("approver 14: " + d.getDescription());
+		 * System.out.println("requester 2: " + e.getDescription());
+		 * System.out.println("new description: " + this.getRequests() .get(0)
+		 * .getId());
+		 * 
+		 * EMail mail = new EMail(); mail.setBody("Hi this is the body");
+		 * mail.setHeader("This is the header");
+		 * mail.setReceiverMail("asd@dsf.w");
+		 * mail.setSenderMail("sender@asd.wd"); this.insertEMail(mail);
+		 * 
+		 * System.out.println(this.getNotebooks() .get(0) .getName());
+		 * 
+		 * notebook.setName("small notebook");
+		 * 
+		 * this.updateNotebook(notebook);
+		 * 
+		 * System.out.println(this.getNotebooks() .get(0) .getName());
+		 * System.out.println(this.getNotebooks() .get(0) .isAvailable());
+		 * System.out.println(this.getNotebooks() .get(0) .isDefective());
+		 * 
+		 * System.out.println(this.getLecturers() .get(0) .getLastName());
+		 * System.out.println(this.getAdmins() .get(0) .getLastName());
+		 * System.out.println(this.getOSs() .get(1));
+		 * System.out.println(this.getStatusses() .get(1));
+		 * System.out.println(this.getUserForID(1) .getFirstName());
+		 */
 
-		this.insertNotebook(notebook);
-
-		Request a1 = new Request(	1,
-									2,
-									12,
-									1,
-									null,
-									null,
-									null,
-									null,
-									"sdf32",
-									1,
-									1,
-									"This is a Request with id 1 from approver 12 and requester 2");
-
-		Request a2 = new Request(	2,
-									3,
-									14,
-									1,
-									null,
-									null,
-									null,
-									null,
-									"sdf32",
-									1,
-									1,
-									"This is a Request from approver 14 and requester 3");
-
-		Request a3 = new Request(	3,
-									4,
-									15,
-									1,
-									null,
-									null,
-									null,
-									null,
-									"hiiamahash",
-									1,
-									1,
-									"This is a Request with  approver id 15 requester id 4 hash: hiiamahash");
-
-		this.insertRequest(a1);
-		this.insertRequest(a2);
-		this.insertRequest(a3);
-
-		a1.setDescription("new description for: This is a Request with id 1 from approver 12 and requester 2");
-		this.updateRequest(a1);
-
-		Request b = this.getRequestForHash("hiiamahash");
-		Request c = this.getRequestForID(1);
-
-		Request d = this.getRequestsForApproverForID(14)
-						.get(0);
-		Request e = this.getRequestsForRequesterForID(2)
-						.get(0);
-
-		System.out.println("hash hiiamahash: " + b.getDescription());
-
-		if (c != null) {
-			System.out.println("id 1 und new description: "
-					+ c.getDescription());
-		} else {
-			System.out.println("c is null");
-		}
-
-		System.out.println("approver 14: " + d.getDescription());
-		System.out.println("requester 2: " + e.getDescription());
-		System.out.println("new description: " + this.getRequests()
-														.get(0)
-														.getId());
-
-		EMail mail = new EMail();
-		mail.setBody("Hi this is the body");
-		mail.setHeader("This is the header");
-		mail.setReceiverMail("asd@dsf.w");
-		mail.setSenderMail("sender@asd.wd");
-		this.insertEMail(mail);
-
-		System.out.println(this.getNotebooks()
-								.get(0)
-								.getName());
-
-		notebook.setName("small notebook");
-
-		this.updateNotebook(notebook);
-
-		System.out.println(this.getNotebooks()
-								.get(0)
-								.getName());
-		System.out.println(this.getNotebooks()
-								.get(0)
-								.isAvailable());
-		System.out.println(this.getNotebooks()
-								.get(0)
-								.isDefective());
-
-		System.out.println(this.getLecturers()
-								.get(0)
-								.getLastName());
-		System.out.println(this.getAdmins()
-								.get(0)
-								.getLastName());
-		System.out.println(this.getOSs()
-								.get(1));
-		System.out.println(this.getStatusses()
-								.get(1));
-		System.out.println(this.getUserForID(1)
-								.getFirstName());
+		Map<String, Integer> map = this.getNotebookCount();
+		System.out.println(map.get("short") + " " + map.get("medium") + " "
+				+ map.get("long"));
+		this.updateNotebookCount("short", 1);
+		this.updateNotebookCount("medium", 2);
+		this.updateNotebookCount("long", 3);
+		map = this.getNotebookCount();
+		System.out.println(map.get("short") + " " + map.get("medium") + " "
+				+ map.get("long"));
 
 	}
 

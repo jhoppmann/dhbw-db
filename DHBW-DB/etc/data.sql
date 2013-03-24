@@ -175,3 +175,8 @@ INSERT INTO `User` (`ID`, `MatrNo`, `Firstname`, `Name`, `EMail`, `IsStudent`, `
 (14, 5, 'Harald', 'Haake', 'test5@dhbwlecturer.com', 0, 1, 0, 'caa66a072554b442f4e8e43c665924cb'),
 (15, 6, 'Super', 'Admin', 'adminAddress@gmail.com', 0, 0, 1, '531704a02607a1646efcf4c1fae1eec6'),
 (16, 7, 'Jonathan', 'Osterman', 'drmanhatten@watchmen.com', 1, 1, 1, '17828ff61bd0ad2487e39a0d83d5e2bb');
+
+INSERT INTO notebookcount(`Name`,`Count`)VALUES('short',20);
+INSERT INTO notebookcount(`Name`,`Count`)VALUES('medium',10);
+INSERT INTO notebookcount(`Name`,`Count`)VALUES('long',5);
+

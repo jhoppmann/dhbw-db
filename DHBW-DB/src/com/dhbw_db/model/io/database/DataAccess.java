@@ -34,7 +34,8 @@ public interface DataAccess {
 		NOTEBOOK("Notebook"),
 		OS("OS"),
 		STATUS("Status"),
-		EMAIL("EMail");
+		EMAIL("EMail"),
+		NOTEBOOKCOUNT("NotebookCount");
 
 		private String text;
 
@@ -191,5 +192,23 @@ public interface DataAccess {
 	 * @return The list of the requests a requester is assigned to
 	 */
 	public List<Request> getRequestsForRequesterForID(int requesterID);
+
+	/**
+	 * Gets the notebook count stored in a map
+	 * 
+	 * 
+	 * @return The map with the notebook count. Key value is short, medium or
+	 *         long
+	 */
+	Map<String, Integer> getNotebookCount();
+
+	/**
+	 * 
+	 * Updates the notebook count
+	 * 
+	 * @param the key value short, medium or long
+	 * @param the count of notebooks to be addded
+	 */
+	void updateNotebookCount(String name, int addedNotebooks);
 
 }
