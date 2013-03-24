@@ -21,6 +21,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 import com.dhbw_db.model.beans.EMail;
 import com.dhbw_db.model.beans.Notebook;
+import com.dhbw_db.model.beans.Notebook.NotebookCategory;
 import com.dhbw_db.model.beans.User;
 import com.dhbw_db.model.io.logging.LoggingService;
 import com.dhbw_db.model.io.logging.LoggingService.LogLevel;
@@ -84,6 +85,7 @@ public class MySQLAccess implements DataAccess {
 
 		if (!tableExists(Table.NOTEBOOKCOUNT.toString())) {
 			this.setupNotebookCountTable();
+			this.insertNotebookNumbers();
 		}
 
 		log.log("createTables method executed", LogLevel.INFO);
@@ -366,6 +368,36 @@ public class MySQLAccess implements DataAccess {
 					LogLevel.INFO);
 		}
 
+	}
+
+	/**
+	 * Fills the notebook count table with initial data
+	 */
+	private void insertNotebookNumbers() {
+		try {
+			Statement statement = connection.createStatement();
+
+			statement.addBatch("insert into "
+					+ connectionInfo.get("database.database") + "."
+					+ Table.NOTEBOOKCOUNT.toString()
+					+ " (Name, Count) VALUES ('"
+					+ NotebookCategory.LONG.toString() + "', 5)");
+			statement.addBatch("insert into "
+					+ connectionInfo.get("database.database") + "."
+					+ Table.NOTEBOOKCOUNT.toString()
+					+ " (Name, Count) VALUES ('"
+					+ NotebookCategory.MEDIUM.toString() + "', 10)");
+			statement.addBatch("insert into "
+					+ connectionInfo.get("database.database") + "."
+					+ Table.NOTEBOOKCOUNT.toString()
+					+ " (Name, Count) VALUES ('"
+					+ NotebookCategory.SHORT.toString() + "', 20)");
+
+			statement.executeBatch();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			log.log(e.getMessage(), LogLevel.ERROR);
+		}
 	}
 
 	/**
@@ -1203,12 +1235,12 @@ public class MySQLAccess implements DataAccess {
 	}
 
 	@Override
-	public Map<String, Integer> getNotebookCount() {
+	public Map<NotebookCategory, Integer> getNotebookCount() {
 		String sql = "SELECT Name, Count FROM "
 				+ connectionInfo.getProperty("database.database") + "."
 				+ Table.NOTEBOOKCOUNT.toString();
 
-		HashMap<String, Integer> notebooksMap = new HashMap<String, Integer>();
+		HashMap<NotebookCategory, Integer> notebooksMap = new HashMap<NotebookCategory, Integer>();
 
 		try {
 			connect();
@@ -1218,7 +1250,7 @@ public class MySQLAccess implements DataAccess {
 			ResultSet result = statement.executeQuery();
 
 			while (result.next()) {
-				notebooksMap.put(	result.getString("Name"),
+				notebooksMap.put(	NotebookCategory.valueOf(result.getString("Name")),
 									result.getInt("Count"));
 
 			}
@@ -1234,7 +1266,7 @@ public class MySQLAccess implements DataAccess {
 	}
 
 	@Override
-	public void updateNotebookCount(String name, int addedNotebooks) {
+	public void updateNotebookCount(String name, int value) {
 		String sql = "UPDATE "
 				+ connectionInfo.getProperty("database.database") + "."
 				+ Table.NOTEBOOKCOUNT.toString()
@@ -1243,7 +1275,7 @@ public class MySQLAccess implements DataAccess {
 		try {
 			connect();
 			PreparedStatement statement = connection.prepareStatement(sql);
-			statement.setInt(1, addedNotebooks);
+			statement.setInt(1, value);
 			statement.setString(2, name);
 
 			statement.executeUpdate();
@@ -1378,7 +1410,7 @@ public class MySQLAccess implements DataAccess {
 		 * System.out.println(this.getUserForID(1) .getFirstName());
 		 */
 
-		Map<String, Integer> map = this.getNotebookCount();
+		Map<NotebookCategory, Integer> map = this.getNotebookCount();
 		System.out.println(map.get("short") + " " + map.get("medium") + " "
 				+ map.get("long"));
 		this.updateNotebookCount("short", 1);

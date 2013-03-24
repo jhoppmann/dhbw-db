@@ -9,9 +9,9 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 
 import com.dhbw_db.control.MainController;
-import com.dhbw_db.control.MainUI;
 import com.dhbw_db.model.beans.EMail;
 import com.dhbw_db.model.beans.Notebook;
+import com.dhbw_db.model.beans.Notebook.NotebookCategory;
 import com.dhbw_db.model.beans.User;
 import com.dhbw_db.model.request.Request;
 
@@ -87,7 +87,7 @@ public class AsynchronousWrapper implements DataAccess {
 
 	@Override
 	public void insertRequest(final Request request) {
-		MainController mc = ((MainUI) (MainUI.getCurrent())).getController();
+		MainController mc = MainController.get();
 
 		mc.execute(new Callable<String>() {
 
@@ -102,7 +102,7 @@ public class AsynchronousWrapper implements DataAccess {
 
 	@Override
 	public void updateRequest(final Request request) {
-		MainController mc = ((MainUI) (MainUI.getCurrent())).getController();
+		MainController mc = MainController.get();
 
 		mc.execute(new Callable<String>() {
 
@@ -140,7 +140,7 @@ public class AsynchronousWrapper implements DataAccess {
 
 	@Override
 	public void insertNotebook(final Notebook notebook) {
-		MainController mc = ((MainUI) (MainUI.getCurrent())).getController();
+		MainController mc = MainController.get();
 
 		mc.execute(new Callable<String>() {
 
@@ -154,7 +154,7 @@ public class AsynchronousWrapper implements DataAccess {
 
 	@Override
 	public void updateNotebook(final Notebook notebook) {
-		MainController mc = ((MainUI) (MainUI.getCurrent())).getController();
+		MainController mc = MainController.get();
 
 		mc.execute(new Callable<String>() {
 
@@ -168,7 +168,7 @@ public class AsynchronousWrapper implements DataAccess {
 
 	@Override
 	public void insertEMail(final EMail eMail) {
-		MainController mc = ((MainUI) (MainUI.getCurrent())).getController();
+		MainController mc = MainController.get();
 
 		mc.execute(new Callable<String>() {
 
@@ -206,6 +206,28 @@ public class AsynchronousWrapper implements DataAccess {
 	@Override
 	public List<Request> getRequestsForRequesterForID(int requesterID) {
 		return wrappedAccess.getRequestsForRequesterForID(requesterID);
+	}
+
+	@Override
+	public Map<NotebookCategory, Integer> getNotebookCount() {
+		return wrappedAccess.getNotebookCount();
+	}
+
+	@Override
+	public void updateNotebookCount(final String name, final int value) {
+		MainController mc = MainController.get();
+
+		mc.execute(new Callable<String>() {
+
+			@Override
+			public String call() throws Exception {
+				AsynchronousWrapper.this.wrappedAccess.updateNotebookCount(	name,
+																			value);
+				return "Modified Notebook count of category " + name + " by "
+						+ value;
+			}
+		});
+
 	}
 
 }

@@ -3,14 +3,16 @@
  */
 package com.dhbw_db.control;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import com.dhbw_db.model.beans.Notebook.NotebookCategory;
 import com.dhbw_db.model.beans.User;
 import com.dhbw_db.model.io.database.DataAccess;
+import com.dhbw_db.model.io.logging.LoggingService;
+import com.dhbw_db.model.io.logging.LoggingService.LogLevel;
 import com.dhbw_db.model.request.Request;
+import com.dhbw_db.view.PostButtonPage;
 import com.dhbw_db.view.student.NotebookRequest;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -39,8 +41,8 @@ public class NotebookRequestController implements ClickListener {
 	 * 
 	 * @return A List with NotebookCategories.
 	 */
-	public List<NotebookCategory> getNotebooks() {
-		return Arrays.asList(NotebookCategory.values());
+	public Map<NotebookCategory, Integer> getNotebooks() {
+		return dao.getNotebookCount();
 	}
 
 	/**
@@ -73,7 +75,29 @@ public class NotebookRequestController implements ClickListener {
 						.getCaption()
 						.equals("Beantragen")) {
 			Request r = controlledView.getRequest();
-			dao.insertRequest(r);
+			String headline = "Antrag erfolgreich angelegt!";
+			String subline = "Sie können nun über die Navigationsleiste zur "
+					+ "Startseite zurückkehren.";
+			try {
+				dao.insertRequest(r);
+				LoggingService.getInstance()
+								.log(	"Request successfully created and "
+												+ "persisted",
+										LogLevel.INFO);
+			} catch (Exception e) {
+				LoggingService.getInstance()
+								.log(e.getMessage(), LogLevel.ERROR);
+				e.printStackTrace();
+				headline = "Antrag nicht angelegt!";
+				subline = "Der Antrag konnte leider nicht angelegt werden. "
+						+ "Versuchen Sie es erneut. Sollte das Problem "
+						+ "weiterhin bestehen, kontaktieren Sie einen "
+						+ "Administrator.";
+			}
+			MainController.get()
+							.changeView(new PostButtonPage(	headline,
+															subline));
+
 		}
 
 	}

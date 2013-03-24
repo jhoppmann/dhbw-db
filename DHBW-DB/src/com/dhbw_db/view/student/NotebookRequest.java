@@ -77,7 +77,7 @@ public class NotebookRequest extends CustomComponent {
 
 	NotebookRequestController control;
 
-	private List<NotebookCategory> notebooks;
+	private Map<NotebookCategory, Integer> notebooks;
 
 	private List<User> lecturers;
 
@@ -294,8 +294,10 @@ public class NotebookRequest extends CustomComponent {
 	 * @param notebooks
 	 */
 	private void addNotebookOptions() {
-		for (NotebookCategory nbc : notebooks) {
+		for (NotebookCategory nbc : notebooks.keySet()) {
 			notebookOptionGroup.addItem(nbc);
+			notebookOptionGroup.setItemCaption(nbc, nbc.getText() + " ("
+					+ notebooks.get(nbc) + ")");
 		}
 	}
 

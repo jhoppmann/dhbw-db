@@ -9,6 +9,7 @@ import java.util.Map;
 
 import com.dhbw_db.model.beans.EMail;
 import com.dhbw_db.model.beans.Notebook;
+import com.dhbw_db.model.beans.Notebook.NotebookCategory;
 import com.dhbw_db.model.beans.User;
 import com.dhbw_db.model.request.Request;
 
@@ -102,7 +103,6 @@ public interface DataAccess {
 	/**
 	 * Gets all requests from the database
 	 * 
-	 * 
 	 * @return List of all Request
 	 */
 	public List<Request> getRequests();
@@ -139,14 +139,14 @@ public interface DataAccess {
 	/**
 	 * Updates a notebook object on the database
 	 * 
-	 * @param the notebook to be updated
+	 * @param notebook the notebook to be updated
 	 */
 	public void updateNotebook(Notebook notebook);
 
 	/**
 	 * Inserts an email entry into the database
 	 * 
-	 * @param the email to be inserted
+	 * @param eMail the email to be inserted
 	 */
 	public void insertEMail(EMail eMail);
 
@@ -154,15 +154,14 @@ public interface DataAccess {
 	 * Gets a map of all operating systems available for the notebooks from the
 	 * database
 	 * 
-	 * @return hashmap of all operating systems
+	 * @return <tt>Map</tt> of all operating systems
 	 */
 	public Map<Integer, String> getOSs();
 
 	/**
 	 * Gets a map of all status values from the database
 	 * 
-	 * 
-	 * @return hashmap of all status values
+	 * @return A <tt>Map</tt> of all status values
 	 */
 	public Map<Integer, String> getStatusses();
 
@@ -196,19 +195,18 @@ public interface DataAccess {
 	/**
 	 * Gets the notebook count stored in a map
 	 * 
-	 * 
 	 * @return The map with the notebook count. Key value is short, medium or
 	 *         long
 	 */
-	Map<String, Integer> getNotebookCount();
+	Map<NotebookCategory, Integer> getNotebookCount();
 
 	/**
 	 * 
 	 * Updates the notebook count
 	 * 
-	 * @param the key value short, medium or long
-	 * @param the count of notebooks to be addded
+	 * @param name the key value short, medium or long
+	 * @param value The value by which the notebook count will be modified
 	 */
-	void updateNotebookCount(String name, int addedNotebooks);
+	void updateNotebookCount(String name, int value);
 
 }
