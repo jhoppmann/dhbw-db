@@ -230,4 +230,10 @@ public class AsynchronousWrapper implements DataAccess {
 
 	}
 
+	@Override
+	public String getOSForID(int id) {
+		// Just hand the call down to the wrapped object
+		return wrappedAccess.getOSForID(id);
+	}
+
 }

@@ -209,4 +209,12 @@ public interface DataAccess {
 	 */
 	void updateNotebookCount(String name, int value);
 
+	/**
+	 * Gets the OS Name as a String for an OSID
+	 * 
+	 * @param OSID
+	 * @return OS Name as a String
+	 */
+	public String getOSForID(int id);
+
 }
