@@ -4,6 +4,7 @@
 package com.dhbw_db.view.login;
 
 import com.dhbw_db.control.MainUI;
+import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -54,6 +55,8 @@ public class LoginWindow extends Window {
 				LoginWindow.this.close();
 			}
 		});
+
+		submit.setClickShortcut(KeyCode.ENTER);
 
 		vlo.addComponent(username);
 		vlo.setComponentAlignment(username, Alignment.MIDDLE_CENTER);
