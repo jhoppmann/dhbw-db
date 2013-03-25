@@ -26,9 +26,7 @@ import com.vaadin.ui.TextArea;
 /**
  * The layout for the notebook request page. Defines all components and their
  * positions. Expects three String arrays, to add the items of the notebook
- * option group, the lecturer combo box and the OS combo box. Includes get
- * methods, to get all user inputs. The two buttons do NOT have any
- * functionality or button listeners yet.
+ * option group, the lecturer combo box and the OS combo box.
  * 
  * @author Florian Hauck
  * @author jhoppmann
@@ -244,48 +242,6 @@ public class NotebookRequest extends CustomComponent {
 		panelLayout.addComponent(requestButton, "top:460.0px;left:140.0px;");
 
 		return panelLayout;
-	}
-
-	/**
-	 * @return The value of the start date field.
-	 */
-	public Date getStartDate() {
-		return startDatePopupDateField.getValue();
-	}
-
-	/**
-	 * @return The value of the end date field.
-	 */
-	public Date getEndDate() {
-		return endDatePopupDateField.getValue();
-	}
-
-	/**
-	 * @return The value of the comment text area.
-	 */
-	public String getComment() {
-		return commentTextArea.getValue();
-	}
-
-	/**
-	 * @return The selected lecturer.
-	 */
-	public String getLecturer() {
-		return (String) lecturerComboBox.getConvertedValue();
-	}
-
-	/**
-	 * @return The selected OS.
-	 */
-	public String getOS() {
-		return (String) oSComboBox.getConvertedValue();
-	}
-
-	/**
-	 * @return The selected notebook category.
-	 */
-	public String getNotebook() {
-		return (String) notebookOptionGroup.getConvertedValue();
 	}
 
 	/**
