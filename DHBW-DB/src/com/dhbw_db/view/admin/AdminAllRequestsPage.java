@@ -44,6 +44,10 @@ public class AdminAllRequestsPage extends CustomComponent {
 		addTableItems();
 	}
 
+	/**
+	 * 
+	 * @return the absolute Layoute
+	 */
 	private AbsoluteLayout buildMainLayout() {
 		// common part: create layout
 		mainLayout = new AbsoluteLayout();
@@ -76,6 +80,10 @@ public class AdminAllRequestsPage extends CustomComponent {
 		return panel;
 	}
 
+	/**
+	 * 
+	 * @return the vertical Layout
+	 */
 	private VerticalLayout buildpanelLayout() {
 		// common part: create layout
 		panelLayout = new VerticalLayout();

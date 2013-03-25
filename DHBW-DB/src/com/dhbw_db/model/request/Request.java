@@ -8,6 +8,7 @@ import java.util.Date;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import com.dhbw_db.control.MainUI;
+import com.dhbw_db.model.beans.Notebook.NotebookCategory;
 import com.dhbw_db.model.exceptions.NotAllowedException;
 import com.dhbw_db.model.request.states.ApprovedState;
 import com.dhbw_db.model.request.states.CanceledState;
@@ -56,6 +57,8 @@ public class Request {
 	private int os;
 
 	private String description;
+
+	private NotebookCategory category;
 
 	/**
 	 * The possible statuses the request can have
@@ -132,7 +135,7 @@ public class Request {
 	 */
 	public Request(int id, int requesterId, int approverId, int notebookId,
 			Date created, Date start, Date end, Date until, String hash,
-			int statusID, int os, String description) {
+			int statusID, int os, String description, String category) {
 		super();
 
 		this.id = id;
@@ -153,35 +156,36 @@ public class Request {
 
 		switch (statusID) {
 			case 1:
-			setStatus(Status.OPEN);
+				setStatus(Status.OPEN);
 				break;
 			case 2:
-			setStatus(Status.APPROVED);
+				setStatus(Status.APPROVED);
 				break;
 			case 3:
-			setStatus(Status.RETRACTED);
+				setStatus(Status.RETRACTED);
 				break;
 			case 4:
-			setStatus(Status.REJECTED);
+				setStatus(Status.REJECTED);
 				break;
 			case 5:
-			setStatus(Status.OVERDUE);
+				setStatus(Status.OVERDUE);
 				break;
 			case 6:
-			setStatus(Status.COMPLETED);
+				setStatus(Status.COMPLETED);
 				break;
 			case 8:
-			setStatus(Status.CANCELED);
+				setStatus(Status.CANCELED);
 				break;
 			case 7:
 			default:
-			setStatus(Status.ERROR);
+				setStatus(Status.ERROR);
 				break;
 
 		}
 
 		this.os = os;
 		this.description = description;
+		this.setCategory(category);
 	}
 
 	/**
@@ -250,29 +254,29 @@ public class Request {
 		this.status = s;
 		switch (s) {
 			case OPEN:
-			currentState = new OpenState(this);
+				currentState = new OpenState(this);
 				break;
 			case REJECTED:
-			currentState = new RejectedState(this);
+				currentState = new RejectedState(this);
 				break;
 			case RETRACTED:
-			currentState = new RetractedState(this);
+				currentState = new RetractedState(this);
 				break;
 			case APPROVED:
-			currentState = new ApprovedState(this);
+				currentState = new ApprovedState(this);
 				break;
 			case OVERDUE:
-			currentState = new OverdueState(this);
+				currentState = new OverdueState(this);
 				break;
 			case COMPLETED:
-			currentState = new CompletedState(this);
+				currentState = new CompletedState(this);
 				break;
 			case CANCELED:
-			currentState = new CanceledState(this);
+				currentState = new CanceledState(this);
 				break;
 			case ERROR:
 			default:
-			currentState = new ErrorState(this);
+				currentState = new ErrorState(this);
 				break;
 
 		}
@@ -489,5 +493,19 @@ public class Request {
 	 */
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	/**
+	 * @return the category
+	 */
+	public String getCategory() {
+		return category.name();
+	}
+
+	/**
+	 * @param c the category to set
+	 */
+	public void setCategory(String c) {
+		this.category = NotebookCategory.valueOf(c);
 	}
 }

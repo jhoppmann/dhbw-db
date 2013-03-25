@@ -110,7 +110,7 @@ public interface DataAccess {
 	/**
 	 * Gets a requests for id from the database
 	 * 
-	 * @return A Request object for the request corresponding to the ID
+	 * @return rA Request object for the request corresponding to the ID
 	 */
 	public Request getRequestForID(int id);
 
@@ -132,7 +132,7 @@ public interface DataAccess {
 	/**
 	 * Inserts a notebook entry into the database
 	 * 
-	 * @param the notebook to be inserted
+	 * @param notebook the notebook to be inserted
 	 */
 	public void insertNotebook(Notebook notebook);
 
@@ -171,7 +171,7 @@ public interface DataAccess {
 	 * 
 	 * @param username The user's username
 	 * @param password The user's password
-	 * @return A user object if the user is found in conjunction with this
+	 * @return user A user object if the user is found in conjunction with this
 	 *         password, or <tt>null</tt> if not
 	 */
 	public User authenticate(String username, String password);
@@ -179,7 +179,7 @@ public interface DataAccess {
 	/**
 	 * Gets all requests for the passed approver ID
 	 * 
-	 * @param approverID
+	 * @param approverID the approverID for which the request are fetched
 	 * @return The list of the requests a approver is assigned to
 	 */
 	public List<Request> getRequestsForApproverForID(int approverID);
@@ -187,7 +187,7 @@ public interface DataAccess {
 	/**
 	 * Gets all requests for the passed requester ID
 	 * 
-	 * @param requesterID
+	 * @param requesterID the requesterID for which the requests are fetched
 	 * @return The list of the requests a requester is assigned to
 	 */
 	public List<Request> getRequestsForRequesterForID(int requesterID);
