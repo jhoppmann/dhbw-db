@@ -176,7 +176,7 @@ public class NotebookRequest extends CustomComponent {
 		notebookOptionGroup.setCaption("Ausleihgeräte");
 		notebookOptionGroup.setImmediate(false);
 		notebookOptionGroup.setNullSelectionAllowed(false);
-		notebookOptionGroup.setWidth("96px");
+		notebookOptionGroup.setWidth("125px");
 		notebookOptionGroup.setHeight("60px");
 		panelLayout.addComponent(notebookOptionGroup, "top:70.0px;left:20.0px;");
 
