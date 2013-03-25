@@ -10,4 +10,4 @@ Sie erhalten eine Nachricht, wenn der Antrag bearbeitet wurde.
 <br>
 <p>Optionale Bemerkung: $request.description</p>
 <p>Zum Stornieren Ihres Antrags klicken Sie bitte hier:</p>
-<a href=URL</a></html>
+<a href="$url">$url</a></html>

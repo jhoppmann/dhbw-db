@@ -8,4 +8,4 @@ $requester hat einen Antrag zum Ausleihen eines Notebooks beim Notebookverleih g
 <br>
 <p>Optionale Bemerkung: $request.description</p>
 <p>Zum Bearbeiten dieses Antrags klicken Sie bitte hier:</p>
-<a href=URL</a></html>
+<a href="$url">$url</a></html>

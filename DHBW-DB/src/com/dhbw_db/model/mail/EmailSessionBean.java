@@ -3,6 +3,7 @@
  */
 package com.dhbw_db.model.mail;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
@@ -23,7 +24,11 @@ import javax.mail.internet.MimeMultipart;
 
 import com.dhbw_db.control.MainController;
 import com.dhbw_db.control.MainUI;
+import com.dhbw_db.model.beans.User;
+import com.dhbw_db.model.io.FileAccess;
+import com.dhbw_db.model.io.database.DataAccess;
 import com.dhbw_db.model.request.Request;
+import com.vaadin.ui.UI;
 
 /**
  * EmailSessionBean is responsible for e-mail distribution
@@ -60,7 +65,7 @@ public class EmailSessionBean {
 
 	private MainController mc = ((MainUI) (MainUI.getCurrent())).getController();
 
-	private SimpleDateFormat date = new SimpleDateFormat("dd'.'MM'.'yyyy");
+	private SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
 
 	/**
 	 * Sends a confirmation email to the requesting student
@@ -702,4 +707,51 @@ public class EmailSessionBean {
 
 	}
 
+	@SuppressWarnings("unused")
+	private String mailTextProcessor(String filename, Request rq)
+			throws IOException {
+		String mailtext = (new FileAccess()).loadMailText(filename);
+
+		DataAccess dao = MainController.get()
+										.getDataAccess();
+
+		String urlBase = UI.getCurrent()
+							.getPage()
+							.getLocation()
+							.toString();
+
+		// start replacements
+		User requester = dao.getUserForID(rq.getRequesterId());
+		User approver = dao.getUserForID(rq.getApproverId());
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+		mailtext = mailtext.replaceAll("$requester", requester.getLastName()
+				+ ", " + requester.getFirstName());
+
+		mailtext = mailtext.replaceAll(	"$matrNr",
+										Integer.toString(requester.getMatrNr()));
+
+		mailtext = mailtext.replaceAll("$lecturer", approver.getLastName()
+				+ ", " + approver.getFirstName());
+
+		mailtext = mailtext.replaceAll(	"$request.description",
+										rq.getDescription());
+
+		mailtext = mailtext.replaceAll(	"$request.start",
+										sdf.format(rq.getStart()));
+
+		mailtext = mailtext.replaceAll("$request.end", sdf.format(rq.getEnd()));
+
+		mailtext = mailtext.replaceAll(	"$request.created",
+										sdf.format(rq.getCreated()));
+
+		// TODO replace with OS name from database
+		mailtext = mailtext.replaceAll(	"$request.os",
+										Integer.toString(rq.getOs()));
+
+		mailtext = mailtext.replaceAll(	"$url",
+										urlBase + "?hash=" + rq.getHash());
+
+		return mailtext;
+	}
 }
