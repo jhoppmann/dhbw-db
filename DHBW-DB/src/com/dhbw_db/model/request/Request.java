@@ -100,7 +100,7 @@ public class Request {
 		 * 
 		 * @return The corresponding status, or ERROR, if none is found
 		 */
-		public Status getForId(int id) {
+		public static Status getForId(int id) {
 			for (Status st : Status.values()) {
 				if (id == st.id)
 					return st;
@@ -135,7 +135,7 @@ public class Request {
 	 */
 	public Request(int id, int requesterId, int approverId, int notebookId,
 			Date created, Date start, Date end, Date until, String hash,
-			int statusID, int os, String description, String category) {
+			int statusID, int os, String description, NotebookCategory category) {
 		super();
 
 		this.id = id;
@@ -148,44 +148,11 @@ public class Request {
 		this.until = until;
 		this.hash = hash;
 
-		/*
-		 * OPEN(1, "Open"), APPROVED(2, "Approved"), RETRACTED(3, "Retracted"),
-		 * REJECTED(4, "Rejected"), OVERDUE(5, "Overdue"), COMPLETED(6,
-		 * "Completed"), ERROR(7, "Error"), CANCELED(8, "Canceled");
-		 */
-
-		switch (statusID) {
-			case 1:
-				setStatus(Status.OPEN);
-				break;
-			case 2:
-				setStatus(Status.APPROVED);
-				break;
-			case 3:
-				setStatus(Status.RETRACTED);
-				break;
-			case 4:
-				setStatus(Status.REJECTED);
-				break;
-			case 5:
-				setStatus(Status.OVERDUE);
-				break;
-			case 6:
-				setStatus(Status.COMPLETED);
-				break;
-			case 8:
-				setStatus(Status.CANCELED);
-				break;
-			case 7:
-			default:
-				setStatus(Status.ERROR);
-				break;
-
-		}
+		setStatus(Status.getForId(statusID));
 
 		this.os = os;
 		this.description = description;
-		this.setCategory(category);
+		this.category = category;
 	}
 
 	/**
@@ -498,14 +465,14 @@ public class Request {
 	/**
 	 * @return the category
 	 */
-	public String getCategory() {
-		return category.name();
+	public NotebookCategory getCategory() {
+		return category;
 	}
 
 	/**
 	 * @param c the category to set
 	 */
-	public void setCategory(String c) {
-		this.category = NotebookCategory.valueOf(c);
+	public void setCategory(NotebookCategory c) {
+		this.category = c;
 	}
 }
