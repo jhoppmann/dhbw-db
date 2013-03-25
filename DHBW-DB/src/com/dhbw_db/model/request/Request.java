@@ -7,7 +7,7 @@ import java.util.Date;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
-import com.dhbw_db.control.MainUI;
+import com.dhbw_db.control.MainController;
 import com.dhbw_db.model.beans.Notebook.NotebookCategory;
 import com.dhbw_db.model.exceptions.NotAllowedException;
 import com.dhbw_db.model.request.states.ApprovedState;
@@ -363,8 +363,8 @@ public class Request {
 		try {
 			currentState.retract();
 		} catch (NotAllowedException nae) {
-			((MainUI) (MainUI.getCurrent())).getController()
-											.printError(nae.getMessage());
+			MainController.get()
+							.printError(nae.getMessage());
 		}
 	}
 
@@ -376,8 +376,8 @@ public class Request {
 		try {
 			currentState.cancel();
 		} catch (NotAllowedException nae) {
-			((MainUI) (MainUI.getCurrent())).getController()
-											.printError(nae.getMessage());
+			MainController.get()
+							.printError(nae.getMessage());
 		}
 	}
 
@@ -389,8 +389,8 @@ public class Request {
 		try {
 			currentState.approve();
 		} catch (NotAllowedException nae) {
-			((MainUI) (MainUI.getCurrent())).getController()
-											.printError(nae.getMessage());
+			MainController.get()
+							.printError(nae.getMessage());
 		}
 	}
 
@@ -402,8 +402,8 @@ public class Request {
 		try {
 			currentState.reject();
 		} catch (NotAllowedException nae) {
-			((MainUI) (MainUI.getCurrent())).getController()
-											.printError(nae.getMessage());
+			MainController.get()
+							.printError(nae.getMessage());
 		}
 	}
 
@@ -415,8 +415,8 @@ public class Request {
 		try {
 			currentState.complete();
 		} catch (NotAllowedException nae) {
-			((MainUI) (MainUI.getCurrent())).getController()
-											.printError(nae.getMessage());
+			MainController.get()
+							.printError(nae.getMessage());
 		}
 	}
 

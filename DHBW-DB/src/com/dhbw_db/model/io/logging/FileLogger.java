@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.concurrent.Callable;
 
-import com.dhbw_db.control.MainUI;
+import com.dhbw_db.control.MainController;
 import com.dhbw_db.model.io.FileAccess;
 import com.dhbw_db.model.io.logging.LoggingService.LogLevel;
 
@@ -46,10 +46,10 @@ public class FileLogger extends Logger {
 	@Override
 	public void log(String message, LogLevel l) {
 		if (asynchronous) {
-			((MainUI) (MainUI.getCurrent())).getController()
-											.execute(new WriteCommand(	message,
-																		l,
-																		target));
+			MainController.get()
+							.execute(new WriteCommand(	message,
+														l,
+														target));
 		} else {
 			String line = l.toString() + "\t" + (new Date()).toString() + "\t"
 					+ message;
