@@ -44,7 +44,7 @@ public class StartupListener implements ServletContextListener {
 		try {
 			db.initializeDatabase();
 		} catch (SQLException e) {
-			// TODO think of a way to log a stacktrace
+			e.printStackTrace();
 			log.log(e.getMessage(), LogLevel.ERROR);
 		}
 
