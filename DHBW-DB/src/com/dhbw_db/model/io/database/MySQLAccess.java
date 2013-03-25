@@ -25,6 +25,7 @@ import com.dhbw_db.model.beans.Notebook.NotebookCategory;
 import com.dhbw_db.model.beans.User;
 import com.dhbw_db.model.io.logging.LoggingService;
 import com.dhbw_db.model.io.logging.LoggingService.LogLevel;
+import com.dhbw_db.model.mail.EmailSessionBean;
 import com.dhbw_db.model.request.Request;
 import com.dhbw_db.model.settings.Settings;
 
@@ -90,7 +91,8 @@ public class MySQLAccess implements DataAccess {
 
 		log.log("createTables method executed", LogLevel.INFO);
 
-		testSomeMethods();
+		// testSomeMethods();
+		// testMails();
 	}
 
 	@Override
@@ -1415,6 +1417,35 @@ public class MySQLAccess implements DataAccess {
 		 * System.out.println(map.get("short") + " " + map.get("medium") + " " +
 		 * map.get("long"));
 		 */
+
+	}
+
+	public void testMails() {
+		Request a1 = new Request(	1,
+									2,
+									12,
+									1,
+									new Date(),
+									new Date(),
+									new Date(),
+									new Date(),
+									"sdf32hash",
+									1,
+									1,
+									"This is a Request with id 1 from approver 12 and requester 2",
+									"SHORT");
+
+		// EmailSessionBean mailer = new EmailSessionBean();
+
+		try {
+			EmailSessionBean.sendHTMLMail(	"dhbw.notebook-verleih@gmx.de",
+											"DHBW Subject",
+											"<p>Hi there this is a new mail</p><p> Feel free to mail back</p>");
+		}
+
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 
 	}
 
