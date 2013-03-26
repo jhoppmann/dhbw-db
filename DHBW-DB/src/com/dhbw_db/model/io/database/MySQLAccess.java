@@ -1308,7 +1308,7 @@ public class MySQLAccess implements DataAccess {
 		String sql = "SELECT ID, MatrNo, Firstname, Name, EMail, isStudent, isAdmin, isLecturer, Password FROM "
 				+ connectionInfo.getProperty("database.database")
 				+ "."
-				+ Table.USER.toString() + " WHERE Name = ?";
+				+ Table.USER.toString() + " WHERE MatrNo = ?";
 
 		User user = null;
 
@@ -1317,7 +1317,7 @@ public class MySQLAccess implements DataAccess {
 			user = null;
 
 			PreparedStatement statement = connection.prepareStatement(sql);
-			statement.setString(1, username);
+			statement.setInt(1, Integer.valueOf(username));
 
 			ResultSet result = statement.executeQuery();
 

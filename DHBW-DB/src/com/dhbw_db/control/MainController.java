@@ -17,6 +17,8 @@ import com.dhbw_db.model.io.logging.LoggingService.LogLevel;
 import com.dhbw_db.view.ApplicationWindow;
 import com.dhbw_db.view.student.StudentStartPage;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
 
 /**
  * The MainController is responsible for the most common tasks, and those that
@@ -51,8 +53,7 @@ public class MainController {
 	 * @param message The message to show
 	 */
 	public void print(String message) {
-		// TODO change this to info messages in the UI
-		System.out.println(message);
+		Notification.show(message, Type.HUMANIZED_MESSAGE);
 	}
 
 	/**
@@ -62,7 +63,7 @@ public class MainController {
 	 */
 	public void printError(String message) {
 		// TODO change this to info messages in the UI
-		System.err.println(message);
+		Notification.show(message, Type.ERROR_MESSAGE);
 	}
 
 	/**
