@@ -31,8 +31,6 @@ import com.vaadin.ui.Notification.Type;
 public class MainController {
 	private ApplicationWindow view;
 
-	private Executor executor;
-
 	private User user;
 
 	private DataAccess dataAccess;
@@ -41,7 +39,6 @@ public class MainController {
 
 	public MainController(ApplicationWindow view) {
 		this.view = view;
-		executor = new Executor(2);
 		dataAccess = AsynchronousWrapper.getDataAccess(SupportedDatabases.MYSQL);
 
 		log = LoggingService.getInstance();
@@ -74,7 +71,8 @@ public class MainController {
 	 *         checking
 	 */
 	public FutureTask<String> execute(Callable<String> call) {
-		return executor.addTask(call);
+		return Executor.getInstance()
+						.addTask(call);
 	}
 
 	/**

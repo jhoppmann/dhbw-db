@@ -17,7 +17,9 @@ import java.util.concurrent.FutureTask;
 public class Executor {
 	ExecutorService executor;
 
-	public Executor(int poolSize) {
+	private static Executor instance;
+
+	private Executor(int poolSize) {
 		executor = Executors.newFixedThreadPool(poolSize);
 	}
 
@@ -29,12 +31,19 @@ public class Executor {
 		this(1);
 	}
 
+	public static Executor getInstance() {
+		if (instance == null) {
+			instance = new Executor(1);
+		}
+		return instance;
+	}
+
 	/**
 	 * This adds a task to the executor's queue
 	 * 
 	 * @param ca The callable that represents the task
 	 */
-	public FutureTask<String> addTask(Callable<String> ca) {
+	public synchronized FutureTask<String> addTask(Callable<String> ca) {
 		FutureTask<String> ft = new FutureTask<String>(ca);
 
 		executor.execute(ft);
@@ -52,6 +61,7 @@ public class Executor {
 	 * @return A message describing the status of the FutureTask, or its return
 	 *         value
 	 */
+
 	public String checkStatus(FutureTask<String> ft) {
 		String message = "";
 		if (ft.isDone()) {
