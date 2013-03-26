@@ -12,7 +12,7 @@ import com.vaadin.ui.Table;
 
 /**
  * The layout for the student start page. Defines all components and their
- * positions. Expects the table items and adds them to the table.
+ * positions.
  * 
  * @author Florian Hauck
  * @version 0.1
@@ -39,16 +39,13 @@ public class StudentStartPage extends CustomComponent {
 
 	/**
 	 * The constructor should first build the main layout, set the composition
-	 * root and then define the table headlines and add items to the table.
+	 * root and then define the table headlines.
 	 */
 	public StudentStartPage() {
 		buildMainLayout();
 		setCompositionRoot(mainLayout);
 
-		// TODO Constructor expects the table items and should pass them to the
-		// addTableItems method.
 		defineTableColumns();
-		addTableItems();
 	}
 
 	/**
@@ -124,7 +121,6 @@ public class StudentStartPage extends CustomComponent {
 		currentRequestTable = new Table();
 		currentRequestTable.setCaption("Aktuellster Leihantrag");
 		defineTableColumns();
-		addTableItems();
 		currentRequestTable.setImmediate(false);
 		currentRequestTable.setWidth("700px");
 		currentRequestTable.setHeight("45px");
@@ -150,17 +146,6 @@ public class StudentStartPage extends CustomComponent {
 													String.class,
 													null);
 		currentRequestTable.addContainerProperty("Status", String.class, null);
-	}
-
-	/**
-	 * Adds items to the table.
-	 */
-	private void addTableItems() {
-		// TODO Decide in which form this method receives the table items and
-		// add
-		// these items to the table. Maybe a SQL container might be a good
-		// solution.
-		// currentRequestTable.setContainerDataSource(container);
 	}
 
 }

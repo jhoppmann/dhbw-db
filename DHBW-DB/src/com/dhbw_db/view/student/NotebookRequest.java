@@ -26,9 +26,7 @@ import com.vaadin.ui.TextArea;
 /**
  * The layout for the notebook request page. Defines all components and their
  * positions. Expects three String arrays, to add the items of the notebook
- * option group, the lecturer combo box and the OS combo box. Includes get
- * methods, to get all user inputs. The two buttons do NOT have any
- * functionality or button listeners yet.
+ * option group, the lecturer combo box and the OS combo box.
  * 
  * @author Florian Hauck
  * @author jhoppmann

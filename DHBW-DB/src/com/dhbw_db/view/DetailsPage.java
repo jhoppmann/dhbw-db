@@ -408,7 +408,7 @@ public class DetailsPage extends CustomComponent {
 		iDLabel2.setValue("" + r.getId());
 		notebookLabel2.setValue("" + r.getNotebookId());
 		lecturerLabel2.setValue((mc.getDataAccess().getUserForID(r.getApproverId())).getLastName());
-		oSLabel2.setValue("" + r.getOs());
+		oSLabel2.setValue((mc.getDataAccess().getOSForID(r.getOs())));
 		creationDateLabel2.setValue("" + r.getCreated());
 		startDateLabel2.setValue("" + r.getStart());
 		endDateLabel2.setValue("" + r.getUntil());
