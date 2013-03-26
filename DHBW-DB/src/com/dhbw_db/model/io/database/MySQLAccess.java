@@ -1068,6 +1068,45 @@ public class MySQLAccess implements DataAccess {
 	}
 
 	@Override
+	public Notebook getANotebook() {
+		String sql = "SELECT ID, Name, IsDefective, IsAvailable FROM "
+				+ connectionInfo.getProperty("database.database") + "."
+				+ Table.NOTEBOOK.toString()
+				+ " WHERE IsDefective = ? AND IsAvailable = ?";
+
+		Notebook notebook = null;
+
+		try {
+			connect();
+
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setBoolean(1, false);
+			statement.setBoolean(2, true);
+
+			ResultSet result = statement.executeQuery();
+
+			if (result.next()) {
+
+				notebook = new Notebook();
+
+				notebook.setiD(result.getInt("ID"));
+				notebook.setName(result.getString("Name"));
+				notebook.setDefective(result.getBoolean("IsDefective"));
+				notebook.setAvailable(result.getBoolean("IsAvailable"));
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			log.log(e.getMessage(), LogLevel.ERROR);
+		} finally {
+			disconnect();
+		}
+
+		return notebook;
+	}
+
+	@Override
 	public void insertNotebook(Notebook notebook) {
 		String sql = "INSERT INTO "
 				+ connectionInfo.getProperty("database.database") + "."
@@ -1398,6 +1437,9 @@ public class MySQLAccess implements DataAccess {
 		 * System.out.println(map.get("short") + " " + map.get("medium") + " " +
 		 * map.get("long"));
 		 */
+
+		System.out.println(this.getANotebook()
+								.getName());
 
 	}
 

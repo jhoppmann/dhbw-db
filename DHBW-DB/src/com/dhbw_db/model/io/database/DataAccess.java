@@ -110,7 +110,7 @@ public interface DataAccess {
 	/**
 	 * Gets a requests for id from the database
 	 * 
-	 * @return rA Request object for the request corresponding to the ID
+	 * @return A Request object for the request corresponding to the ID
 	 */
 	public Request getRequestForID(int id);
 
@@ -132,21 +132,21 @@ public interface DataAccess {
 	/**
 	 * Inserts a notebook entry into the database
 	 * 
-	 * @param notebook the notebook to be inserted
+	 * @param notebook The notebook to be inserted
 	 */
 	public void insertNotebook(Notebook notebook);
 
 	/**
 	 * Updates a notebook object on the database
 	 * 
-	 * @param notebook the notebook to be updated
+	 * @param notebook The notebook to be updated
 	 */
 	public void updateNotebook(Notebook notebook);
 
 	/**
 	 * Inserts an email entry into the database
 	 * 
-	 * @param eMail the email to be inserted
+	 * @param eMail The email to be inserted
 	 */
 	public void insertEMail(EMail eMail);
 
@@ -179,7 +179,7 @@ public interface DataAccess {
 	/**
 	 * Gets all requests for the passed approver ID
 	 * 
-	 * @param approverID the approverID for which the request are fetched
+	 * @param approverID The approverID for which the request are fetched
 	 * @return The list of the requests a approver is assigned to
 	 */
 	public List<Request> getRequestsForApproverForID(int approverID);
@@ -187,7 +187,7 @@ public interface DataAccess {
 	/**
 	 * Gets all requests for the passed requester ID
 	 * 
-	 * @param requesterID the requesterID for which the requests are fetched
+	 * @param requesterID The requesterID for which the requests are fetched
 	 * @return The list of the requests a requester is assigned to
 	 */
 	public List<Request> getRequestsForRequesterForID(int requesterID);
@@ -204,7 +204,7 @@ public interface DataAccess {
 	 * 
 	 * Updates the notebook count
 	 * 
-	 * @param name the key value short, medium or long
+	 * @param name The key value short, medium or long
 	 * @param value The value by which the notebook count will be modified
 	 */
 	void updateNotebookCount(String name, int value);
@@ -216,5 +216,13 @@ public interface DataAccess {
 	 * @return OS Name as a String
 	 */
 	public String getOSForID(int id);
+
+	/**
+	 * Returns a available and not defective notebook
+	 * 
+	 * @return Returns the first notebook which is available and not defective.
+	 *         If no notebook is suitable returns null;
+	 */
+	Notebook getANotebook();
 
 }
