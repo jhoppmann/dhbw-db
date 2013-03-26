@@ -46,11 +46,17 @@ public class NavigationBar extends MenuBar {
 			addItem("Eigene Anträge",
 					new ViewChangeCommand(View.STUDENT_REQUEST));
 
+		if (u.isStudent())
+			addItem("Logout", new LogoutCommand());
+
 		if (u.isLecturer())
 			addItem("Offene Anträge", new ViewChangeCommand(View.LECTURER_OPEN));
 
 		if (u.isLecturer())
 			addItem("Alle Anträge", new ViewChangeCommand(View.LECTURER_ALL));
+
+		if (u.isLecturer())
+			addItem("Logout", new LogoutCommand());
 
 		if (u.isAdmin())
 			addItem("Ausgabe / Rücknahme",
@@ -64,6 +70,9 @@ public class NavigationBar extends MenuBar {
 
 		if (u.isAdmin())
 			addItem("Admin Area", null);
+
+		if (u.isAdmin())
+			addItem("Logout", new LogoutCommand());
 
 	}
 
@@ -88,6 +97,24 @@ public class NavigationBar extends MenuBar {
 		public void menuSelected(MenuItem selectedItem) {
 			NavigationBar.this.control.changeView(v);
 
+		}
+
+	}
+
+	/**
+	 * Changes the current window to the LoginWindow on click.
+	 * 
+	 * @author Florian Hauck
+	 * @version 0.1
+	 * @since 0.1
+	 */
+	private class LogoutCommand implements MenuBar.Command {
+
+		private static final long serialVersionUID = -7526347041745695175L;
+
+		@Override
+		public void menuSelected(MenuItem selectedItem) {
+			NavigationBar.this.control.logout();
 		}
 
 	}

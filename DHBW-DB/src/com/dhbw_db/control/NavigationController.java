@@ -9,6 +9,7 @@ import com.dhbw_db.view.admin.AdminStartPage;
 import com.dhbw_db.view.lecturer.LecturerAllRequestsPage;
 import com.dhbw_db.view.lecturer.LecturerOpenRequestsPage;
 import com.dhbw_db.view.lecturer.LecturerStartPage;
+import com.dhbw_db.view.login.LoginWindow;
 import com.dhbw_db.view.student.NotebookRequest;
 import com.dhbw_db.view.student.StudentRequestsPage;
 import com.dhbw_db.view.student.StudentStartPage;
@@ -83,5 +84,19 @@ public class NavigationController {
 		}
 
 		mc.changeView(c);
+	}
+
+	/**
+	 * Is responsible for causing the main controller to change the current
+	 * Window to the LoginWindow.
+	 * 
+	 */
+	public void logout() {
+		MainUI.getCurrent()
+				.setContent(null);
+		LoginWindow login = new LoginWindow();
+		MainUI.getCurrent()
+				.addWindow(login);
+		login.focus();
 	}
 }
