@@ -32,11 +32,7 @@ public class NavigationBar extends MenuBar {
 		control = new NavigationController();
 
 		// build the navigation items
-		if (u.isAdmin())
-			addItem("Start", new ViewChangeCommand(View.START_ADMIN));
-		else if (u.isLecturer())
-			addItem("Start", new ViewChangeCommand(View.START_LECTURER));
-		else
+		if (u.isAdmin() || u.isLecturer() || u.isStudent())
 			addItem("Start", new ViewChangeCommand(View.START_STUDENT));
 
 		if (u.isStudent())
@@ -64,6 +60,18 @@ public class NavigationBar extends MenuBar {
 
 		if (u.isAdmin())
 			addItem("Admin Area", null);
+
+		if (u != null) {
+			addItem("Logout", new MenuBar.Command() {
+
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public void menuSelected(MenuItem selectedItem) {
+					control.logout();
+				}
+			});
+		}
 
 	}
 

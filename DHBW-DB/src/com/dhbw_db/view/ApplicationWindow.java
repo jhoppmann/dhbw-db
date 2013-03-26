@@ -5,11 +5,7 @@ package com.dhbw_db.view;
 
 import com.dhbw_db.control.MainController;
 import com.dhbw_db.control.MainUI;
-import com.dhbw_db.model.beans.User;
-import com.dhbw_db.view.admin.AdminStartPage;
-import com.dhbw_db.view.lecturer.LecturerStartPage;
 import com.dhbw_db.view.login.LoginWindow;
-import com.dhbw_db.view.student.StudentStartPage;
 import com.vaadin.server.ClassResource;
 import com.vaadin.ui.AbsoluteLayout;
 import com.vaadin.ui.Alignment;
@@ -34,7 +30,7 @@ public class ApplicationWindow extends Panel {
 
 	Panel applicationSpace;
 
-	public ApplicationWindow() {
+	public ApplicationWindow(Component displayPage) {
 
 		if (MainController.get()
 							.getUser() == null) {
@@ -74,14 +70,8 @@ public class ApplicationWindow extends Panel {
 			applicationSpace.setHeight("700px");
 
 			AbsoluteLayout applicationSpaceLayout = new AbsoluteLayout();
-			User u = MainController.get()
-									.getUser();
-			if (u.isAdmin())
-				applicationSpaceLayout.addComponent(new AdminStartPage());
-			else if (u.isLecturer())
-				applicationSpaceLayout.addComponent(new LecturerStartPage());
-			else
-				applicationSpaceLayout.addComponent(new StudentStartPage());
+
+			applicationSpaceLayout.addComponent(displayPage);
 
 			applicationSpace.setContent(applicationSpaceLayout);
 

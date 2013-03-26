@@ -66,6 +66,10 @@ public class UnitTestJH {
 		FileAccess.appendLine(testFile, "file1 append4", true);
 		FileAccess.appendLine(testFile, "file1 append final", true);
 
+		FileAccess fa = new FileAccess();
+
+		System.out.println(fa.loadMailText("AdminInfo"));
+
 		System.out.println("Exiting file io test at " + now());
 
 	}

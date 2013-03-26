@@ -247,48 +247,6 @@ public class NotebookRequest extends CustomComponent {
 	}
 
 	/**
-	 * @return The value of the start date field.
-	 */
-	public Date getStartDate() {
-		return startDatePopupDateField.getValue();
-	}
-
-	/**
-	 * @return The value of the end date field.
-	 */
-	public Date getEndDate() {
-		return endDatePopupDateField.getValue();
-	}
-
-	/**
-	 * @return The value of the comment text area.
-	 */
-	public String getComment() {
-		return commentTextArea.getValue();
-	}
-
-	/**
-	 * @return The selected lecturer.
-	 */
-	public String getLecturer() {
-		return (String) lecturerComboBox.getConvertedValue();
-	}
-
-	/**
-	 * @return The selected OS.
-	 */
-	public String getOS() {
-		return (String) oSComboBox.getConvertedValue();
-	}
-
-	/**
-	 * @return The selected notebook category.
-	 */
-	public String getNotebook() {
-		return (String) notebookOptionGroup.getConvertedValue();
-	}
-
-	/**
 	 * Adds the notebooks as items to the notebook option group.
 	 * 
 	 * @param notebooks
@@ -338,6 +296,11 @@ public class NotebookRequest extends CustomComponent {
 		oSComboBox.select(null);
 	}
 
+	/**
+	 * Constructs a request from the selected values and returns it
+	 * 
+	 * @return A request with the selected values
+	 */
 	public Request getRequest() {
 		Request r = new Request(MainController.get()
 												.getUser()
@@ -347,6 +310,7 @@ public class NotebookRequest extends CustomComponent {
 		r.setDescription(commentTextArea.getValue());
 		r.setUntil(endDatePopupDateField.getValue());
 		r.setOs((Integer) oSComboBox.getValue());
+		r.setCategory((NotebookCategory) notebookOptionGroup.getValue());
 		return r;
 	}
 

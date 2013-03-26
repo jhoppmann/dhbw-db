@@ -13,7 +13,9 @@ import com.dhbw_db.model.io.database.AsynchronousWrapper;
 import com.dhbw_db.model.io.database.AsynchronousWrapper.SupportedDatabases;
 import com.dhbw_db.model.io.database.DataAccess;
 import com.dhbw_db.model.io.logging.LoggingService;
+import com.dhbw_db.model.io.logging.LoggingService.LogLevel;
 import com.dhbw_db.view.ApplicationWindow;
+import com.dhbw_db.view.student.StudentStartPage;
 import com.vaadin.ui.Component;
 
 /**
@@ -100,7 +102,7 @@ public class MainController {
 	 */
 	public void authenticate(String username, String password) {
 		this.user = Authenticator.authenticate(username, password);
-		((MainUI) (MainUI.getCurrent())).repaint();
+		((MainUI) (MainUI.getCurrent())).repaint(new StudentStartPage());
 	}
 
 	/**
@@ -128,6 +130,26 @@ public class MainController {
 	 */
 	public static MainController get() {
 		return ((MainUI) (MainUI.getCurrent())).getController();
+	}
+
+	/**
+	 * Sets a user for this controller
+	 * 
+	 * @param u The user object to use.
+	 */
+	public void setUser(User u) {
+		this.user = u;
+	}
+
+	/**
+	 * Logs out the current user.
+	 */
+	public void logout() {
+		log.log("Logging out user " + user.getLastName() + ", "
+						+ user.getFirstName(),
+				LogLevel.INFO);
+		user = null;
+		((MainUI) (MainUI.getCurrent())).repaint(new StudentStartPage());
 	}
 
 }
