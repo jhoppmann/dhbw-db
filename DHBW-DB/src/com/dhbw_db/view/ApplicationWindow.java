@@ -3,6 +3,7 @@
  */
 package com.dhbw_db.view;
 
+import com.dhbw_db.control.MainController;
 import com.dhbw_db.control.MainUI;
 import com.dhbw_db.model.beans.User;
 import com.dhbw_db.view.admin.AdminStartPage;
@@ -35,8 +36,8 @@ public class ApplicationWindow extends Panel {
 
 	public ApplicationWindow() {
 
-		if (((MainUI) (MainUI.getCurrent())).getController()
-											.getUser() == null) {
+		if (MainController.get()
+							.getUser() == null) {
 			LoginWindow login = new LoginWindow();
 			MainUI.getCurrent()
 					.addWindow(login);
@@ -73,8 +74,8 @@ public class ApplicationWindow extends Panel {
 			applicationSpace.setHeight("700px");
 
 			AbsoluteLayout applicationSpaceLayout = new AbsoluteLayout();
-			User u = ((MainUI) (MainUI.getCurrent())).getController()
-														.getUser();
+			User u = MainController.get()
+									.getUser();
 			if (u.isAdmin())
 				applicationSpaceLayout.addComponent(new AdminStartPage());
 			else if (u.isLecturer())

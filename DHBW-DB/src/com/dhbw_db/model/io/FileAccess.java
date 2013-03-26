@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * The FileAccess class helps perform common file operations by providing a
@@ -47,5 +48,17 @@ public class FileAccess {
 		output.newLine();
 		output.flush();
 		output.close();
+	}
+
+	public String loadMailText(String filename) throws IOException {
+		InputStream stream = getClass().getResourceAsStream("/mails/"
+				+ filename);
+		if (stream == null) {
+			return "Null stream.";
+		}
+		byte[] content = new byte[stream.available()];
+		stream.read(content);
+
+		return new String(content);
 	}
 }

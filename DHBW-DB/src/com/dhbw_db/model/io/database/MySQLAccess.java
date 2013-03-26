@@ -236,7 +236,7 @@ public class MySQLAccess implements DataAccess {
 				+ "StartDate TIMESTAMP NULL, " + "EndDate TIMESTAMP NULL, "
 				+ "UntilDate TIMESTAMP NULL, " + "StatusID INT, "
 				+ "OSID INT, "
-				+ "Description VARCHAR(240), category VARCHAR(32), "
+				+ "Description VARCHAR(240), Category VARCHAR(32), "
 				+ "PRIMARY KEY (ID), "
 
 				+ "CONSTRAINT UserID1 " + "FOREIGN KEY (RequesterID) "
@@ -584,7 +584,8 @@ public class MySQLAccess implements DataAccess {
 
 			statement.setString(11, request.getDescription());
 
-			statement.setString(12, request.getCategory());
+			statement.setString(12, request.getCategory()
+											.toString());
 
 			statement.executeUpdate();
 
@@ -629,7 +630,8 @@ public class MySQLAccess implements DataAccess {
 
 			statement.setString(10, request.getDescription());
 
-			statement.setString(11, request.getCategory());
+			statement.setString(11, request.getCategory()
+											.toString());
 
 			statement.setInt(12, request.getId());
 
@@ -697,7 +699,7 @@ public class MySQLAccess implements DataAccess {
 												result.getInt("StatusID"),
 												result.getInt("OSID"),
 												result.getString("Description"),
-												result.getString("Category"));
+												NotebookCategory.valueOf(result.getString("Category")));
 
 				requestList.add(request);
 			}
@@ -767,7 +769,7 @@ public class MySQLAccess implements DataAccess {
 												result.getInt("StatusID"),
 												result.getInt("OSID"),
 												result.getString("Description"),
-												result.getString("Category"));
+												NotebookCategory.valueOf(result.getString("Category")));
 
 				requestList.add(request);
 			}
@@ -837,7 +839,7 @@ public class MySQLAccess implements DataAccess {
 												result.getInt("StatusID"),
 												result.getInt("OSID"),
 												result.getString("Description"),
-												result.getString("Category"));
+												NotebookCategory.valueOf(result.getString("Category")));
 
 				requestList.add(request);
 			}
@@ -907,7 +909,7 @@ public class MySQLAccess implements DataAccess {
 										result.getInt("StatusID"),
 										result.getInt("OSID"),
 										result.getString("Description"),
-										result.getString("Category"));
+										NotebookCategory.valueOf(result.getString("Category")));
 
 			}
 
@@ -976,7 +978,7 @@ public class MySQLAccess implements DataAccess {
 										result.getInt("StatusID"),
 										result.getInt("OSID"),
 										result.getString("Description"),
-										result.getString("Category"));
+										NotebookCategory.valueOf(result.getString("Category")));
 
 			}
 
@@ -1282,134 +1284,77 @@ public class MySQLAccess implements DataAccess {
 		 * requestOne.setOs(5); updateRequest(requestOne); requestOne =
 		 * getRequestByID(1); System.out.println("Request1 after update: " +
 		 * requestOne.getId() + " " + requestOne.getOs());
-		 */
-
-		Notebook notebook = new Notebook();
-		notebook.setAvailable(true);
-		notebook.setDefective(false);
-		notebook.setName("great notebook");
-		notebook.setiD(1);
-
-		this.insertNotebook(notebook);
-
-		Request a1 = new Request(	1,
-									2,
-									12,
-									1,
-									null,
-									null,
-									null,
-									null,
-									"sdf32",
-									1,
-									1,
-									"This is a Request with id 1 from approver 12 and requester 2",
-									"SHORT");
-
-		Request a2 = new Request(	2,
-									3,
-									14,
-									1,
-									null,
-									null,
-									null,
-									null,
-									"sdf32",
-									1,
-									1,
-									"This is a Request from approver 14 and requester 3",
-									"MEDIUM");
-
-		Request a3 = new Request(	3,
-									4,
-									15,
-									1,
-									null,
-									null,
-									null,
-									null,
-									"hiiamahash",
-									1,
-									1,
-									"This is a Request with  approver id 15 requester id 4 hash: hiiamahash",
-									"LONG");
-
-		this.insertRequest(a1);
-		this.insertRequest(a2);
-		this.insertRequest(a3);
-
-		a1.setDescription("new description for: This is a Request with id 1 from approver 12 and requester 2");
-		this.updateRequest(a1);
-
-		Request b = this.getRequestForHash("hiiamahash");
-		Request c = this.getRequestForID(1);
-
-		Request d = this.getRequestsForApproverForID(14)
-						.get(0);
-		Request e = this.getRequestsForRequesterForID(2)
-						.get(0);
-
-		System.out.println("hash hiiamahash: " + b.getDescription()
-				+ "Category(LONG): " + b.getCategory());
-
-		if (c != null) {
-			System.out.println("id 1 und new description: "
-					+ c.getDescription());
-		} else {
-			System.out.println("c is null");
-		}
-
-		System.out.println("approver 14: " + d.getDescription()
-				+ "Category(MEDIUM): " + d.getCategory());
-		System.out.println("requester 2: " + e.getDescription()
-				+ "Category(SHORT): " + e.getCategory());
-		System.out.println("new description: " + this.getRequests()
-														.get(0)
-														.getId()
-				+ "Category(SHORT): " + this.getRequests()
-											.get(0)
-											.getCategory());
-
-		EMail mail = new EMail();
-		mail.setBody("Hi this is the body");
-		mail.setHeader("This is the header");
-		mail.setReceiverMail("asd@dsf.w");
-		mail.setSenderMail("sender@asd.wd");
-		this.insertEMail(mail);
-
-		System.out.println(this.getNotebooks()
-								.get(0)
-								.getName());
-
-		notebook.setName("small notebook");
-
-		this.updateNotebook(notebook);
-
-		System.out.println(this.getNotebooks()
-								.get(0)
-								.getName());
-		System.out.println(this.getNotebooks()
-								.get(0)
-								.isAvailable());
-		System.out.println(this.getNotebooks()
-								.get(0)
-								.isDefective());
-
-		System.out.println(this.getLecturers()
-								.get(0)
-								.getLastName());
-		System.out.println(this.getAdmins()
-								.get(0)
-								.getLastName());
-		System.out.println(this.getOSs()
-								.get(1));
-		System.out.println(this.getStatusses()
-								.get(1));
-		System.out.println(this.getUserForID(1)
-								.getFirstName());
-
-		/*
-		 * Map<NotebookCategory, Integer> map = this.getNotebookCount();
+		 * 
+		 * 
+		 * Notebook notebook = new Notebook(); notebook.setAvailable(true);
+		 * notebook.setDefective(false); notebook.setName("great notebook");
+		 * notebook.setiD(1);
+		 * 
+		 * this.insertNotebook(notebook);
+		 * 
+		 * Request a1 = new Request( 1, 2, 12, 1, null, null, null, null,
+		 * "sdf32", 1, 1,
+		 * "This is a Request with id 1 from approver 12 and requester 2",
+		 * "SHORT");
+		 * 
+		 * Request a2 = new Request( 2, 3, 14, 1, null, null, null, null,
+		 * "sdf32", 1, 1, "This is a Request from approver 14 and requester 3",
+		 * "MEDIUM");
+		 * 
+		 * Request a3 = new Request( 3, 4, 15, 1, null, null, null, null,
+		 * "hiiamahash", 1, 1,
+		 * "This is a Request with  approver id 15 requester id 4 hash: hiiamahash"
+		 * , "LONG");
+		 * 
+		 * this.insertRequest(a1); this.insertRequest(a2);
+		 * this.insertRequest(a3);
+		 * 
+		 * a1.setDescription(
+		 * "new description for: This is a Request with id 1 from approver 12 and requester 2"
+		 * ); this.updateRequest(a1);
+		 * 
+		 * Request b = this.getRequestForHash("hiiamahash"); Request c =
+		 * this.getRequestForID(1);
+		 * 
+		 * Request d = this.getRequestsForApproverForID(14) .get(0); Request e =
+		 * this.getRequestsForRequesterForID(2) .get(0);
+		 * 
+		 * System.out.println("hash hiiamahash: " + b.getDescription() +
+		 * "Category(LONG): " + b.getCategory());
+		 * 
+		 * if (c != null) { System.out.println("id 1 und new description: " +
+		 * c.getDescription()); } else { System.out.println("c is null"); }
+		 * 
+		 * System.out.println("approver 14: " + d.getDescription() +
+		 * "Category(MEDIUM): " + d.getCategory());
+		 * System.out.println("requester 2: " + e.getDescription() +
+		 * "Category(SHORT): " + e.getCategory());
+		 * System.out.println("new description: " + this.getRequests() .get(0)
+		 * .getId() + "Category(SHORT): " + this.getRequests() .get(0)
+		 * .getCategory());
+		 * 
+		 * EMail mail = new EMail(); mail.setBody("Hi this is the body");
+		 * mail.setHeader("This is the header");
+		 * mail.setReceiverMail("asd@dsf.w");
+		 * mail.setSenderMail("sender@asd.wd"); this.insertEMail(mail);
+		 * 
+		 * System.out.println(this.getNotebooks() .get(0) .getName());
+		 * 
+		 * notebook.setName("small notebook");
+		 * 
+		 * this.updateNotebook(notebook);
+		 * 
+		 * System.out.println(this.getNotebooks() .get(0) .getName());
+		 * System.out.println(this.getNotebooks() .get(0) .isAvailable());
+		 * System.out.println(this.getNotebooks() .get(0) .isDefective());
+		 * 
+		 * System.out.println(this.getLecturers() .get(0) .getLastName());
+		 * System.out.println(this.getAdmins() .get(0) .getLastName());
+		 * System.out.println(this.getOSs() .get(1));
+		 * System.out.println(this.getStatusses() .get(1));
+		 * System.out.println(this.getUserForID(1) .getFirstName());
+		 * 
+		 * /* Map<NotebookCategory, Integer> map = this.getNotebookCount();
 		 * System.out.println(map.get("short") + " " + map.get("medium") + " " +
 		 * map.get("long")); this.updateNotebookCount("short", 1);
 		 * this.updateNotebookCount("medium", 2);
@@ -1433,7 +1378,7 @@ public class MySQLAccess implements DataAccess {
 									1,
 									1,
 									"This is a Request with id 1 from approver 12 and requester 2",
-									"SHORT");
+									NotebookCategory.SHORT);
 
 		// EmailSessionBean mailer = new EmailSessionBean();
 
