@@ -8,7 +8,7 @@ import com.dhbw_db.model.request.Request;
 import com.dhbw_db.view.ApplicationWindow;
 import com.dhbw_db.view.DetailsPage;
 import com.dhbw_db.view.PostButtonPage;
-import com.dhbw_db.view.student.StudentStartPage;
+import com.dhbw_db.view.StartPage;
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.Component;
@@ -71,7 +71,7 @@ public class MainUI extends UI {
 			repaint(c);
 
 		} else {
-			repaint(new StudentStartPage());
+			repaint(new StartPage());
 		}
 	}
 

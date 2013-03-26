@@ -3,15 +3,13 @@
  */
 package com.dhbw_db.control;
 
+import com.dhbw_db.view.StartPage;
 import com.dhbw_db.view.admin.AdminAllRequestsPage;
 import com.dhbw_db.view.admin.AdminApprovedRequestsPage;
-import com.dhbw_db.view.admin.AdminStartPage;
 import com.dhbw_db.view.lecturer.LecturerAllRequestsPage;
 import com.dhbw_db.view.lecturer.LecturerOpenRequestsPage;
-import com.dhbw_db.view.lecturer.LecturerStartPage;
 import com.dhbw_db.view.student.NotebookRequest;
 import com.dhbw_db.view.student.StudentRequestsPage;
-import com.dhbw_db.view.student.StudentStartPage;
 import com.vaadin.ui.Component;
 
 /**
@@ -32,9 +30,7 @@ public class NavigationController {
 	 * @since 0.1
 	 */
 	public enum View {
-		START_ADMIN,
-		START_STUDENT,
-		START_LECTURER,
+		START,
 		NEW_REQUEST,
 		STUDENT_REQUEST,
 		LECTURER_OPEN,
@@ -54,14 +50,8 @@ public class NavigationController {
 		Component c = null;
 
 		switch (v) {
-			case START_ADMIN:
-				c = new AdminStartPage();
-				break;
-			case START_STUDENT:
-				c = new StudentStartPage();
-				break;
-			case START_LECTURER:
-				c = new LecturerStartPage();
+			case START:
+				c = new StartPage();
 				break;
 			case NEW_REQUEST:
 				c = new NotebookRequest();

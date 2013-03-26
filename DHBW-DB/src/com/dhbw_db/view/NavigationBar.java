@@ -37,7 +37,7 @@ public class NavigationBar extends MenuBar {
 
 		// build the navigation items
 		if (u.isAdmin() || u.isLecturer() || u.isStudent())
-			addItem("Start", new ViewChangeCommand(View.START_STUDENT));
+			addItem("Start", new ViewChangeCommand(View.START));
 
 		if (u.isStudent())
 			addItem("Neuer Leihantrag", new ViewChangeCommand(View.NEW_REQUEST));

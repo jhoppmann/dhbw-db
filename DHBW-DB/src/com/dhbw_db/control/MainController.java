@@ -15,7 +15,7 @@ import com.dhbw_db.model.io.database.DataAccess;
 import com.dhbw_db.model.io.logging.LoggingService;
 import com.dhbw_db.model.io.logging.LoggingService.LogLevel;
 import com.dhbw_db.view.ApplicationWindow;
-import com.dhbw_db.view.student.StudentStartPage;
+import com.dhbw_db.view.StartPage;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
@@ -101,7 +101,7 @@ public class MainController {
 	 */
 	public void authenticate(String username, String password) {
 		this.user = Authenticator.authenticate(username, password);
-		((MainUI) (MainUI.getCurrent())).repaint(new StudentStartPage());
+		((MainUI) (MainUI.getCurrent())).repaint(new StartPage());
 	}
 
 	/**
@@ -148,7 +148,7 @@ public class MainController {
 						+ user.getFirstName(),
 				LogLevel.INFO);
 		user = null;
-		((MainUI) (MainUI.getCurrent())).repaint(new StudentStartPage());
+		((MainUI) (MainUI.getCurrent())).repaint(new StartPage());
 	}
 
 }

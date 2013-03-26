@@ -29,7 +29,7 @@ public class UnitTestMW {
 		EmailSessionBean a = new EmailSessionBean();
 		Request r = new Request(requesterId,
 								approverId);
-		a.sendMailRequestStudent("moritz.walliser@1und1.de", "test", "test", r);
+		a.sendMailRequestStudent(r);
 
 	}
 }
