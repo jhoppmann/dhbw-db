@@ -33,3 +33,6 @@ body {
 .v-captiontext {
 	font-weight: bold;
 }
+.v-menubar-menuitem.v-menubar-menuitem-checked {
+	color: red;
+}

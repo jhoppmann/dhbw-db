@@ -3,6 +3,8 @@
  */
 package com.dhbw_db.view;
 
+import java.util.List;
+
 import com.dhbw_db.control.MainController;
 import com.dhbw_db.control.NavigationController;
 import com.dhbw_db.control.NavigationController.View;
@@ -21,6 +23,8 @@ public class NavigationBar extends MenuBar {
 	private MainController mc;
 
 	private NavigationController control;
+
+	private MenuItem checkedItem;
 
 	public NavigationBar() {
 		this.setWidth("100%");
@@ -73,6 +77,19 @@ public class NavigationBar extends MenuBar {
 			});
 		}
 
+		// sets the status of the "Start" item in the menu bar to "checked" by
+		// default
+		List<MenuItem> a = this.getItems();
+		for (int i = 0; i < a.size(); i++) {
+			if (a.get(i)
+					.getText()
+					.equals("Start")) {
+				checkedItem = a.get(i);
+				checkedItem.setCheckable(true);
+				checkedItem.setChecked(true);
+			}
+		}
+
 	}
 
 	/**
@@ -94,8 +111,12 @@ public class NavigationBar extends MenuBar {
 
 		@Override
 		public void menuSelected(MenuItem selectedItem) {
-			NavigationBar.this.control.changeView(v);
+			checkedItem.setChecked(false);
+			checkedItem = selectedItem;
+			selectedItem.setCheckable(true);
+			selectedItem.setChecked(true);
 
+			NavigationBar.this.control.changeView(v);
 		}
 
 	}
