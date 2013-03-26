@@ -10,6 +10,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import com.dhbw_db.control.MainController;
 import com.dhbw_db.model.beans.Notebook.NotebookCategory;
 import com.dhbw_db.model.exceptions.NotAllowedException;
+import com.dhbw_db.model.mail.EmailSessionBean;
 import com.dhbw_db.model.request.states.ApprovedState;
 import com.dhbw_db.model.request.states.CanceledState;
 import com.dhbw_db.model.request.states.CompletedState;
@@ -156,28 +157,6 @@ public class Request {
 	}
 
 	/**
-	 * Loads a request for a given ID.
-	 * 
-	 * @param id The requests unique ID.
-	 * @return A request object
-	 */
-	public static Request load(int id) {
-		// TODO Let some database magic happen here!
-		return null;
-	}
-
-	/**
-	 * Loads a request identified by its hash.
-	 * 
-	 * @param hash The requests unique hash.
-	 * @return A request object
-	 */
-	public static Request loadByHash(String hash) {
-		// TODO black, dark magic
-		return null;
-	}
-
-	/**
 	 * Persists this request to the database.
 	 */
 	public void save() {
@@ -203,6 +182,8 @@ public class Request {
 		if (status == Status.APPROVED) {
 			if (now.after(until)) {
 				setStatus(Status.OVERDUE);
+
+				(new EmailSessionBean()).sendMailOverdueWarning(this);
 			}
 		}
 		if (status == Status.OPEN) {
