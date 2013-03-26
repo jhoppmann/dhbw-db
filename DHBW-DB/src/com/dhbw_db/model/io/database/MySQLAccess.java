@@ -547,6 +547,42 @@ public class MySQLAccess implements DataAccess {
 	}
 
 	@Override
+	public String getOSForID(int id) {
+
+		String sql = "SELECT Name FROM "
+				+ connectionInfo.getProperty("database.database") + "."
+				+ Table.OS.toString() + " WHERE ID = ?";
+
+		String oSName = null;
+
+		try {
+			connect();
+
+			oSName = new String();
+
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setInt(1, id);
+
+			ResultSet result = statement.executeQuery();
+
+			if (result.next()) {
+
+				oSName = result.getString("Name");
+
+			}
+
+		} catch (SQLException e) {
+			oSName = "Fehler";
+			e.printStackTrace();
+			log.log(e.getMessage(), LogLevel.ERROR);
+		} finally {
+			disconnect();
+		}
+
+		return oSName;
+	}
+
+	@Override
 	public void insertRequest(Request request) {
 		String sql = "INSERT INTO "
 				+ connectionInfo.getProperty("database.database")
@@ -1409,4 +1445,5 @@ public class MySQLAccess implements DataAccess {
 			}
 		}
 	}
+
 }

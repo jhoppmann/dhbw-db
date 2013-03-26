@@ -84,4 +84,12 @@ public class NavigationController {
 
 		mc.changeView(c);
 	}
+
+	/**
+	 * Sends a log out call to the main controller
+	 */
+	public void logout() {
+		MainController.get()
+						.logout();
+	}
 }
