@@ -3,6 +3,7 @@ package com.dhbw_db.control;
 import com.dhbw_db.model.beans.User;
 import com.dhbw_db.model.io.logging.FileLogger;
 import com.dhbw_db.model.io.logging.LoggingService;
+import com.dhbw_db.model.io.logging.LoggingService.LogLevel;
 import com.dhbw_db.model.request.Request;
 import com.dhbw_db.view.ApplicationWindow;
 import com.dhbw_db.view.DetailsPage;
@@ -52,7 +53,10 @@ public class MainUI extends UI {
 			if (url.length() >= parameterPosition + 37) {
 				String hash = url.substring(parameterPosition + 5,
 											(parameterPosition + 37));
-				System.out.println(hash);
+				LoggingService.getInstance()
+								.log(	"Entering for request with hash "
+												+ hash,
+										LogLevel.INFO);
 
 				Request rq = mc.getDataAccess()
 								.getRequestForHash(hash);

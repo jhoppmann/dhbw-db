@@ -4,6 +4,7 @@
 package com.dhbw_db.model.request.states;
 
 import com.dhbw_db.model.exceptions.NotAllowedException;
+import com.dhbw_db.model.mail.EmailSessionBean;
 import com.dhbw_db.model.request.Request;
 import com.dhbw_db.model.request.Request.Status;
 
@@ -28,6 +29,7 @@ public class OverdueState implements RequestState {
 	@Override
 	public void cancel() throws NotAllowedException {
 		rq.setStatus(Status.CANCELED);
+		(new EmailSessionBean()).sendMailRequestCancelled(rq);
 	}
 
 	@Override

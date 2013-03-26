@@ -236,4 +236,9 @@ public class AsynchronousWrapper implements DataAccess {
 		return wrappedAccess.getOSForID(id);
 	}
 
+	@Override
+	public Notebook getANotebook() {
+		return wrappedAccess.getANotebook();
+	}
+
 }

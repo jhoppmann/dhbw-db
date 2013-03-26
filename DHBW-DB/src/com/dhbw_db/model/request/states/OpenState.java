@@ -4,6 +4,7 @@
 package com.dhbw_db.model.request.states;
 
 import com.dhbw_db.model.exceptions.NotAllowedException;
+import com.dhbw_db.model.mail.EmailSessionBean;
 import com.dhbw_db.model.request.Request;
 import com.dhbw_db.model.request.Request.Status;
 
@@ -23,21 +24,25 @@ public class OpenState implements RequestState {
 	@Override
 	public void retract() throws NotAllowedException {
 		rq.setStatus(Status.RETRACTED);
+		(new EmailSessionBean()).sendMailRequestCancelledLecturer(rq);
 	}
 
 	@Override
 	public void cancel() throws NotAllowedException {
 		rq.setStatus(Status.CANCELED);
+		(new EmailSessionBean()).sendMailRequestCancelled(rq);
 	}
 
 	@Override
 	public void approve() throws NotAllowedException {
 		rq.setStatus(Status.APPROVED);
+		(new EmailSessionBean()).sendMailRequestSuccess(rq);
 	}
 
 	@Override
 	public void reject() throws NotAllowedException {
 		rq.setStatus(Status.REJECTED);
+		(new EmailSessionBean()).sendMailRequestRejected(rq);
 	}
 
 	@Override

@@ -309,6 +309,10 @@ public class NotebookRequest extends CustomComponent {
 		r.setUntil(endDatePopupDateField.getValue());
 		r.setOs((Integer) oSComboBox.getValue());
 		r.setCategory((NotebookCategory) notebookOptionGroup.getValue());
+		r.setNotebookId(MainController.get()
+										.getDataAccess()
+										.getANotebook()
+										.getiD());
 		return r;
 	}
 

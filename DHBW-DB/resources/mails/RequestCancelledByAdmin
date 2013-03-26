@@ -1,0 +1,11 @@
+Hallo $requester,
+
+Sie haben einen Antrag zum Ausleihen eines Notebooks beim Notebookverleih gestellt.
+Ein Adminstrator hat den Antrag abgebrochen.
+				
+<html><h1>Ihre Antragsdaten:</h1><table border=0>
+<tr><th>Name</th><th>Matrikelnummer</th><th>Zuständiger Dozent</th><th>Ausleihdatum</th><th>Rückgabedatum</th><th>Betriebssystem</th></tr>
+<tr><td>$requester</td><td>$matrNr</td><td>$lecturer</td><td>$request.start</td><td>$request.end</td><td>$request.os</td></tr></table>
+<br>
+<p>Optionale Bemerkung: $request.description</p>
+</html>

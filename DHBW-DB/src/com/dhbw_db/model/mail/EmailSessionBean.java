@@ -59,9 +59,8 @@ public class EmailSessionBean {
 	 * Sends a confirmation email to the requesting student
 	 * 
 	 * @param r The corresponding request object, to which the messages refer to
-	 * @throws MessagingException
 	 */
-	public void sendMailRequestStudent(Request r) throws MessagingException {
+	public void sendMailRequestStudent(Request r) {
 		try {
 			String body = mailTextProcessor("RequestStudent", r);
 			DataAccess dao = MainController.get()
@@ -86,7 +85,7 @@ public class EmailSessionBean {
 	 * 
 	 * @param r The corresponding request object, to which the messages refer to
 	 */
-	public void sendMailRequestLecturer(Request r) throws MessagingException {
+	public void sendMailRequestLecturer(Request r) {
 		try {
 			String body = mailTextProcessor("RequestLecturer", r);
 			DataAccess dao = MainController.get()
@@ -110,9 +109,8 @@ public class EmailSessionBean {
 	 * Sends an email to the requesting student with notice of success
 	 * 
 	 * @param r The corresponding request object, to which the messages refer to
-	 * @throws MessagingException
 	 */
-	public void sendMailRequestSuccess(Request r) throws MessagingException {
+	public void sendMailRequestSuccess(Request r) {
 		try {
 			String body = mailTextProcessor("RequestSuccess", r);
 			DataAccess dao = MainController.get()
@@ -136,9 +134,8 @@ public class EmailSessionBean {
 	 * Sends an email to the requesting student with notice of rejection
 	 * 
 	 * @param r The corresponding request object, to which the messages refer to
-	 * @throws MessagingException
 	 */
-	public void sendMailRequestRejected(Request r) throws MessagingException {
+	public void sendMailRequestRejected(Request r) {
 		try {
 			String body = mailTextProcessor("RequestRejected", r);
 			DataAccess dao = MainController.get()
@@ -163,9 +160,8 @@ public class EmailSessionBean {
 	 * request
 	 * 
 	 * @param r The corresponding request object, to which the messages refer to
-	 * @throws MessagingException
 	 */
-	public void sendMailAdminInfo(Request r) throws MessagingException {
+	public void sendMailAdminInfo(Request r) {
 		try {
 			String body = mailTextProcessor("AdminInfo", r);
 			DataAccess dao = MainController.get()
@@ -191,9 +187,8 @@ public class EmailSessionBean {
 	 * overdue
 	 * 
 	 * @param r The corresponding request object, to which the messages refer to
-	 * @throws MessagingException
 	 */
-	public void sendMailOverdueWarning(Request r) throws MessagingException {
+	public void sendMailOverdueWarning(Request r) {
 		try {
 			String body = mailTextProcessor("OverdueWarning", r);
 			DataAccess dao = MainController.get()
@@ -218,10 +213,8 @@ public class EmailSessionBean {
 	 * his/her request
 	 * 
 	 * @param r The corresponding request object, to which the messages refer to
-	 * @throws MessagingException
 	 */
-	public void sendMailRequestCancelledStudent(Request r)
-			throws MessagingException {
+	public void sendMailRequestCancelledStudent(Request r) {
 		try {
 			String body = mailTextProcessor("RequestCancelledStudent", r);
 			DataAccess dao = MainController.get()
@@ -246,10 +239,8 @@ public class EmailSessionBean {
 	 * cancelled his/her request
 	 * 
 	 * @param r The corresponding request object, to which the messages refer to
-	 * @throws MessagingException
 	 */
-	public void sendMailRequestCancelledLecturer(Request r)
-			throws MessagingException {
+	public void sendMailRequestCancelledLecturer(Request r) {
 		try {
 			String body = mailTextProcessor("RequestCancelledLecturer", r);
 			DataAccess dao = MainController.get()
@@ -270,13 +261,41 @@ public class EmailSessionBean {
 	}
 
 	/**
+	 * Sends an email to the requester if an admin cancelled his request.
+	 * 
+	 * @param r The corresponding request object, to which the messages refer to
+	 */
+	public void sendMailRequestCancelled(Request r) {
+		try {
+			String body = mailTextProcessor("RequestCancelledByAdmin", r);
+			DataAccess dao = MainController.get()
+											.getDataAccess();
+			List<String> to = new ArrayList<String>();
+			to.add(dao.getUserForID(r.getRequesterId())
+						.geteMail());
+
+			MainController.get()
+							.execute(new MailCommand(	to,
+														"Antrag abgebrochen",
+														body));
+		} catch (IOException e) {
+			LoggingService.getInstance()
+							.log(e.getMessage(), LogLevel.ERROR);
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * This method handles the actual sending of a message.
 	 * 
 	 * @param to The mail address the mail should be sent
 	 * @param subject The mail subject
 	 * @param body The mail body in HTML
+	 * 
+	 * @throws MessagingException
 	 */
-	public static void sendHTMLMail(List<String> to, String subject, String body)
-			throws MessagingException {
+	private static void sendHTMLMail(List<String> to, String subject,
+			String body) throws MessagingException {
 
 		Authenticator auth = new Authenticator() {
 			private PasswordAuthentication pa = new PasswordAuthentication(	username,
