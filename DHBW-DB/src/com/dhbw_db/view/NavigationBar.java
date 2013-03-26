@@ -79,12 +79,12 @@ public class NavigationBar extends MenuBar {
 
 		// sets the status of the "Start" item in the menu bar to "checked" by
 		// default
-		List<MenuItem> a = this.getItems();
-		for (int i = 0; i < a.size(); i++) {
-			if (a.get(i)
-					.getText()
-					.equals("Start")) {
-				checkedItem = a.get(i);
+		List<MenuItem> itemList = this.getItems();
+		for (int i = 0; i < itemList.size(); i++) {
+			if (itemList.get(i)
+						.getText()
+						.equals("Start")) {
+				checkedItem = itemList.get(i);
 				checkedItem.setCheckable(true);
 				checkedItem.setChecked(true);
 			}
