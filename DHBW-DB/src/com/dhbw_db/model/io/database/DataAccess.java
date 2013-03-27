@@ -225,4 +225,12 @@ public interface DataAccess {
 	 */
 	Notebook getANotebook();
 
+	/**
+	 * Returns the requested notebook
+	 * 
+	 * @param id
+	 * @return A notebook
+	 */
+	Notebook getNotebookForID(int id);
+
 }

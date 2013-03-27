@@ -1104,6 +1104,43 @@ public class MySQLAccess implements DataAccess {
 	}
 
 	@Override
+	public Notebook getNotebookForID(int id) {
+		String sql = "SELECT ID, Name, IsDefective, IsAvailable FROM "
+				+ connectionInfo.getProperty("database.database") + "."
+				+ Table.NOTEBOOK.toString() + " WHERE ID = ?";
+
+		Notebook notebook = null;
+
+		try {
+			connection = connect();
+
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setInt(1, id);
+
+			ResultSet result = statement.executeQuery();
+
+			if (result.next()) {
+
+				notebook = new Notebook();
+
+				notebook.setiD(result.getInt("ID"));
+				notebook.setName(result.getString("Name"));
+				notebook.setDefective(result.getBoolean("IsDefective"));
+				notebook.setAvailable(result.getBoolean("IsAvailable"));
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			log.log(e.getMessage(), LogLevel.ERROR);
+		} finally {
+			disconnect();
+		}
+
+		return notebook;
+	}
+
+	@Override
 	public void insertNotebook(Notebook notebook) {
 		String sql = "INSERT INTO "
 				+ connectionInfo.getProperty("database.database") + "."
