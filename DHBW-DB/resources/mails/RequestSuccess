@@ -1,13 +1,32 @@
-Hallo $requester,
+<html>
+	
+	Hallo $requester,<br /><br />
 
-Sie haben einen Antrag zum Ausleihen eines Notebooks beim Notebookverleih gestellt.
-Ihr zust&auml;ndiger Dozent $lecturer hat den Antrag genehmigt.
-Sie k&ouml;nnen das Notebook am $request.start zur Ausleihe abholen.
+	Sie haben einen Antrag zum Ausleihen eines Notebooks beim Notebookverleih gestellt.<br />
+Ihr zust&auml;ndiger Dozent $lecturer hat den Antrag genehmigt.<br />
+Sie k&ouml;nnen das Notebook am $request.start zur Ausleihe abholen.<br />
 				
-<html><h1>Ihre Antragsdaten:</h1><table border=0>
-<tr><th>Name</th><th>Matrikelnummer</th><th>Zust&auml;ndiger Dozent</th><th>Ausleihdatum</th><th>R&uuml;ckgabedatum</th><th>Betriebssystem</th></tr>
-<tr><td>$requester</td><td>$matrNr</td><td>$lecturer</td><td>$request.start</td><td>$request.end</td><td>$request.os</td></tr></table>
-<br>
-<p>Optionale Bemerkung: $request.description</p>
-<p>Zum Stornieren Ihres Antrags klicken Sie bitte hier:</p>
-<a href=URL</a></html>
+	<h3>Ihre Antragsdaten:</h3>
+	
+	<b>Name:</b><br />
+	$requester<br /><br />
+	
+	<b>Martrikelnummer:</b><br />
+	$matrNr<br /><br />
+	
+	<b>Zust&auml;ndiger Dozent:</b><br />
+	$lecturer<br /><br />
+	
+	<b>Ausleihdatum:</b><br />
+	$request.start<br /><br />
+	
+	<b>R&uuml;ckgabedatum:</b><br />
+	$request.end<br /><br />
+	
+	<b>Betriebssystem:</b><br />
+	$request.os<br /><br />
+	
+	<b>Optionale Bemerkung:</b><br />
+	$request.description<br /><br />
+
+</html>

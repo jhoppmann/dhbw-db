@@ -1,13 +1,33 @@
-Hallo $requester,
+<html>
+	
+	Hallo $requester,<br /><br />
 
-Sie haben am $request.start ein Notebook vom Notebookverleih ausgeliehen.
-Die Leihfrist für das Notebook ist am $request.end abgelaufen.
-Bitte geben Sie das Notebook schnellstmöglich zur&uuml;ck.
-Beim &Uuml;berschreiten der Leihfrist fallen Mahngeb&uuml;hren an. Die jeweilige H&ouml;he ist der Geb&uuml;hrenordnung zu entnehmen.
+	Sie haben am $request.start ein Notebook vom Notebookverleih ausgeliehen.<br />
+	Die Leihfrist für das Notebook ist am $request.end abgelaufen.<br />
+	Bitte geben Sie das Notebook schnellstmöglich zur&uuml;ck.<br />
+	Beim &Uuml;berschreiten der Leihfrist fallen Mahngeb&uuml;hren an. Die jeweilige H&ouml;he ist der Geb&uuml;hrenordnung zu entnehmen.<br />
 				
-<html><h1>Ihre Antragsdaten:</h1><table border=0>
-<tr><th>Name</th><th>Matrikelnummer</th><th>Zust&auml;ndiger Dozent</th><th>Ausleihdatum</th><th>R&uuml;ckgabedatum</th><th>Betriebssystem</th></tr>
-<tr><td>$requester</td><td>$matrNr</td><td>$lecturer</td><td>$request.start</td><td>$request.end</td><td>$request.os</td></tr></table>
-<br>
-<p>Optionale Bemerkung: $request.description</p>
+	<h3>Ihre Antragsdaten:</h3>
+	
+	<b>Name:</b><br />
+	$requester<br /><br />
+	
+	<b>Martrikelnummer:</b><br />
+	$matrNr<br /><br />
+	
+	<b>Zust&auml;ndiger Dozent:</b><br />
+	$lecturer<br /><br />
+	
+	<b>Ausleihdatum:</b><br />
+	$request.start<br /><br />
+	
+	<b>R&uuml;ckgabedatum:</b><br />
+	$request.end<br /><br />
+	
+	<b>Betriebssystem:</b><br />
+	$request.os<br /><br />
+	
+	<b>Optionale Bemerkung:</b><br />
+	$request.description<br /><br />
+
 </html>
