@@ -60,12 +60,14 @@ public class NavigationBar extends MenuBar {
 			addItem("Alle Anträge", new ViewChangeCommand(View.ADMIN_REQUESTS));
 
 		if (u.isAdmin())
-			addItem("Notebook Statuses", null);
+			addItem("Notebookstatus ändern",
+					new ViewChangeCommand(View.ADMIN_NOTEBOOKSTATUS));
 
 		if (u.isAdmin())
-			addItem("Admin Area", null);
+			addItem("Notebook hinzufügen",
+					new ViewChangeCommand(View.ADMIN_NEWNOTEBOOK));
 
-		if (u != null) {
+		if (u != null && (u.isAdmin() || u.isLecturer() || u.isStudent())) {
 			addItem("Logout", new MenuBar.Command() {
 
 				private static final long serialVersionUID = 1L;

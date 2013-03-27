@@ -4,8 +4,10 @@
 package com.dhbw_db.control;
 
 import com.dhbw_db.view.StartPage;
+import com.dhbw_db.view.admin.AddNotebook;
 import com.dhbw_db.view.admin.AdminAllRequestsPage;
 import com.dhbw_db.view.admin.AdminApprovedRequestsPage;
+import com.dhbw_db.view.admin.ChangeLaptops;
 import com.dhbw_db.view.lecturer.LecturerAllRequestsPage;
 import com.dhbw_db.view.lecturer.LecturerOpenRequestsPage;
 import com.dhbw_db.view.student.NotebookRequest;
@@ -37,6 +39,8 @@ public class NavigationController {
 		LECTURER_ALL,
 		ADMIN_CHECKOUT,
 		ADMIN_REQUESTS,
+		ADMIN_NEWNOTEBOOK,
+		ADMIN_NOTEBOOKSTATUS
 	};
 
 	/**
@@ -70,9 +74,22 @@ public class NavigationController {
 				break;
 			case ADMIN_REQUESTS:
 				c = new AdminAllRequestsPage();
+				break;
+			case ADMIN_NOTEBOOKSTATUS:
+				MainUI.getCurrent()
+						.addWindow(new ChangeLaptops());
+				break;
+			case ADMIN_NEWNOTEBOOK:
+				MainUI.getCurrent()
+						.addWindow(new AddNotebook());
+				break;
+			default:
+				break;
 		}
 
-		mc.changeView(c);
+		if (v != View.ADMIN_NEWNOTEBOOK && v != View.ADMIN_NOTEBOOKSTATUS) {
+			mc.changeView(c);
+		}
 	}
 
 	/**

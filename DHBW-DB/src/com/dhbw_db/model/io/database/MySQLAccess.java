@@ -381,17 +381,17 @@ public class MySQLAccess implements DataAccess {
 					+ connectionInfo.get("database.database") + "."
 					+ Table.NOTEBOOKCOUNT.toString()
 					+ " (Name, Count) VALUES ('"
-					+ NotebookCategory.LONG.toString() + "', 5)");
+					+ NotebookCategory.LONG.toString() + "', 17)");
 			statement.addBatch("insert into "
 					+ connectionInfo.get("database.database") + "."
 					+ Table.NOTEBOOKCOUNT.toString()
 					+ " (Name, Count) VALUES ('"
-					+ NotebookCategory.MEDIUM.toString() + "', 10)");
+					+ NotebookCategory.MEDIUM.toString() + "', 5)");
 			statement.addBatch("insert into "
 					+ connectionInfo.get("database.database") + "."
 					+ Table.NOTEBOOKCOUNT.toString()
 					+ " (Name, Count) VALUES ('"
-					+ NotebookCategory.SHORT.toString() + "', 20)");
+					+ NotebookCategory.SHORT.toString() + "', 3)");
 
 			statement.executeBatch();
 		} catch (SQLException e) {
