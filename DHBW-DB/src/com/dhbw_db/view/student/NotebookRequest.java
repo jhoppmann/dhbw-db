@@ -268,8 +268,12 @@ public class NotebookRequest extends CustomComponent {
 			notebookOptionGroup.addItem(nbc);
 			notebookOptionGroup.setItemCaption(nbc, nbc.getText() + " ("
 					+ notebooks.get(nbc) + ")");
-			// hack
-			notebookOptionGroup.setValue(nbc);
+			if (notebooks.get(nbc) == 0) {
+				notebookOptionGroup.setItemEnabled(nbc, false);
+			} else {
+				notebookOptionGroup.setValue(nbc);
+			}
+
 		}
 	}
 
