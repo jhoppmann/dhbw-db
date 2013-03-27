@@ -64,7 +64,7 @@ public class EmailSessionBean {
 	 */
 	public void sendMailRequestStudent(Request r) {
 		try {
-			String body = mailTextProcessor("RequestStudent", r);
+			String body = processMailText("RequestStudent", r);
 			DataAccess dao = MainController.get()
 											.getDataAccess();
 			List<String> to = new ArrayList<String>();
@@ -89,7 +89,7 @@ public class EmailSessionBean {
 	 */
 	public void sendMailRequestLecturer(Request r) {
 		try {
-			String body = mailTextProcessor("RequestLecturer", r);
+			String body = processMailText("RequestLecturer", r);
 			DataAccess dao = MainController.get()
 											.getDataAccess();
 			List<String> to = new ArrayList<String>();
@@ -114,7 +114,7 @@ public class EmailSessionBean {
 	 */
 	public void sendMailRequestSuccess(Request r) {
 		try {
-			String body = mailTextProcessor("RequestSuccess", r);
+			String body = processMailText("RequestSuccess", r);
 			DataAccess dao = MainController.get()
 											.getDataAccess();
 			List<String> to = new ArrayList<String>();
@@ -139,7 +139,7 @@ public class EmailSessionBean {
 	 */
 	public void sendMailRequestRejected(Request r) {
 		try {
-			String body = mailTextProcessor("RequestRejected", r);
+			String body = processMailText("RequestRejected", r);
 			DataAccess dao = MainController.get()
 											.getDataAccess();
 			List<String> to = new ArrayList<String>();
@@ -165,7 +165,7 @@ public class EmailSessionBean {
 	 */
 	public void sendMailAdminInfo(Request r) {
 		try {
-			String body = mailTextProcessor("AdminInfo", r);
+			String body = processMailText("AdminInfo", r);
 			DataAccess dao = MainController.get()
 											.getDataAccess();
 			List<String> to = new ArrayList<String>();
@@ -192,7 +192,7 @@ public class EmailSessionBean {
 	 */
 	public void sendMailOverdueWarning(Request r) {
 		try {
-			String body = mailTextProcessor("OverdueWarning", r);
+			String body = processMailText("OverdueWarning", r);
 			DataAccess dao = MainController.get()
 											.getDataAccess();
 			List<String> to = new ArrayList<String>();
@@ -218,7 +218,7 @@ public class EmailSessionBean {
 	 */
 	public void sendMailRequestCancelledStudent(Request r) {
 		try {
-			String body = mailTextProcessor("RequestCancelledStudent", r);
+			String body = processMailText("RequestCancelledStudent", r);
 			DataAccess dao = MainController.get()
 											.getDataAccess();
 			List<String> to = new ArrayList<String>();
@@ -244,7 +244,7 @@ public class EmailSessionBean {
 	 */
 	public void sendMailRequestCancelledLecturer(Request r) {
 		try {
-			String body = mailTextProcessor("RequestCancelledLecturer", r);
+			String body = processMailText("RequestCancelledLecturer", r);
 			DataAccess dao = MainController.get()
 											.getDataAccess();
 			List<String> to = new ArrayList<String>();
@@ -269,7 +269,7 @@ public class EmailSessionBean {
 	 */
 	public void sendMailRequestCancelled(Request r) {
 		try {
-			String body = mailTextProcessor("RequestCancelledByAdmin", r);
+			String body = processMailText("RequestCancelledByAdmin", r);
 			DataAccess dao = MainController.get()
 											.getDataAccess();
 			List<String> to = new ArrayList<String>();
@@ -350,7 +350,7 @@ public class EmailSessionBean {
 
 	}
 
-	private static String mailTextProcessor(String filename, Request rq)
+	private static String processMailText(String filename, Request rq)
 			throws IOException {
 		String mailtext = (new FileAccess()).loadMailText(filename);
 
@@ -367,14 +367,12 @@ public class EmailSessionBean {
 		User approver = dao.getUserForID(rq.getApproverId());
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-		mailtext = mailtext.replaceAll("\\$requester", requester.getLastName()
-				+ ", " + requester.getFirstName());
+		mailtext = mailtext.replaceAll("\\$requester", requester.fullName());
 
 		mailtext = mailtext.replaceAll(	"\\$matrNr",
 										Integer.toString(requester.getMatrNr()));
 
-		mailtext = mailtext.replaceAll("\\$lecturer", approver.getLastName()
-				+ ", " + approver.getFirstName());
+		mailtext = mailtext.replaceAll("\\$lecturer", approver.fullName());
 
 		mailtext = mailtext.replaceAll(	"\\$request.description",
 										rq.getDescription());
@@ -388,9 +386,8 @@ public class EmailSessionBean {
 		mailtext = mailtext.replaceAll(	"\\$request.created",
 										sdf.format(rq.getCreated()));
 
-		// TODO replace with OS name from database
 		mailtext = mailtext.replaceAll(	"\\$request.os",
-										Integer.toString(rq.getOs()));
+										dao.getOSForID(rq.getOs()));
 
 		mailtext = mailtext.replaceAll(	"\\$url",
 										urlBase + "?hash=" + rq.getHash());
