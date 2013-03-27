@@ -1,5 +1,7 @@
 package com.dhbw_db.control;
 
+import java.io.File;
+
 import com.dhbw_db.model.beans.User;
 import com.dhbw_db.model.io.logging.FileLogger;
 import com.dhbw_db.model.io.logging.LoggingService;
@@ -36,7 +38,8 @@ public class MainUI extends UI {
 
 		mc = new MainController(null);
 		LoggingService.getInstance()
-						.registerLogger(new FileLogger());
+						.registerLogger(new FileLogger(	new File("C:\\logs\\notebookrental.log"),
+														true));
 		// check if the url contains a valid hash
 		if (url.contains("hash=")) {
 			Component c = new PostButtonPage(	"Kein Antrag gefunden",
