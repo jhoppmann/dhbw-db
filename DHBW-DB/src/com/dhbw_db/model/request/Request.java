@@ -3,6 +3,7 @@
  */
 package com.dhbw_db.model.request;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import com.dhbw_db.model.beans.Notebook;
 import com.dhbw_db.model.beans.Notebook.NotebookCategory;
 import com.dhbw_db.model.exceptions.NotAllowedException;
 import com.dhbw_db.model.io.database.DataAccess;
+import com.dhbw_db.model.io.database.MySQLAccess;
 import com.dhbw_db.model.mail.EmailSessionBean;
 import com.dhbw_db.model.request.states.ApprovedState;
 import com.dhbw_db.model.request.states.CanceledState;
@@ -189,8 +191,12 @@ public class Request {
 				(new EmailSessionBean()).sendMailOverdueWarning(this);
 			}
 		}
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(start);
+		cal.add(Calendar.WEEK_OF_YEAR, 1);
+
 		if (status == Status.OPEN) {
-			if (now.after(until)) {
+			if (now.after(until) || now.after(cal.getTime())) {
 				setStatus(Status.CANCELED);
 			}
 		}
@@ -495,8 +501,7 @@ public class Request {
 	 * Frees all resources after the request can no longer proceed
 	 */
 	private void freeResources() {
-		DataAccess dao = MainController.get()
-										.getDataAccess();
+		DataAccess dao = new MySQLAccess();
 
 		List<Notebook> notebooks = dao.getNotebooks();
 

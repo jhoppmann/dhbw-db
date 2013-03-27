@@ -6,6 +6,7 @@ import java.util.Properties;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import com.dhbw_db.control.TimeWorker;
 import com.dhbw_db.model.io.database.AsynchronousWrapper;
 import com.dhbw_db.model.io.database.AsynchronousWrapper.SupportedDatabases;
 import com.dhbw_db.model.io.database.DataAccess;
@@ -48,6 +49,8 @@ public class StartupListener implements ServletContextListener {
 			log.log(e.getMessage(), LogLevel.ERROR);
 		}
 
+		Thread timeworker = new Thread(TimeWorker.getInstance());
+		timeworker.start();
 	}
 
 	@Override
