@@ -28,7 +28,7 @@ public class ApprovedState implements RequestState {
 
 	@Override
 	public void cancel() throws NotAllowedException {
-		rq.setStatus(Status.CANCELED);
+		rq.moveToStatus(Status.CANCELED);
 		rq.freeResources();
 		(new EmailSessionBean()).sendMailRequestCancelled(rq);
 	}
@@ -45,7 +45,7 @@ public class ApprovedState implements RequestState {
 
 	@Override
 	public void complete() throws NotAllowedException {
-		rq.setStatus(Status.COMPLETED);
+		rq.moveToStatus(Status.COMPLETED);
 		rq.freeResources();
 	}
 

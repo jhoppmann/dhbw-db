@@ -15,6 +15,8 @@ import com.dhbw_db.model.beans.Notebook.NotebookCategory;
 import com.dhbw_db.model.exceptions.NotAllowedException;
 import com.dhbw_db.model.io.database.DataAccess;
 import com.dhbw_db.model.io.database.MySQLAccess;
+import com.dhbw_db.model.io.logging.LoggingService;
+import com.dhbw_db.model.io.logging.LoggingService.LogLevel;
 import com.dhbw_db.model.mail.EmailSessionBean;
 import com.dhbw_db.model.request.states.ApprovedState;
 import com.dhbw_db.model.request.states.CanceledState;
@@ -239,6 +241,14 @@ public class Request {
 		}
 	}
 
+	public void moveToStatus(Status s) {
+		setStatus(s);
+		LoggingService.getInstance()
+						.log(	"Request " + getId() + " moved to state "
+										+ s.name(),
+								LogLevel.INFO);
+	}
+
 	/**
 	 * @return the id
 	 */
@@ -355,6 +365,8 @@ public class Request {
 		} catch (NotAllowedException nae) {
 			MainController.get()
 							.printError(nae.getMessage());
+			LoggingService.getInstance()
+							.log(nae.getMessage(), LogLevel.ERROR);
 		}
 	}
 
@@ -368,6 +380,8 @@ public class Request {
 		} catch (NotAllowedException nae) {
 			MainController.get()
 							.printError(nae.getMessage());
+			LoggingService.getInstance()
+							.log(nae.getMessage(), LogLevel.ERROR);
 		}
 	}
 
@@ -381,6 +395,8 @@ public class Request {
 		} catch (NotAllowedException nae) {
 			MainController.get()
 							.printError(nae.getMessage());
+			LoggingService.getInstance()
+							.log(nae.getMessage(), LogLevel.ERROR);
 		}
 	}
 
@@ -394,6 +410,8 @@ public class Request {
 		} catch (NotAllowedException nae) {
 			MainController.get()
 							.printError(nae.getMessage());
+			LoggingService.getInstance()
+							.log(nae.getMessage(), LogLevel.ERROR);
 		}
 	}
 
@@ -404,9 +422,12 @@ public class Request {
 		// hand call down to the current state
 		try {
 			currentState.complete();
+			this.end = new Date();
 		} catch (NotAllowedException nae) {
 			MainController.get()
 							.printError(nae.getMessage());
+			LoggingService.getInstance()
+							.log(nae.getMessage(), LogLevel.ERROR);
 		}
 	}
 

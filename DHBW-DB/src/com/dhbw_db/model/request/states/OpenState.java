@@ -23,27 +23,27 @@ public class OpenState implements RequestState {
 
 	@Override
 	public void retract() throws NotAllowedException {
-		rq.setStatus(Status.RETRACTED);
+		rq.moveToStatus(Status.RETRACTED);
 		(new EmailSessionBean()).sendMailRequestCancelledLecturer(rq);
 		rq.freeResources();
 	}
 
 	@Override
 	public void cancel() throws NotAllowedException {
-		rq.setStatus(Status.CANCELED);
+		rq.moveToStatus(Status.CANCELED);
 		(new EmailSessionBean()).sendMailRequestCancelled(rq);
 		rq.freeResources();
 	}
 
 	@Override
 	public void approve() throws NotAllowedException {
-		rq.setStatus(Status.APPROVED);
+		rq.moveToStatus(Status.APPROVED);
 		(new EmailSessionBean()).sendMailRequestSuccess(rq);
 	}
 
 	@Override
 	public void reject() throws NotAllowedException {
-		rq.setStatus(Status.REJECTED);
+		rq.moveToStatus(Status.REJECTED);
 		(new EmailSessionBean()).sendMailRequestRejected(rq);
 		rq.freeResources();
 	}
