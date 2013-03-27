@@ -465,7 +465,9 @@ public class DetailsPage extends CustomComponent {
 		MainController mc = MainController.get();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		iDLabel2.setValue("" + r.getId());
-		notebookLabel2.setValue("" + r.getNotebookId());
+		notebookLabel2.setValue("" + mc.getDataAccess()
+										.getNotebookForID(r.getNotebookId())
+										.getName());
 		lecturerLabel2.setValue((mc.getDataAccess().getUserForID(r.getApproverId())).getLastName());
 		oSLabel2.setValue((mc.getDataAccess().getOSForID(r.getOs())));
 		creationDateLabel2.setValue("" + sdf.format(r.getCreated()));

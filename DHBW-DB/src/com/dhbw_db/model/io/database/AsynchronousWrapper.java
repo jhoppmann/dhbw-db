@@ -243,7 +243,6 @@ public class AsynchronousWrapper implements DataAccess {
 
 	@Override
 	public Notebook getNotebookForID(int id) {
-
 		return wrappedAccess.getNotebookForID(id);
 	}
 

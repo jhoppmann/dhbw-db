@@ -100,7 +100,8 @@ public class RequestTable extends CustomComponent {
 
 		for (Request r : requests) {
 			requestsTable.addItem(	new Object[] {
-											Integer.toString(r.getNotebookId()),
+											dao.getNotebookForID(r.getNotebookId())
+												.getName(),
 											dao.getUserForID(r.getRequesterId())
 												.fullName(),
 											dao.getUserForID(r.getApproverId())
