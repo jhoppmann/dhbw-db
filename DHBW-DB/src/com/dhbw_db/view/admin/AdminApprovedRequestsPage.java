@@ -100,9 +100,7 @@ public class AdminApprovedRequestsPage extends CustomComponent {
 		// find open requests
 		List<Request> allRequests = MainController.get()
 													.getDataAccess()
-													.getRequestsForApproverForID(MainController.get()
-																								.getUser()
-																								.getID());
+													.getRequests();
 		List<Request> openRequests = new ArrayList<Request>();
 
 		for (Request rq : allRequests) {

@@ -91,7 +91,8 @@ public class Notebook {
 	}
 
 	public String toString() {
-		return this.name + (isDefective ? " (defective)" : "");
+		return this.name + (isAvailable ? "" : " (ausgeliehen)")
+				+ (isDefective ? " (defective)" : "");
 	}
 
 }
