@@ -11,9 +11,9 @@ package com.dhbw_db.model.beans;
 public class Notebook {
 
 	public enum NotebookCategory {
-		SHORT("Kurz"),
-		MEDIUM("Mittelfristig"),
-		LONG("Langfristig");
+		SHORT("Kurz (eine Woche)"),
+		MEDIUM("Mittelfristig (ein Monat)"),
+		LONG("Langfristig (drei Monate)");
 
 		private String text;
 

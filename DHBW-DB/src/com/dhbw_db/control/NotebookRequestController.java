@@ -3,6 +3,8 @@
  */
 package com.dhbw_db.control;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +17,8 @@ import com.dhbw_db.model.mail.EmailSessionBean;
 import com.dhbw_db.model.request.Request;
 import com.dhbw_db.view.PostButtonPage;
 import com.dhbw_db.view.student.NotebookRequest;
+import com.vaadin.data.Property.ValueChangeEvent;
+import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 
@@ -23,7 +27,8 @@ import com.vaadin.ui.Button.ClickListener;
  * @version 0.1
  * @since 0.1
  */
-public class NotebookRequestController implements ClickListener {
+public class NotebookRequestController implements ClickListener,
+		ValueChangeListener {
 
 	private static final long serialVersionUID = 1L;
 
@@ -76,6 +81,13 @@ public class NotebookRequestController implements ClickListener {
 						.getCaption()
 						.equals("Beantragen")) {
 			Request r = controlledView.getRequest();
+
+			if (r == null) {
+				MainController.get()
+								.print("Nicht alle Pflichtfelder gefüllt");
+				return;
+			}
+
 			String headline = "Antrag erfolgreich angelegt!";
 			String subline = "Sie können nun über die Navigationsleiste zur "
 					+ "Startseite zurückkehren.";
@@ -101,6 +113,57 @@ public class NotebookRequestController implements ClickListener {
 							.changeView(new PostButtonPage(	headline,
 															subline));
 
+		}
+
+	}
+
+	@Override
+	public void valueChange(ValueChangeEvent event) {
+		// this method is for setting right time bounds
+
+		Date start = controlledView.getStartDate();
+		Date end = controlledView.getEndDate();
+
+		if (end == null && start == null) {
+			// leave this method if no date is set.
+			return;
+		}
+
+		// assure end date after start date
+		if (end == null || !start.before(end)) {
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(start);
+			cal.add(Calendar.DATE, 1);
+			Date later = cal.getTime();
+
+			controlledView.setEndDate(later);
+		}
+
+		NotebookCategory nbc = controlledView.getCategory();
+
+		if (nbc == null || end == null) {
+			return;
+		}
+		// assure the date doesn't violate the category lengths
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(start);
+		cal.add(Calendar.WEEK_OF_YEAR, 1);
+		Date oneWeek = cal.getTime();
+
+		cal.setTime(start);
+		cal.add(Calendar.MONTH, 1);
+		Date oneMonth = cal.getTime();
+
+		cal.setTime(start);
+		cal.add(Calendar.MONTH, 3);
+		Date threeMonths = cal.getTime();
+
+		if (nbc == NotebookCategory.SHORT && end.after(oneWeek)) {
+			controlledView.setEndDate(oneWeek);
+		} else if (nbc == NotebookCategory.MEDIUM && end.after(oneMonth)) {
+			controlledView.setEndDate(oneMonth);
+		} else if (end.after(threeMonths)) {
+			controlledView.setEndDate(threeMonths);
 		}
 
 	}

@@ -5,6 +5,7 @@ package com.dhbw_db.view.admin;
 
 import com.dhbw_db.control.NotebookController;
 import com.dhbw_db.model.beans.Notebook.NotebookCategory;
+import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.OptionGroup;
@@ -40,6 +41,7 @@ public class AddNotebook extends Window {
 		duration.setCaption("Ausleihdauer");
 		duration.setImmediate(false);
 		duration.setNullSelectionAllowed(false);
+		duration.setRequired(true);
 		for (NotebookCategory nbc : NotebookCategory.values()) {
 			duration.addItem(nbc);
 			duration.setItemCaption(nbc, nbc.getText());
@@ -72,7 +74,12 @@ public class AddNotebook extends Window {
 	 * @return The selected duration
 	 */
 	public NotebookCategory getSelectedCategory() {
-		return (NotebookCategory) duration.getValue();
+		try {
+			duration.validate();
+			return (NotebookCategory) duration.getValue();
+		} catch (InvalidValueException e) {
+		}
+		return null;
 	}
 
 	/**

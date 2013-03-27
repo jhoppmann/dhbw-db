@@ -38,6 +38,12 @@ public class NotebookController implements ClickListener {
 			Notebook nb = ((ChangeLaptops) (controlledView)).getSelectedNotebook();
 			NotebookCategory nbc = ((ChangeLaptops) (controlledView)).getSelectedCategory();
 
+			if (nbc == null || nb == null) {
+				MainController.get()
+								.print("Nicht alle Pflichtfelder gefüllt");
+				return;
+			}
+
 			if (nb.isDefective()) {
 				MainController.get()
 								.getDataAccess()
@@ -65,6 +71,12 @@ public class NotebookController implements ClickListener {
 						.equals("Hinzufügen")) {
 			String name = ((AddNotebook) (controlledView)).getNotebookName();
 			NotebookCategory nbc = ((AddNotebook) (controlledView)).getSelectedCategory();
+
+			if (nbc == null || name == null || name.equals("")) {
+				MainController.get()
+								.print("Nicht alle Pflichtfelder gefüllt");
+				return;
+			}
 
 			Notebook nb = new Notebook();
 			nb.setName(name);

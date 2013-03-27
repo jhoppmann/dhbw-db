@@ -7,6 +7,7 @@ import com.dhbw_db.control.MainController;
 import com.dhbw_db.control.NotebookController;
 import com.dhbw_db.model.beans.Notebook;
 import com.dhbw_db.model.beans.Notebook.NotebookCategory;
+import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
@@ -43,6 +44,7 @@ public class ChangeLaptops extends Window {
 		duration.setCaption("Ausleihdauer");
 		duration.setImmediate(false);
 		duration.setNullSelectionAllowed(false);
+		duration.setRequired(true);
 		for (NotebookCategory nbc : NotebookCategory.values()) {
 			duration.addItem(nbc);
 			duration.setItemCaption(nbc, nbc.getText());
@@ -85,7 +87,13 @@ public class ChangeLaptops extends Window {
 	 * @return Noteboook that's been selected
 	 */
 	public Notebook getSelectedNotebook() {
-		return (Notebook) notebooks.getValue();
+		try {
+			notebooks.validate();
+			return (Notebook) notebooks.getValue();
+		} catch (InvalidValueException e) {
+		}
+
+		return null;
 	}
 
 	/**
@@ -94,6 +102,13 @@ public class ChangeLaptops extends Window {
 	 * @return The selected duration
 	 */
 	public NotebookCategory getSelectedCategory() {
-		return (NotebookCategory) duration.getValue();
+		try {
+			duration.validate();
+			return (NotebookCategory) duration.getValue();
+		} catch (InvalidValueException e) {
+		}
+
+		return null;
+
 	}
 }
