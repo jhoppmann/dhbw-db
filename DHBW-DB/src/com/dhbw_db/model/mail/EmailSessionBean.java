@@ -6,6 +6,7 @@ package com.dhbw_db.model.mail;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.Callable;
@@ -20,6 +21,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import com.dhbw_db.control.MainController;
+import com.dhbw_db.model.beans.EMail;
 import com.dhbw_db.model.beans.User;
 import com.dhbw_db.model.io.FileAccess;
 import com.dhbw_db.model.io.database.DataAccess;
@@ -328,7 +330,23 @@ public class EmailSessionBean {
 		Transport.send(msg);
 
 		LoggingService.getInstance()
-						.log("Message to " + to + " send.", LogLevel.INFO);
+						.log("Message to " + to + " sent.", LogLevel.INFO);
+
+		EMail sent = new EMail();
+		sent.setBody(body);
+		sent.setDate(new Date());
+		sent.setHeader("");
+		sent.setSenderMail(from);
+		String receiver = new String();
+		for (String s : to) {
+			receiver += s + ", ";
+		}
+		receiver = receiver.substring(0, receiver.length() - 2);
+		sent.setReceiverMail(receiver);
+
+		MainController.get()
+						.getDataAccess()
+						.insertEMail(sent);
 
 	}
 

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Mar 26, 2013 at 08:42 PM
+-- Generation Time: Mar 27, 2013 at 06:32 AM
 -- Server version: 5.1.62
 -- PHP Version: 5.3.3-pl1-gentoo
 
@@ -21,13 +21,13 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
 CREATE TABLE IF NOT EXISTS `EMail` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `ReceiverMail` varchar(45) DEFAULT NULL,
-  `SenderMail` varchar(45) DEFAULT NULL,
-  `Header` varchar(45) DEFAULT NULL,
-  `Body` varchar(45) DEFAULT NULL,
+  `ReceiverMail` varchar(150) DEFAULT NULL,
+  `SenderMail` varchar(150) DEFAULT NULL,
+  `Header` varchar(150) DEFAULT NULL,
+  `Body` varchar(1500) DEFAULT NULL,
   `Date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `EMail`
@@ -46,38 +46,38 @@ CREATE TABLE IF NOT EXISTS `Notebook` (
   `IsDefective` bit(1) NOT NULL,
   `IsAvailable` bit(1) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=26 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=27 ;
 
 --
 -- Dumping data for table `Notebook`
 --
 
 INSERT INTO `Notebook` (`ID`, `Name`, `IsDefective`, `IsAvailable`) VALUES
-(1, 'HP Pavillion', '', ''),
-(2, 'HP Pavillion', '', ''),
-(3, 'HP Pavillion', '', ''),
-(4, 'HP Pavillion', '', ''),
-(5, 'HP Pavillion', '', ''),
-(6, 'Dell ProBook', '', ''),
-(7, 'Dell ProBood', '', ''),
-(8, 'Dell ProBood', '', ''),
-(9, 'Dell ProBood', '', ''),
-(10, 'Dell ProBood', '', ''),
-(11, 'Sony Vaio', '', ''),
-(12, 'Sony Vaio', '', ''),
-(13, 'Sony Vaio', '', ''),
-(14, 'Sony Vaio', '', ''),
-(15, 'Sony Vaio', '', ''),
-(16, 'One Superbook', '', ''),
-(17, 'One Superbook', '', ''),
-(18, 'One Superbook', '', ''),
-(19, 'One Superbook', '', ''),
-(20, 'One Superbook', '', ''),
-(21, 'Apple MacBook Pro', '', ''),
-(22, 'Apple MacBook Pro', '', ''),
-(23, 'Apple MacBook Pro', '', ''),
-(24, 'Apple MacBook Pro', '', ''),
-(25, 'Apple MacBook Pro', '', '');
+(1, 'HP Pavillion', '\0', '\0'),
+(2, 'HP Pavillion', '\0', '\0'),
+(3, 'HP Pavillion', '\0', '\0'),
+(4, 'HP Pavillion', '\0', '\0'),
+(5, 'HP Pavillion', '\0', ''),
+(6, 'Dell ProBook', '\0', ''),
+(7, 'Dell ProBood', '\0', ''),
+(8, 'Dell ProBood', '\0', ''),
+(9, 'Dell ProBood', '\0', ''),
+(10, 'Dell ProBood', '\0', ''),
+(11, 'Sony Vaio', '\0', ''),
+(12, 'Sony Vaio', '\0', ''),
+(13, 'Sony Vaio', '\0', ''),
+(14, 'Sony Vaio', '\0', ''),
+(15, 'Sony Vaio', '\0', ''),
+(16, 'One Superbook', '\0', ''),
+(17, 'One Superbook', '\0', ''),
+(18, 'One Superbook', '\0', ''),
+(19, 'One Superbook', '\0', ''),
+(20, 'One Superbook', '\0', ''),
+(21, 'Apple MacBook Pro', '\0', ''),
+(22, 'Apple MacBook Pro', '\0', ''),
+(23, 'Apple MacBook Pro', '\0', ''),
+(24, 'Apple MacBook Pro', '\0', ''),
+(25, 'Apple MacBook Pro', '\0', '');
 
 -- --------------------------------------------------------
 
@@ -90,16 +90,16 @@ CREATE TABLE IF NOT EXISTS `NotebookCount` (
   `Name` varchar(45) NOT NULL,
   `Count` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `NotebookCount`
 --
 
 INSERT INTO `NotebookCount` (`ID`, `Name`, `Count`) VALUES
-(1, 'LONG', 5),
-(2, 'MEDIUM', 10),
-(3, 'SHORT', 20);
+(1, 'LONG', 17),
+(2, 'MEDIUM', 5),
+(3, 'SHORT', 3);
 
 -- --------------------------------------------------------
 
@@ -150,14 +150,12 @@ CREATE TABLE IF NOT EXISTS `Process` (
   KEY `NotebookID` (`NotebookID`),
   KEY `OSID` (`OSID`),
   KEY `StatusID` (`StatusID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `Process`
 --
 
-INSERT INTO `Process` (`ID`, `RequesterID`, `ApproverID`, `NotebookID`, `Hash`, `CreationDate`, `StartDate`, `EndDate`, `UntilDate`, `StatusID`, `OSID`, `Description`, `Category`) VALUES
-(3, 1, 12, 1, 'f498da10bf015ae66280d19b3cf10cb3', '2013-03-26 15:26:07', '2013-03-26 15:25:42', NULL, '2013-03-30 00:00:00', 1, 3, 'asdfasdf', 'LONG');
 
 -- --------------------------------------------------------
 
@@ -218,24 +216,10 @@ INSERT INTO `User` (`ID`, `MatrNo`, `Firstname`, `Name`, `EMail`, `IsStudent`, `
 (7, 100007, 'testuser7', 'Mueller', 'dhbw.notebook-verleih@gmx.de', 1, 0, 0, '5df2cb58225c54e8b8173754d24df318'),
 (8, 100008, 'testuser8', 'Mueller', 'dhbw.notebook-verleih@gmx.de', 1, 0, 0, 'f3536a763fe6787ad6db084471070e23'),
 (9, 100009, 'testuser9', 'Mueller', 'dhbw.notebook-verleih@gmx.de', 1, 0, 0, '70017656f4c9a162c82a526d31d0536c'),
-(10, 1, 'Roland', 'Kuestermann', 'dattHoppi@gmail.com', 0, 0, 1, 'caa66a072554b442f4e8e43c665924cb'),
-(11, 2, 'Frederic', 'Toussaint', 'dattHoppi@gmail.com', 0, 0, 1, 'caa66a072554b442f4e8e43c665924cb'),
+(10, 1, 'Roland', 'Kuestermann', 'dhbw.notebook-verleih@gmx.de', 0, 0, 1, 'caa66a072554b442f4e8e43c665924cb'),
+(11, 2, 'Frederic', 'Toussaint', 'dhbw.notebook-verleih@gmx.de', 0, 0, 1, 'caa66a072554b442f4e8e43c665924cb'),
 (12, 3, 'Katja', 'Wengler', 'dhbw.notebook-verleih@gmx.de', 0, 0, 1, 'caa66a072554b442f4e8e43c665924cb'),
 (13, 4, 'Stefan', 'Klink', 'dhbw.notebook-verleih@gmx.de', 0, 0, 1, 'caa66a072554b442f4e8e43c665924cb'),
 (14, 5, 'Harald', 'Haake', 'dhbw.notebook-verleih@gmx.de', 0, 0, 1, 'caa66a072554b442f4e8e43c665924cb'),
 (15, 6, 'Super', 'Admin', 'dhbw.notebook-verleih@gmx.de', 0, 1, 0, '531704a02607a1646efcf4c1fae1eec6'),
 (16, 7, 'Jonathan', 'Osterman', 'dhbw.notebook-verleih@gmx.de', 1, 1, 1, '17828ff61bd0ad2487e39a0d83d5e2bb');
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `Process`
---
-ALTER TABLE `Process`
-  ADD CONSTRAINT `NotebookID` FOREIGN KEY (`NotebookID`) REFERENCES `Notebook` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `OSID` FOREIGN KEY (`OSID`) REFERENCES `OS` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `StatusID` FOREIGN KEY (`StatusID`) REFERENCES `Status` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `UserID1` FOREIGN KEY (`RequesterID`) REFERENCES `User` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `UserID2` FOREIGN KEY (`ApproverID`) REFERENCES `User` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION;

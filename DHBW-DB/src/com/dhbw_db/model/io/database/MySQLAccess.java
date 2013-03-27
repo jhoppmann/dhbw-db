@@ -144,10 +144,10 @@ public class MySQLAccess implements DataAccess {
 		String creationString = "create table "
 				+ connectionInfo.get("database.database") + "."
 				+ Table.EMAIL.toString() + " (ID INT NOT NULL AUTO_INCREMENT, "
-				+ "ReceiverMail VARCHAR(45) NULL, "
-				+ "SenderMail VARCHAR(45) NULL, " + "Header VARCHAR(45) NULL, "
-				+ "Body VARCHAR(45) NULL, " + "Date TIMESTAMP, "
-				+ "PRIMARY KEY (ID))";
+				+ "ReceiverMail VARCHAR(150) NULL, "
+				+ "SenderMail VARCHAR(150) NULL, "
+				+ "Header VARCHAR(150) NULL, " + "Body VARCHAR(1500) NULL, "
+				+ "Date TIMESTAMP, " + "PRIMARY KEY (ID))";
 
 		try {
 			Statement statement = connection.createStatement();
@@ -430,7 +430,7 @@ public class MySQLAccess implements DataAccess {
 		List<User> lecturers = new ArrayList<User>();
 
 		try {
-			connect();
+			connection = connect();
 			PreparedStatement statement = connection.prepareStatement(sql);
 
 			ResultSet result = statement.executeQuery();
@@ -469,7 +469,7 @@ public class MySQLAccess implements DataAccess {
 		List<User> userList = new ArrayList<User>();
 
 		try {
-			connect();
+			connection = connect();
 
 			PreparedStatement statement = connection.prepareStatement(sql);
 
@@ -511,7 +511,7 @@ public class MySQLAccess implements DataAccess {
 		User user = null;
 
 		try {
-			connect();
+			connection = connect();
 
 			user = new User();
 
@@ -553,7 +553,7 @@ public class MySQLAccess implements DataAccess {
 		String oSName = null;
 
 		try {
-			connect();
+			connection = connect();
 
 			oSName = new String();
 
@@ -588,7 +588,7 @@ public class MySQLAccess implements DataAccess {
 				+ " (RequesterID, ApproverID, NotebookID, Hash, CreationDate, StartDate, EndDate, UntilDate, StatusID, OSID, Description, Category) VALUES (? , ? , ? , ? , ? , ? , ? , ? , ? , ?, ?, ?)";
 
 		try {
-			connect();
+			connection = connect();
 			PreparedStatement statement = connection.prepareStatement(sql);
 
 			statement.setInt(1, request.getRequesterId());
@@ -639,7 +639,7 @@ public class MySQLAccess implements DataAccess {
 				+ " SET RequesterID = ? , ApproverID = ? , NotebookID = ?, Hash = ?, StartDate = ? , EndDate = ? , UntilDate = ? , StatusID = ?, OSID = ?, Description = ?, Category = ? WHERE ID = ?";
 
 		try {
-			connect();
+			connection = connect();
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setInt(1, request.getRequesterId());
 			statement.setInt(2, request.getApproverId());
@@ -688,7 +688,7 @@ public class MySQLAccess implements DataAccess {
 		List<Request> requestList = new ArrayList<Request>();
 
 		try {
-			connect();
+			connection = connect();
 			PreparedStatement statement = connection.prepareStatement(sql);
 
 			ResultSet result = statement.executeQuery();
@@ -757,7 +757,7 @@ public class MySQLAccess implements DataAccess {
 		List<Request> requestList = new ArrayList<Request>();
 
 		try {
-			connect();
+			connection = connect();
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setInt(1, approverID);
 
@@ -827,7 +827,7 @@ public class MySQLAccess implements DataAccess {
 		List<Request> requestList = new ArrayList<Request>();
 
 		try {
-			connect();
+			connection = connect();
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setInt(1, requesterID);
 
@@ -897,7 +897,7 @@ public class MySQLAccess implements DataAccess {
 		Request request = null;
 
 		try {
-			connect();
+			connection = connect();
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setInt(1, id);
 
@@ -966,7 +966,7 @@ public class MySQLAccess implements DataAccess {
 		Request request = null;
 
 		try {
-			connect();
+			connection = connect();
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setString(1, hash);
 
@@ -1035,7 +1035,7 @@ public class MySQLAccess implements DataAccess {
 		List<Notebook> notebookList = null;
 
 		try {
-			connect();
+			connection = connect();
 			notebookList = new ArrayList<Notebook>();
 
 			PreparedStatement statement = connection.prepareStatement(sql);
@@ -1074,7 +1074,7 @@ public class MySQLAccess implements DataAccess {
 		Notebook notebook = null;
 
 		try {
-			connect();
+			connection = connect();
 
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setBoolean(1, false);
@@ -1111,7 +1111,7 @@ public class MySQLAccess implements DataAccess {
 				+ " (Name, IsDefective, IsAvailable) VALUES (?,?,?)";
 
 		try {
-			connect();
+			connection = connect();
 			PreparedStatement statement = connection.prepareStatement(sql);
 
 			statement.setString(1, notebook.getName());
@@ -1137,7 +1137,7 @@ public class MySQLAccess implements DataAccess {
 				+ " SET Name = ?, IsDefective = ?, IsAvailable = ? WHERE ID = ?";
 
 		try {
-			connect();
+			connection = connect();
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setString(1, notebook.getName());
 			statement.setBoolean(2, notebook.isDefective());
@@ -1163,7 +1163,7 @@ public class MySQLAccess implements DataAccess {
 				+ " (ReceiverMail, SenderMail, Header, Body, Date) VALUES (?,?,?,?,?)";
 
 		try {
-			connect();
+			connection = connect();
 			PreparedStatement statement = connection.prepareStatement(sql);
 
 			statement.setString(1, eMail.getReceiverMail());
@@ -1227,7 +1227,7 @@ public class MySQLAccess implements DataAccess {
 		HashMap<Integer, String> statusMap = new HashMap<Integer, String>();
 
 		try {
-			connect();
+			connection = connect();
 			PreparedStatement statement = connection.prepareStatement(sql);
 
 			ResultSet result = statement.executeQuery();
@@ -1255,7 +1255,7 @@ public class MySQLAccess implements DataAccess {
 		HashMap<NotebookCategory, Integer> notebooksMap = new HashMap<NotebookCategory, Integer>();
 
 		try {
-			connect();
+			connection = connect();
 
 			PreparedStatement statement = connection.prepareStatement(sql);
 
@@ -1285,7 +1285,7 @@ public class MySQLAccess implements DataAccess {
 				+ " SET COUNT = COUNT + ? WHERE NAME = ?";
 
 		try {
-			connect();
+			connection = connect();
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setInt(1, value);
 			statement.setString(2, name);
@@ -1310,7 +1310,7 @@ public class MySQLAccess implements DataAccess {
 		User user = null;
 
 		try {
-			connect();
+			connection = connect();
 			user = null;
 
 			PreparedStatement statement = connection.prepareStatement(sql);
