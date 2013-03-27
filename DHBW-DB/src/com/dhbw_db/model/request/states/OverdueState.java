@@ -30,6 +30,7 @@ public class OverdueState implements RequestState {
 	public void cancel() throws NotAllowedException {
 		rq.setStatus(Status.CANCELED);
 		(new EmailSessionBean()).sendMailRequestCancelled(rq);
+		rq.freeResources();
 	}
 
 	@Override
@@ -45,6 +46,7 @@ public class OverdueState implements RequestState {
 	@Override
 	public void complete() throws NotAllowedException {
 		rq.setStatus(Status.COMPLETED);
+		rq.freeResources();
 	}
 
 }

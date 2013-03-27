@@ -9,9 +9,14 @@ import java.util.List;
 import com.dhbw_db.control.MainController;
 import com.dhbw_db.model.io.database.DataAccess;
 import com.dhbw_db.model.request.Request;
+import com.dhbw_db.view.DetailsPage;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
+import com.vaadin.ui.VerticalLayout;
 
 /**
  * The RequestTable class is a component that takes a <tt>List</tt> of Requests
@@ -36,24 +41,48 @@ public class RequestTable extends CustomComponent {
 	 * @param requests The List of requests to be displayed.
 	 * @param width The width of the table, in pixels
 	 */
-	public RequestTable(List<Request> requests, int width) {
-		dao = MainController.get()
-							.getDataAccess();
-		HorizontalLayout lo = new HorizontalLayout();
-		requestsTable = new Table();
-		requestsTable.setCaption("Alle bisherigen Leihvorgänge");
-		requestsTable.setWidth(width + "px");
-		defineTableColumns();
-		addItems(requests);
-		lo.addComponent(requestsTable);
+	public RequestTable(List<Request> requests) {
+
+		VerticalLayout lo = new VerticalLayout();
+		if (requests != null && !requests.isEmpty()) {
+			dao = MainController.get()
+								.getDataAccess();
+			requestsTable = new Table();
+			requestsTable.setCaption("Alle bisherigen Leihvorgänge");
+			requestsTable.setMultiSelect(false);
+			requestsTable.setSelectable(true);
+			defineTableColumns();
+			addItems(requests);
+			lo.addComponent(requestsTable);
+
+			Button show = new Button("Anzeigen");
+			show.addClickListener(new ClickListener() {
+
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public void buttonClick(ClickEvent event) {
+					if (requestsTable.getValue() != null) {
+						Request request = dao.getRequestForID((Integer) requestsTable.getValue());
+						MainController.get()
+										.changeView(new DetailsPage(request));
+					}
+
+				}
+			});
+			lo.addComponent(show);
+		} else {
+			Label noRequests = new Label("Keine Anträge für diese Ansicht vorhanden!");
+			noRequests.setStyleName("headline");
+			lo.addComponent(noRequests);
+		}
 
 		setCompositionRoot(lo);
 	}
 
 	private void defineTableColumns() {
-		requestsTable.addContainerProperty("ID", Integer.class, null);
 		requestsTable.addContainerProperty("Notebook", String.class, null);
-		requestsTable.addContainerProperty("Betriebssystem", String.class, null);
+		requestsTable.addContainerProperty("Antragsteller", String.class, null);
 		requestsTable.addContainerProperty("Betreuer", String.class, null);
 		requestsTable.addContainerProperty(	"Erstellung des Antrages",
 											String.class,
@@ -64,11 +93,6 @@ public class RequestTable extends CustomComponent {
 											String.class,
 											null);
 		requestsTable.addContainerProperty("Status", String.class, null);
-		requestsTable.addContainerProperty(	"Bemerkung für Betreuer",
-											String.class,
-											null);
-
-		// TODO Change visible Columns according to user authorizations
 	}
 
 	private void addItems(List<Request> requests) {
@@ -76,19 +100,19 @@ public class RequestTable extends CustomComponent {
 
 		for (Request r : requests) {
 			requestsTable.addItem(	new Object[] {
-											new Integer(r.getId()),
 											Integer.toString(r.getNotebookId()),
-											Integer.toString(r.getOs()),
+											dao.getUserForID(r.getRequesterId())
+												.fullName(),
 											dao.getUserForID(r.getApproverId())
 												.getLastName(),
 											sdf.format(r.getCreated()),
 											sdf.format(r.getStart()),
-											sdf.format(r.getEnd()),
-											sdf.format(r.getEnd()),
+											sdf.format(r.getUntil()),
+											(r.getEnd() == null ? "Noch nicht zurückgegeben"
+													: sdf.format(r.getEnd())),
 											r.getStatus()
-												.toString(), r.getDescription() },
+												.toString() },
 									new Integer(r.getId()));
 		}
 	}
-
 }

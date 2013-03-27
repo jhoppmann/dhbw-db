@@ -74,14 +74,14 @@ public class Request {
 	 * @since 0.1
 	 */
 	public enum Status {
-		OPEN(1, "Open"),
-		APPROVED(2, "Approved"),
-		RETRACTED(3, "Retracted"),
-		REJECTED(4, "Rejected"),
-		OVERDUE(5, "Overdue"),
-		COMPLETED(6, "Completed"),
-		ERROR(7, "Error"),
-		CANCELED(8, "Canceled");
+		OPEN(1, "Offen"),
+		APPROVED(2, "Genehmigt"),
+		RETRACTED(3, "Zurückgezogen"),
+		REJECTED(4, "Abgelehnt"),
+		OVERDUE(5, "Überfällig"),
+		COMPLETED(6, "Beendet"),
+		ERROR(7, "Fehler"),
+		CANCELED(8, "Abgebrochen");
 
 		private int id;
 
@@ -215,11 +215,9 @@ public class Request {
 				break;
 			case REJECTED:
 				currentState = new RejectedState(this);
-				freeResources();
 				break;
 			case RETRACTED:
 				currentState = new RetractedState(this);
-				freeResources();
 				break;
 			case APPROVED:
 				currentState = new ApprovedState(this);
@@ -229,16 +227,13 @@ public class Request {
 				break;
 			case COMPLETED:
 				currentState = new CompletedState(this);
-				freeResources();
 				break;
 			case CANCELED:
 				currentState = new CanceledState(this);
-				freeResources();
 				break;
 			case ERROR:
 			default:
 				currentState = new ErrorState(this);
-				freeResources();
 				break;
 
 		}
@@ -500,7 +495,7 @@ public class Request {
 	/**
 	 * Frees all resources after the request can no longer proceed
 	 */
-	private void freeResources() {
+	public void freeResources() {
 		DataAccess dao = new MySQLAccess();
 
 		List<Notebook> notebooks = dao.getNotebooks();

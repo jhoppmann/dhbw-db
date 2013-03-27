@@ -50,7 +50,7 @@ public class NavigationBar extends MenuBar {
 			addItem("Offene Anträge", new ViewChangeCommand(View.LECTURER_OPEN));
 
 		if (u.isLecturer())
-			addItem("Alle Anträge", new ViewChangeCommand(View.LECTURER_ALL));
+			addItem("Antragsinbox", new ViewChangeCommand(View.LECTURER_ALL));
 
 		if (u.isAdmin())
 			addItem("Ausgabe / Rücknahme",

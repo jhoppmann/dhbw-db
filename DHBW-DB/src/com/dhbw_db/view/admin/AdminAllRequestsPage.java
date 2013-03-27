@@ -3,11 +3,12 @@
  */
 package com.dhbw_db.view.admin;
 
+import com.dhbw_db.control.MainController;
+import com.dhbw_db.view.request.RequestTable;
 import com.vaadin.ui.AbsoluteLayout;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
-import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 
 /**
@@ -17,7 +18,7 @@ import com.vaadin.ui.VerticalLayout;
  */
 public class AdminAllRequestsPage extends CustomComponent {
 
-	private static final long serialVersionUID = -196799282351104311L;
+	private static final long serialVersionUID = 5716916047660854518L;
 
 	private AbsoluteLayout mainLayout;
 
@@ -25,7 +26,7 @@ public class AdminAllRequestsPage extends CustomComponent {
 
 	private VerticalLayout panelLayout;
 
-	private Table requestsTable;
+	private RequestTable requestsTable;
 
 	private Label headlineLabel;
 
@@ -39,15 +40,8 @@ public class AdminAllRequestsPage extends CustomComponent {
 	public AdminAllRequestsPage() {
 		buildMainLayout();
 		setCompositionRoot(mainLayout);
-
-		defineTableColumns();
-		addTableItems();
 	}
 
-	/**
-	 * 
-	 * @return the absolute Layoute
-	 */
 	private AbsoluteLayout buildMainLayout() {
 		// common part: create layout
 		mainLayout = new AbsoluteLayout();
@@ -80,10 +74,6 @@ public class AdminAllRequestsPage extends CustomComponent {
 		return panel;
 	}
 
-	/**
-	 * 
-	 * @return the vertical Layout
-	 */
 	private VerticalLayout buildpanelLayout() {
 		// common part: create layout
 		panelLayout = new VerticalLayout();
@@ -99,52 +89,15 @@ public class AdminAllRequestsPage extends CustomComponent {
 		headlineLabel.setImmediate(false);
 		headlineLabel.setWidth("-1px");
 		headlineLabel.setHeight("-1px");
-		headlineLabel.setValue("Alle Anträge");
+		headlineLabel.setValue("Eigene Anträge");
 		panelLayout.addComponent(headlineLabel);
 
 		// detailTable
-		requestsTable = new Table();
-		requestsTable.setCaption("Alle Anträge");
-
-		requestsTable.setImmediate(false);
-		// requestsTable.setWidth("700px");
-		// requestsTable.setHeight("45px");
+		requestsTable = new RequestTable(MainController.get()
+														.getDataAccess()
+														.getRequests());
 		panelLayout.addComponent(requestsTable);
 
 		return panelLayout;
 	}
-
-	/**
-	 * Defines the headlines of the table columns.
-	 */
-	private void defineTableColumns() {
-		requestsTable.addContainerProperty("ID", Integer.class, null);
-		requestsTable.addContainerProperty("Notebook", String.class, null);
-		requestsTable.addContainerProperty("Betriebssystem", String.class, null);
-		requestsTable.addContainerProperty("Betreuer", String.class, null);
-		requestsTable.addContainerProperty(	"Erstellung des Antrages",
-											String.class,
-											null);
-		requestsTable.addContainerProperty("Ausleihdatum", String.class, null);
-		requestsTable.addContainerProperty("Rückgabedatum", String.class, null);
-		requestsTable.addContainerProperty(	"Ende des Antrages",
-											String.class,
-											null);
-		requestsTable.addContainerProperty("Status", String.class, null);
-		requestsTable.addContainerProperty(	"Bemerkung für Betreuer",
-											String.class,
-											null);
-	}
-
-	/**
-	 * Adds items to the table.
-	 */
-	private void addTableItems() {
-		// TODO Decide in which form this method receives the table items and
-		// add
-		// these items to the table. Maybe a SQL container might be a good
-		// solution.
-		// currentRequestTable.setContainerDataSource(container);
-	}
-
 }

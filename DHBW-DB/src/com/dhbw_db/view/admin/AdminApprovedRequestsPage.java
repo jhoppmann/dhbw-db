@@ -3,13 +3,17 @@
  */
 package com.dhbw_db.view.admin;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.dhbw_db.control.MainController;
+import com.dhbw_db.model.request.Request;
+import com.dhbw_db.model.request.Request.Status;
+import com.dhbw_db.view.request.RequestTable;
 import com.vaadin.ui.AbsoluteLayout;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
-import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 
 /**
@@ -19,7 +23,7 @@ import com.vaadin.ui.VerticalLayout;
  */
 public class AdminApprovedRequestsPage extends CustomComponent {
 
-	private static final long serialVersionUID = -1560057433477309842L;
+	private static final long serialVersionUID = 5716916047660854518L;
 
 	private AbsoluteLayout mainLayout;
 
@@ -27,13 +31,9 @@ public class AdminApprovedRequestsPage extends CustomComponent {
 
 	private VerticalLayout panelLayout;
 
-	private Table requestsTable;
+	private RequestTable requestsTable;
 
 	private Label headlineLabel;
-
-	private Button handOutButton;
-
-	private Button takeBackButton;
 
 	/**
 	 * The constructor should first build the main layout, set the composition
@@ -45,9 +45,6 @@ public class AdminApprovedRequestsPage extends CustomComponent {
 	public AdminApprovedRequestsPage() {
 		buildMainLayout();
 		setCompositionRoot(mainLayout);
-
-		defineTableColumns();
-		addTableItems();
 	}
 
 	private AbsoluteLayout buildMainLayout() {
@@ -97,75 +94,26 @@ public class AdminApprovedRequestsPage extends CustomComponent {
 		headlineLabel.setImmediate(false);
 		headlineLabel.setWidth("-1px");
 		headlineLabel.setHeight("-1px");
-		headlineLabel.setValue("Ausgabe / Rücknahme");
+		headlineLabel.setValue("Eigene Anträge");
 		panelLayout.addComponent(headlineLabel);
 
-		// detailTable
-		requestsTable = new Table();
-		requestsTable.setCaption("Aktuell laufende Anträge");
+		// find open requests
+		List<Request> allRequests = MainController.get()
+													.getDataAccess()
+													.getRequestsForApproverForID(MainController.get()
+																								.getUser()
+																								.getID());
+		List<Request> openRequests = new ArrayList<Request>();
 
-		requestsTable.setImmediate(false);
-		// requestsTable.setWidth("700px");
-		// requestsTable.setHeight("45px");
+		for (Request rq : allRequests) {
+			if (rq.getStatus() == Status.APPROVED)
+				openRequests.add(rq);
+		}
+		// detailTable
+		requestsTable = new RequestTable(openRequests);
 		panelLayout.addComponent(requestsTable);
 
-		// handOutButton
-		handOutButton = new Button();
-		handOutButton.setCaption("Notebook ausgeben");
-		handOutButton.setImmediate(false);
-		handOutButton.setWidth("-1px");
-		handOutButton.setHeight("-1px");
-
-		// takeBackButton
-		takeBackButton = new Button();
-		takeBackButton.setCaption("Notebook annehmen");
-		takeBackButton.setImmediate(false);
-		takeBackButton.setWidth("-1px");
-		takeBackButton.setHeight("-1px");
-
-		HorizontalLayout horizontalLayout1 = new HorizontalLayout();
-
-		horizontalLayout1.addComponent(handOutButton);
-		horizontalLayout1.addComponent(takeBackButton);
-
-		horizontalLayout1.setSpacing(true);
-
-		panelLayout.addComponent(horizontalLayout1);
-
 		return panelLayout;
-	}
-
-	/**
-	 * Defines the headlines of the table columns.
-	 */
-	private void defineTableColumns() {
-		requestsTable.addContainerProperty("ID", Integer.class, null);
-		requestsTable.addContainerProperty("Notebook", String.class, null);
-		requestsTable.addContainerProperty("Betriebssystem", String.class, null);
-		requestsTable.addContainerProperty("Betreuer", String.class, null);
-		requestsTable.addContainerProperty(	"Erstellung des Antrages",
-											String.class,
-											null);
-		requestsTable.addContainerProperty("Ausleihdatum", String.class, null);
-		requestsTable.addContainerProperty("Rückgabedatum", String.class, null);
-		requestsTable.addContainerProperty(	"Ende des Antrages",
-											String.class,
-											null);
-		requestsTable.addContainerProperty("Status", String.class, null);
-		requestsTable.addContainerProperty(	"Bemerkung für Betreuer",
-											String.class,
-											null);
-	}
-
-	/**
-	 * Adds items to the table.
-	 */
-	private void addTableItems() {
-		// TODO Decide in which form this method receives the table items and
-		// add
-		// these items to the table. Maybe a SQL container might be a good
-		// solution.
-		// currentRequestTable.setContainerDataSource(container);
 	}
 
 }

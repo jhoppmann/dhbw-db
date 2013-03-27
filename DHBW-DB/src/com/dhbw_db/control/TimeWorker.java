@@ -40,10 +40,7 @@ public class TimeWorker implements Runnable {
 		while (true) {
 			// run once every 24 hours
 			try {
-				LoggingService.getInstance()
-								.log(	"Timeworker: run at "
-												+ (new Date()).toString(),
-										LogLevel.DEBUG);
+
 				Thread.sleep(86400000L);
 				DataAccess dao = new MySQLAccess();
 				List<Request> requests = dao.getRequests();
@@ -51,6 +48,10 @@ public class TimeWorker implements Runnable {
 					rq.checkTime();
 					dao.updateRequest(rq);
 				}
+				LoggingService.getInstance()
+								.log(	"Timeworker: run at "
+												+ (new Date()).toString(),
+										LogLevel.DEBUG);
 			} catch (InterruptedException e) {
 				LoggingService.getInstance()
 								.log(e.getMessage(), LogLevel.ERROR);

@@ -25,12 +25,14 @@ public class OpenState implements RequestState {
 	public void retract() throws NotAllowedException {
 		rq.setStatus(Status.RETRACTED);
 		(new EmailSessionBean()).sendMailRequestCancelledLecturer(rq);
+		rq.freeResources();
 	}
 
 	@Override
 	public void cancel() throws NotAllowedException {
 		rq.setStatus(Status.CANCELED);
 		(new EmailSessionBean()).sendMailRequestCancelled(rq);
+		rq.freeResources();
 	}
 
 	@Override
@@ -43,6 +45,7 @@ public class OpenState implements RequestState {
 	public void reject() throws NotAllowedException {
 		rq.setStatus(Status.REJECTED);
 		(new EmailSessionBean()).sendMailRequestRejected(rq);
+		rq.freeResources();
 	}
 
 	@Override

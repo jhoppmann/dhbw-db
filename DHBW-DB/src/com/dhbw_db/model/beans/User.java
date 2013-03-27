@@ -138,6 +138,10 @@ public class User {
 		this.isLecturer = isLecturer;
 	}
 
+	public String fullName() {
+		return firstName + " " + lastName;
+	}
+
 	public String toString() {
 		return ID + " " + matrNr + " " + firstName + " " + lastName + " "
 				+ eMail + " " + isStudent + " " + isAdmin + " " + isLecturer;
