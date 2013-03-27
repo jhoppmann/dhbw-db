@@ -13,7 +13,6 @@ import com.dhbw_db.model.beans.User;
 import com.dhbw_db.model.io.database.DataAccess;
 import com.dhbw_db.model.io.logging.LoggingService;
 import com.dhbw_db.model.io.logging.LoggingService.LogLevel;
-import com.dhbw_db.model.mail.EmailSessionBean;
 import com.dhbw_db.model.request.Request;
 import com.dhbw_db.view.PostButtonPage;
 import com.dhbw_db.view.student.NotebookRequest;
@@ -97,8 +96,7 @@ public class NotebookRequestController implements ClickListener,
 								.log(	"Request successfully created and "
 												+ "persisted",
 										LogLevel.INFO);
-				(new EmailSessionBean()).sendMailRequestStudent(r);
-				(new EmailSessionBean()).sendMailRequestLecturer(r);
+				r.start();
 			} catch (Exception e) {
 				LoggingService.getInstance()
 								.log(e.getMessage(), LogLevel.ERROR);

@@ -4,12 +4,15 @@
 package com.dhbw_db.model.request;
 
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
 import com.dhbw_db.control.MainController;
+import com.dhbw_db.model.beans.Notebook;
 import com.dhbw_db.model.beans.Notebook.NotebookCategory;
 import com.dhbw_db.model.exceptions.NotAllowedException;
+import com.dhbw_db.model.io.database.DataAccess;
 import com.dhbw_db.model.mail.EmailSessionBean;
 import com.dhbw_db.model.request.states.ApprovedState;
 import com.dhbw_db.model.request.states.CanceledState;
@@ -206,9 +209,11 @@ public class Request {
 				break;
 			case REJECTED:
 				currentState = new RejectedState(this);
+				freeResources();
 				break;
 			case RETRACTED:
 				currentState = new RetractedState(this);
+				freeResources();
 				break;
 			case APPROVED:
 				currentState = new ApprovedState(this);
@@ -218,13 +223,16 @@ public class Request {
 				break;
 			case COMPLETED:
 				currentState = new CompletedState(this);
+				freeResources();
 				break;
 			case CANCELED:
 				currentState = new CanceledState(this);
+				freeResources();
 				break;
 			case ERROR:
 			default:
 				currentState = new ErrorState(this);
+				freeResources();
 				break;
 
 		}
@@ -455,5 +463,51 @@ public class Request {
 	 */
 	public void setCategory(NotebookCategory c) {
 		this.category = c;
+	}
+
+	/**
+	 * This method is called to start a request. It will then perform all
+	 * necessary operations to set it into an initial state.
+	 */
+	public void start() {
+
+		DataAccess dao = MainController.get()
+										.getDataAccess();
+
+		List<Notebook> notebooks = dao.getNotebooks();
+
+		for (Notebook nb : notebooks) {
+			if (nb.getiD() == this.getNotebookId()) {
+				nb.setAvailable(false);
+				dao.updateNotebook(nb);
+			}
+		}
+
+		dao.updateNotebookCount(this.getCategory()
+									.toString(), -1);
+
+		this.status = Status.OPEN;
+		(new EmailSessionBean()).sendMailRequestStudent(this);
+		(new EmailSessionBean()).sendMailRequestLecturer(this);
+	}
+
+	/**
+	 * Frees all resources after the request can no longer proceed
+	 */
+	private void freeResources() {
+		DataAccess dao = MainController.get()
+										.getDataAccess();
+
+		List<Notebook> notebooks = dao.getNotebooks();
+
+		for (Notebook nb : notebooks) {
+			if (nb.getiD() == this.getNotebookId()) {
+				nb.setAvailable(true);
+				dao.updateNotebook(nb);
+			}
+		}
+
+		dao.updateNotebookCount(this.getCategory()
+									.toString(), 1);
 	}
 }
