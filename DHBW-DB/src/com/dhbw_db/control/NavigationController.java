@@ -3,6 +3,10 @@
  */
 package com.dhbw_db.control;
 
+import java.util.Map;
+
+import com.dhbw_db.model.beans.Notebook.NotebookCategory;
+import com.dhbw_db.view.PostButtonPage;
 import com.dhbw_db.view.StartPage;
 import com.dhbw_db.view.admin.AddNotebook;
 import com.dhbw_db.view.admin.AdminAllRequestsPage;
@@ -58,7 +62,11 @@ public class NavigationController {
 				c = new StartPage();
 				break;
 			case NEW_REQUEST:
-				c = new NotebookRequest();
+				if (checkForNotebooksLeft())
+					c = new NotebookRequest();
+				else
+					c = new PostButtonPage(	"Keine Notebooks mehr verfügbar",
+											"Leider sind im Moment alle Notebooks verliehen. Versuchen Sie es später noch einmal.");
 				break;
 			case STUDENT_REQUEST:
 				c = new StudentRequestsPage();
@@ -98,5 +106,27 @@ public class NavigationController {
 	public void logout() {
 		MainController.get()
 						.logout();
+	}
+
+	/**
+	 * Checks if there are notebooks left
+	 * 
+	 * @return <tt>true</tt> if there is even one notebook left, <tt>false</tt>
+	 *         otherwise
+	 */
+	private boolean checkForNotebooksLeft() {
+		boolean someLeft = false;
+		Map<NotebookCategory, Integer> notebooks = MainController.get()
+																	.getDataAccess()
+																	.getNotebookCount();
+
+		for (NotebookCategory nbc : notebooks.keySet()) {
+			if (notebooks.get(nbc)
+							.intValue() > 0)
+				someLeft = true;
+		}
+
+		return someLeft;
+
 	}
 }
