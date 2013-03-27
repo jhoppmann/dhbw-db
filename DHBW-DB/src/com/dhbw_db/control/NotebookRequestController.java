@@ -91,11 +91,11 @@ public class NotebookRequestController implements ClickListener,
 			String subline = "Sie können nun über die Navigationsleiste zur "
 					+ "Startseite zurückkehren.";
 			try {
-				dao.insertRequest(r);
 				LoggingService.getInstance()
 								.log(	"Request successfully created and "
 												+ "persisted",
 										LogLevel.INFO);
+				dao.insertRequest(r);
 				r.start();
 			} catch (Exception e) {
 				LoggingService.getInstance()
