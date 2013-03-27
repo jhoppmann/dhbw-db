@@ -53,10 +53,10 @@ CREATE TABLE IF NOT EXISTS `Notebook` (
 --
 
 INSERT INTO `Notebook` (`ID`, `Name`, `IsDefective`, `IsAvailable`) VALUES
-(1, 'HP Pavillion', '\0', '\0'),
-(2, 'HP Pavillion', '\0', '\0'),
-(3, 'HP Pavillion', '\0', '\0'),
-(4, 'HP Pavillion', '\0', '\0'),
+(1, 'HP Pavillion', '\0', ''),
+(2, 'HP Pavillion', '\0', ''),
+(3, 'HP Pavillion', '\0', ''),
+(4, 'HP Pavillion', '\0', ''),
 (5, 'HP Pavillion', '\0', ''),
 (6, 'Dell ProBook', '\0', ''),
 (7, 'Dell ProBood', '\0', ''),
