@@ -196,7 +196,7 @@ public class DetailsPage extends CustomComponent {
 		notebookLabel.setImmediate(false);
 		notebookLabel.setWidth("-1px");
 		notebookLabel.setHeight("-1px");
-		notebookLabel.setValue("Notebook ID:");
+		notebookLabel.setValue("Notebook:");
 		mainLayout.addComponent(notebookLabel, "top:80.0px;left:20.0px;");
 
 		// notebookLabel2
