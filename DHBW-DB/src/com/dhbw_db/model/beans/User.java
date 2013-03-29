@@ -4,6 +4,8 @@
 package com.dhbw_db.model.beans;
 
 /**
+ * The class user represents a student, admin or lecturer
+ * 
  * @author Yannic Frank
  * @version 0.2
  * @since 0.2
@@ -138,6 +140,10 @@ public class User {
 		this.isLecturer = isLecturer;
 	}
 
+	/**
+	 * 
+	 * @return the fullName
+	 */
 	public String fullName() {
 		return firstName + " " + lastName;
 	}

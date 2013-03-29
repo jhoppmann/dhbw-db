@@ -14,6 +14,8 @@ import com.dhbw_db.model.beans.User;
 import com.dhbw_db.model.request.Request;
 
 /**
+ * Handles all database communication.
+ * 
  * @author jhoppmann
  * @version 0.1
  * @since 0.1
@@ -171,7 +173,7 @@ public interface DataAccess {
 	 * 
 	 * @param username The user's username
 	 * @param password The user's password
-	 * @return user A user object if the user is found in conjunction with this
+	 * @return A user object if the user is found in conjunction with this
 	 *         password, or <tt>null</tt> if not
 	 */
 	public User authenticate(String username, String password);

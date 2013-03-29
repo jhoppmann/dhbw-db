@@ -29,6 +29,9 @@ import com.dhbw_db.model.request.Request;
 import com.dhbw_db.model.settings.Settings;
 
 /**
+ * The implementation of the interface DataAcces to handle all database
+ * communication.
+ * 
  * @author jhoppmann
  * @author Yannic Frank
  * @version 0.1
