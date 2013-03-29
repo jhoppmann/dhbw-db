@@ -56,6 +56,7 @@ public class AddNotebook extends Window {
 
 		notebookName = new TextField();
 		notebookName.setRequired(true);
+		notebookName.setCaption("Notebook Name:");
 		vlo.addComponent(notebookName);
 		vlo.setComponentAlignment(notebookName, Alignment.MIDDLE_CENTER);
 
