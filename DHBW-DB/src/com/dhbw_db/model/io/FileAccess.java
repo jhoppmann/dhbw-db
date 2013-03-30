@@ -50,6 +50,14 @@ public class FileAccess {
 		output.close();
 	}
 
+	/**
+	 * This method loads a text file from the mails subdirectory and returns it
+	 * contents
+	 * 
+	 * @param filename The name of the file to read
+	 * @return Returns the read file's contents as a string
+	 * @throws IOException If something goes wrong while reading
+	 */
 	public String loadMailText(String filename) throws IOException {
 		InputStream stream = getClass().getResourceAsStream("/mails/"
 				+ filename);

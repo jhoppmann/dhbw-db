@@ -57,8 +57,6 @@ public class MySQLAccess implements DataAccess {
 	 * @throws SQLException
 	 */
 	private void createTables() throws SQLException {
-		// TODO Here goes the code to actually test for table existence and
-		// table creation while using the connection field
 
 		if (!tableExists(Table.USER.toString())) {
 			this.setupUserTable();

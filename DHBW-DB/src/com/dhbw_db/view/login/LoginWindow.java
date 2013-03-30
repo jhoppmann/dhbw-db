@@ -15,9 +15,12 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 /**
+ * The login window handles getting name and password of a user, and forwarding
+ * the info to the authenticator
+ * 
  * @author jhoppmann
  * @version 0.1
- * @since
+ * @since 0.1
  */
 public class LoginWindow extends Window {
 

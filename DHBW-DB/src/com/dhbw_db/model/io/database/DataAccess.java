@@ -31,7 +31,6 @@ public interface DataAccess {
 	 * @since 0.1
 	 */
 	public enum Table {
-		// TODO check case and singular / plural
 		USER("User"),
 		PROCESS("Process"),
 		NOTEBOOK("Notebook"),
@@ -201,7 +200,7 @@ public interface DataAccess {
 	 * @return The map with the notebook count. Key value is short, medium or
 	 *         long
 	 */
-	Map<NotebookCategory, Integer> getNotebookCount();
+	public Map<NotebookCategory, Integer> getNotebookCount();
 
 	/**
 	 * 
@@ -226,7 +225,7 @@ public interface DataAccess {
 	 * @return Returns the first notebook which is available and not defective.
 	 *         If no notebook is suitable returns null;
 	 */
-	Notebook getANotebook();
+	public Notebook getANotebook();
 
 	/**
 	 * Returns the requested notebook
@@ -234,6 +233,6 @@ public interface DataAccess {
 	 * @param id
 	 * @return A notebook
 	 */
-	Notebook getNotebookForID(int id);
+	public Notebook getNotebookForID(int id);
 
 }
