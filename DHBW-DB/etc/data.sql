@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Mar 27, 2013 at 06:32 AM
+-- Generation Time: Mar 30, 2013 at 10:21 PM
 -- Server version: 5.1.62
 -- PHP Version: 5.3.3-pl1-gentoo
 
@@ -19,6 +19,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- Table structure for table `EMail`
 --
 
+DROP TABLE IF EXISTS `EMail`;
 CREATE TABLE IF NOT EXISTS `EMail` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `ReceiverMail` varchar(150) DEFAULT NULL,
@@ -27,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `EMail` (
   `Body` varchar(1500) DEFAULT NULL,
   `Date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `EMail`
@@ -40,6 +41,7 @@ CREATE TABLE IF NOT EXISTS `EMail` (
 -- Table structure for table `Notebook`
 --
 
+DROP TABLE IF EXISTS `Notebook`;
 CREATE TABLE IF NOT EXISTS `Notebook` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Name` varchar(45) NOT NULL,
@@ -53,31 +55,31 @@ CREATE TABLE IF NOT EXISTS `Notebook` (
 --
 
 INSERT INTO `Notebook` (`ID`, `Name`, `IsDefective`, `IsAvailable`) VALUES
-(1, 'HP Pavillion', '\0', ''),
-(2, 'HP Pavillion', '\0', ''),
-(3, 'HP Pavillion', '\0', ''),
-(4, 'HP Pavillion', '\0', ''),
-(5, 'HP Pavillion', '\0', ''),
-(6, 'Dell ProBook', '\0', ''),
-(7, 'Dell ProBood', '\0', ''),
-(8, 'Dell ProBood', '\0', ''),
-(9, 'Dell ProBood', '\0', ''),
-(10, 'Dell ProBood', '\0', ''),
-(11, 'Sony Vaio', '\0', ''),
-(12, 'Sony Vaio', '\0', ''),
-(13, 'Sony Vaio', '\0', ''),
-(14, 'Sony Vaio', '\0', ''),
-(15, 'Sony Vaio', '\0', ''),
-(16, 'One Superbook', '\0', ''),
-(17, 'One Superbook', '\0', ''),
-(18, 'One Superbook', '\0', ''),
-(19, 'One Superbook', '\0', ''),
-(20, 'One Superbook', '\0', ''),
-(21, 'Apple MacBook Pro', '\0', ''),
-(22, 'Apple MacBook Pro', '\0', ''),
-(23, 'Apple MacBook Pro', '\0', ''),
-(24, 'Apple MacBook Pro', '\0', ''),
-(25, 'Apple MacBook Pro', '\0', '');
+(1, 'HP Pavillion', 0, 1),
+(2, 'HP Pavillion', 0, 1),
+(3, 'HP Pavillion', 0, 1),
+(4, 'HP Pavillion', 0, 1),
+(5, 'HP Pavillion', 0, 1),
+(6, 'Dell ProBook', 0, 1),
+(7, 'Dell ProBood', 0, 1),
+(8, 'Dell ProBood', 0, 1),
+(9, 'Dell ProBood', 0, 1),
+(10, 'Dell ProBood', 0, 1),
+(11, 'Sony Vaio', 0, 1),
+(12, 'Sony Vaio', 0, 1),
+(13, 'Sony Vaio', 0, 1),
+(14, 'Sony Vaio', 0, 1),
+(15, 'Sony Vaio', 0, 1),
+(16, 'One Superbook', 0, 1),
+(17, 'One Superbook', 0, 1),
+(18, 'One Superbook', 0, 1),
+(19, 'One Superbook', 0, 1),
+(20, 'One Superbook', 0, 1),
+(21, 'Apple MacBook Pro', 0, 1),
+(22, 'Apple MacBook Pro', 0, 1),
+(23, 'Apple MacBook Pro', 0, 1),
+(24, 'Apple MacBook Pro', 0, 1),
+(25, 'Apple MacBook Pro', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -85,6 +87,7 @@ INSERT INTO `Notebook` (`ID`, `Name`, `IsDefective`, `IsAvailable`) VALUES
 -- Table structure for table `NotebookCount`
 --
 
+DROP TABLE IF EXISTS `NotebookCount`;
 CREATE TABLE IF NOT EXISTS `NotebookCount` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Name` varchar(45) NOT NULL,
@@ -107,6 +110,7 @@ INSERT INTO `NotebookCount` (`ID`, `Name`, `Count`) VALUES
 -- Table structure for table `OS`
 --
 
+DROP TABLE IF EXISTS `OS`;
 CREATE TABLE IF NOT EXISTS `OS` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Name` varchar(45) NOT NULL,
@@ -130,6 +134,7 @@ INSERT INTO `OS` (`ID`, `Name`) VALUES
 -- Table structure for table `Process`
 --
 
+DROP TABLE IF EXISTS `Process`;
 CREATE TABLE IF NOT EXISTS `Process` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `RequesterID` int(11) DEFAULT NULL,
@@ -150,7 +155,7 @@ CREATE TABLE IF NOT EXISTS `Process` (
   KEY `NotebookID` (`NotebookID`),
   KEY `OSID` (`OSID`),
   KEY `StatusID` (`StatusID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `Process`
@@ -163,6 +168,7 @@ CREATE TABLE IF NOT EXISTS `Process` (
 -- Table structure for table `Status`
 --
 
+DROP TABLE IF EXISTS `Status`;
 CREATE TABLE IF NOT EXISTS `Status` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Name` varchar(45) NOT NULL,
@@ -189,6 +195,7 @@ INSERT INTO `Status` (`ID`, `Name`) VALUES
 -- Table structure for table `User`
 --
 
+DROP TABLE IF EXISTS `User`;
 CREATE TABLE IF NOT EXISTS `User` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `MatrNo` int(11) NOT NULL,

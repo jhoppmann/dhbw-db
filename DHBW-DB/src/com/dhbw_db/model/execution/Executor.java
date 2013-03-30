@@ -31,6 +31,11 @@ public class Executor {
 		this(1);
 	}
 
+	/**
+	 * getInstance returns an instance of the executor class.
+	 * 
+	 * @return An instance of the class
+	 */
 	public static Executor getInstance() {
 		if (instance == null) {
 			instance = new Executor(1);
@@ -61,7 +66,6 @@ public class Executor {
 	 * @return A message describing the status of the FutureTask, or its return
 	 *         value
 	 */
-
 	public String checkStatus(FutureTask<String> ft) {
 		String message = "";
 		if (ft.isDone()) {
