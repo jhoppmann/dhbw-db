@@ -164,13 +164,6 @@ public class Request {
 	}
 
 	/**
-	 * Persists this request to the database.
-	 */
-	public void save() {
-		// TODO more database magic!
-	}
-
-	/**
 	 * This method creates a unique 32-digit hash
 	 */
 	@CantTouchThis(Stop.HAMMERTIME)
@@ -188,7 +181,7 @@ public class Request {
 		Date now = new Date();
 		if (status == Status.APPROVED) {
 			if (now.after(until)) {
-				setStatus(Status.OVERDUE);
+				moveToStatus(Status.OVERDUE);
 
 				(new EmailSessionBean()).sendMailOverdueWarning(this);
 			}
@@ -199,7 +192,7 @@ public class Request {
 
 		if (status == Status.OPEN) {
 			if (now.after(until) || now.after(cal.getTime())) {
-				setStatus(Status.CANCELED);
+				moveToStatus(Status.CANCELED);
 			}
 		}
 	}
@@ -241,6 +234,12 @@ public class Request {
 		}
 	}
 
+	/**
+	 * This moves the request from its current status to a new one and logs the
+	 * transition.
+	 * 
+	 * @param s The new status
+	 */
 	public void moveToStatus(Status s) {
 		setStatus(s);
 		LoggingService.getInstance()
@@ -519,16 +518,16 @@ public class Request {
 	public void freeResources() {
 		DataAccess dao = new MySQLAccess();
 
-		List<Notebook> notebooks = dao.getNotebooks();
-
-		for (Notebook nb : notebooks) {
-			if (nb.getiD() == this.getNotebookId()) {
-				nb.setAvailable(true);
-				dao.updateNotebook(nb);
-			}
-		}
+		Notebook nb = dao.getNotebookForID(notebookId);
+		nb.setAvailable(true);
 
 		dao.updateNotebookCount(this.getCategory()
 									.toString(), 1);
+
+		LoggingService.getInstance()
+						.log(	"Freed Notebook " + nb.getName()
+										+ " in category "
+										+ getCategory().getText() + ".",
+								LogLevel.DEBUG);
 	}
 }

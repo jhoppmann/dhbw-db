@@ -28,6 +28,11 @@ public class TimeWorker implements Runnable {
 		// nothing to see here, move along
 	}
 
+	/**
+	 * This is a singleton. Initialize and return instance here.
+	 * 
+	 * @return The instance of this class
+	 */
 	public static TimeWorker getInstance() {
 		if (tw == null) {
 			tw = new TimeWorker();
@@ -48,6 +53,7 @@ public class TimeWorker implements Runnable {
 					rq.checkTime();
 					dao.updateRequest(rq);
 				}
+				// tell the loggers that the worker ran successfully
 				LoggingService.getInstance()
 								.log(	"Timeworker: run at "
 												+ (new Date()).toString(),

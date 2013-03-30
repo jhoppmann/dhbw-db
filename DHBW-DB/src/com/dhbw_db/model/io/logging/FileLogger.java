@@ -46,6 +46,7 @@ public class FileLogger extends Logger {
 	@Override
 	public void log(String message, LogLevel l) {
 		if (MainController.get() != null && asynchronous) {
+			// log asynchronously if possible and desired
 			MainController.get()
 							.execute(new WriteCommand(	message,
 														l,

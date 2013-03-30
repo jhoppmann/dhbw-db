@@ -89,9 +89,10 @@ public interface DataAccess {
 	 * Inserts a request in the database
 	 * 
 	 * @param Request the request to be updated
+	 * @throws SQLException
 	 * 
 	 */
-	public void insertRequest(Request request);
+	public void insertRequest(Request request) throws SQLException;
 
 	/**
 	 * 

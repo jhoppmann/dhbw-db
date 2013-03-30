@@ -9,6 +9,7 @@ import java.util.Map;
 
 import com.dhbw_db.control.MainController;
 import com.dhbw_db.control.NotebookRequestController;
+import com.dhbw_db.model.beans.Notebook;
 import com.dhbw_db.model.beans.Notebook.NotebookCategory;
 import com.dhbw_db.model.beans.User;
 import com.dhbw_db.model.request.Request;
@@ -92,6 +93,7 @@ public class NotebookRequest extends CustomComponent {
 		buildMainLayout();
 		setCompositionRoot(mainLayout);
 
+		// ask the controller for values
 		notebooks = control.getNotebooks();
 		operatingSystems = control.getOperatingSystems();
 		lecturers = control.getApprovers();
@@ -336,29 +338,57 @@ public class NotebookRequest extends CustomComponent {
 			r.setUntil(endDatePopupDateField.getValue());
 			r.setOs((Integer) oSComboBox.getValue());
 			r.setCategory((NotebookCategory) notebookOptionGroup.getValue());
-			r.setNotebookId(MainController.get()
-											.getDataAccess()
-											.getANotebook()
-											.getiD());
+			// handle the case that the last notebook was requested
+			Notebook nb = MainController.get()
+										.getDataAccess()
+										.getANotebook();
+
+			if (nb != null)
+				r.setNotebookId(nb.getiD());
+			else
+				r.setNotebookId(0);
+
 			return r;
 		} catch (InvalidValueException e) {
+			// nothing to do here.
+			// Request will be null if a field contains an invalid value.
 		}
 
 		return null;
 	}
 
+	/**
+	 * Returns the selected starting date.
+	 * 
+	 * @return The selected starting date for the request.
+	 */
 	public Date getStartDate() {
 		return startDatePopupDateField.getValue();
 	}
 
+	/**
+	 * Returns the date until which the request runs.
+	 * 
+	 * @return
+	 */
 	public Date getEndDate() {
 		return endDatePopupDateField.getValue();
 	}
 
+	/**
+	 * Sets the new vaule for the date field
+	 * 
+	 * @param end The new value for the field
+	 */
 	public void setEndDate(Date end) {
 		endDatePopupDateField.setValue(end);
 	}
 
+	/**
+	 * Returns the selected notebook category
+	 * 
+	 * @return The selected notebook category
+	 */
 	public NotebookCategory getCategory() {
 		return (NotebookCategory) notebookOptionGroup.getValue();
 	}

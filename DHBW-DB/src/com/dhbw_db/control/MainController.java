@@ -59,7 +59,6 @@ public class MainController {
 	 * @param message The error message
 	 */
 	public void printError(String message) {
-		// TODO change this to info messages in the UI
 		Notification.show(message, Type.ERROR_MESSAGE);
 	}
 

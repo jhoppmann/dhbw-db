@@ -583,54 +583,56 @@ public class MySQLAccess implements DataAccess {
 	}
 
 	@Override
-	public void insertRequest(Request request) {
+	public void insertRequest(Request request) throws SQLException {
 		String sql = "INSERT INTO "
 				+ connectionInfo.getProperty("database.database")
 				+ "."
 				+ Table.PROCESS.toString()
 				+ " (RequesterID, ApproverID, NotebookID, Hash, CreationDate, StartDate, EndDate, UntilDate, StatusID, OSID, Description, Category) VALUES (? , ? , ? , ? , ? , ? , ? , ? , ? , ?, ?, ?)";
 
+		connection = connect();
+		PreparedStatement statement = connection.prepareStatement(sql);
+
+		statement.setInt(1, request.getRequesterId());
+		statement.setInt(2, request.getApproverId());
+		statement.setInt(3, request.getNotebookId());
+		statement.setString(4, request.getHash());
+		statement.setTimestamp(	5,
+								(request.getCreated() != null) ? new Timestamp(request.getCreated()
+																						.getTime())
+										: null);
+		statement.setTimestamp(	6,
+								(request.getStart() != null) ? new Timestamp(request.getStart()
+																					.getTime())
+										: null);
+		statement.setTimestamp(	7,
+								(request.getEnd() != null) ? new Timestamp(request.getEnd()
+																					.getTime())
+										: null);
+		statement.setTimestamp(	8,
+								(request.getUntil() != null) ? new Timestamp(request.getUntil()
+																					.getTime())
+										: null);
+		statement.setInt(9, request.getStatus()
+									.getId());
+		statement.setInt(10, request.getOs());
+
+		statement.setString(11, request.getDescription());
+
+		statement.setString(12, request.getCategory()
+										.toString());
+
+		statement.executeUpdate();
+
+		// try this separately, an error here doesn't mean a failure in
+		// request creation
 		try {
-			connection = connect();
-			PreparedStatement statement = connection.prepareStatement(sql);
-
-			statement.setInt(1, request.getRequesterId());
-			statement.setInt(2, request.getApproverId());
-			statement.setInt(3, request.getNotebookId());
-			statement.setString(4, request.getHash());
-			statement.setTimestamp(	5,
-									(request.getCreated() != null) ? new Timestamp(request.getCreated()
-																							.getTime())
-											: null);
-			statement.setTimestamp(	6,
-									(request.getStart() != null) ? new Timestamp(request.getStart()
-																						.getTime())
-											: null);
-			statement.setTimestamp(	7,
-									(request.getEnd() != null) ? new Timestamp(request.getEnd()
-																						.getTime())
-											: null);
-			statement.setTimestamp(	8,
-									(request.getUntil() != null) ? new Timestamp(request.getUntil()
-																						.getTime())
-											: null);
-			statement.setInt(9, request.getStatus()
-										.getId());
-			statement.setInt(10, request.getOs());
-
-			statement.setString(11, request.getDescription());
-
-			statement.setString(12, request.getCategory()
-											.toString());
-
-			statement.executeUpdate();
-
+			connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			log.log(e.getMessage(), LogLevel.ERROR);
-		} finally {
-			disconnect();
 		}
+
 	}
 
 	@Override

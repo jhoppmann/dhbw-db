@@ -38,12 +38,14 @@ public class NotebookController implements ClickListener {
 			Notebook nb = ((ChangeLaptops) (controlledView)).getSelectedNotebook();
 			NotebookCategory nbc = ((ChangeLaptops) (controlledView)).getSelectedCategory();
 
+			// handle empty form fields
 			if (nbc == null || nb == null) {
 				MainController.get()
 								.print("Nicht alle Pflichtfelder gefüllt");
 				return;
 			}
 
+			// change the category's count on the database
 			if (nb.isDefective()) {
 				MainController.get()
 								.getDataAccess()
@@ -53,10 +55,13 @@ public class NotebookController implements ClickListener {
 								.getDataAccess()
 								.updateNotebookCount(nbc.toString(), -1);
 
+			// negate the notebook's current status
 			nb.setDefective(!nb.isDefective());
+			// update the notebook data on the database
 			MainController.get()
 							.getDataAccess()
 							.updateNotebook(nb);
+			// log the changes made
 			LoggingService log = LoggingService.getInstance();
 			log.log("Notebook " + nb.getName() + " marked as "
 							+ (nb.isDefective() ? "defective" : "functional"),
@@ -72,21 +77,25 @@ public class NotebookController implements ClickListener {
 			String name = ((AddNotebook) (controlledView)).getNotebookName();
 			NotebookCategory nbc = ((AddNotebook) (controlledView)).getSelectedCategory();
 
+			// handle empty fields
 			if (nbc == null || name == null || name.equals("")) {
 				MainController.get()
 								.print("Nicht alle Pflichtfelder gefüllt");
 				return;
 			}
 
+			// create a new notebook object that is functional and available
 			Notebook nb = new Notebook();
 			nb.setName(name);
 			nb.setDefective(false);
 			nb.setAvailable(true);
 
+			// change the category's count on the database
 			MainController.get()
 							.getDataAccess()
 							.updateNotebookCount(nbc.toString(), 1);
 
+			// insert the new notebook
 			MainController.get()
 							.getDataAccess()
 							.insertNotebook(nb);

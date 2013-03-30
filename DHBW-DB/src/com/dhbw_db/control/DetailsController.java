@@ -45,6 +45,7 @@ public class DetailsController implements ClickListener, ValueChangeListener {
 
 	@Override
 	public void valueChange(ValueChangeEvent event) {
+		// make sure that the date for extension is sane
 		if (controlledView.getDate() != null && request != null) {
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(request.getUntil());

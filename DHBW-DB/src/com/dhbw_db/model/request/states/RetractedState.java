@@ -7,6 +7,8 @@ import com.dhbw_db.model.exceptions.NotAllowedException;
 import com.dhbw_db.model.request.Request;
 
 /**
+ * This represents the state in which the request has been retracted
+ * 
  * @author jhoppmann
  * @version 0.1
  * @since 0.1
@@ -22,27 +24,27 @@ public class RetractedState implements RequestState {
 
 	@Override
 	public void retract() throws NotAllowedException {
-		throw new NotAllowedException("This request is retracted, and therefore no action can be taken.");
+		throw new NotAllowedException("This request has been retracted, and therefore no action can be taken.");
 	}
 
 	@Override
 	public void cancel() throws NotAllowedException {
-		throw new NotAllowedException("This request is retracted, and therefore no action can be taken.");
+		throw new NotAllowedException("This request has been retracted, and therefore no action can be taken.");
 	}
 
 	@Override
 	public void approve() throws NotAllowedException {
-		throw new NotAllowedException("This request is retracted, and therefore no action can be taken.");
+		throw new NotAllowedException("This request has been retracted, and therefore no action can be taken.");
 	}
 
 	@Override
 	public void reject() throws NotAllowedException {
-		throw new NotAllowedException("This request is retracted, and therefore no action can be taken.");
+		throw new NotAllowedException("This request has been retracted, and therefore no action can be taken.");
 	}
 
 	@Override
 	public void complete() throws NotAllowedException {
-		throw new NotAllowedException("This request is retracted, and therefore no action can be taken.");
+		throw new NotAllowedException("This request has been retracted, and therefore no action can be taken.");
 	}
 
 }

@@ -16,6 +16,9 @@ import com.dhbw_db.model.io.logging.LoggingService.LogLevel;
 import com.dhbw_db.model.settings.Settings;
 
 /**
+ * The StartupListener class exists to perform all operations that are necessary
+ * at loading of the application
+ * 
  * @author jhoppmann
  * @version 0.1
  * @since 0.1
@@ -49,6 +52,7 @@ public class StartupListener implements ServletContextListener {
 			log.log(e.getMessage(), LogLevel.ERROR);
 		}
 
+		// create a new worker thread to check request times
 		Thread timeworker = new Thread(TimeWorker.getInstance());
 		timeworker.start();
 	}

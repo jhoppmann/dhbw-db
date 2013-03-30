@@ -91,11 +91,17 @@ public class NotebookRequestController implements ClickListener,
 			String subline = "Sie können nun über die Navigationsleiste zur "
 					+ "Startseite zurückkehren.";
 			try {
+				// if a user reserved the last notebook while this request was
+				// composed
+				if (r.getNotebookId() == 0) {
+					subline = "Es sind leider keine Notebooks mehr vorhanden.";
+					throw new Exception("No notebooks left");
+				}
+				dao.insertRequest(r);
 				LoggingService.getInstance()
 								.log(	"Request successfully created and "
 												+ "persisted",
 										LogLevel.INFO);
-				dao.insertRequest(r);
 				r.start();
 			} catch (Exception e) {
 				LoggingService.getInstance()

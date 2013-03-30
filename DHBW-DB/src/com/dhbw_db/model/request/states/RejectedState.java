@@ -7,6 +7,8 @@ import com.dhbw_db.model.exceptions.NotAllowedException;
 import com.dhbw_db.model.request.Request;
 
 /**
+ * This represents the state in which the request has been rejected
+ * 
  * @author jhoppmann
  * @version 0.1
  * @since 0.1

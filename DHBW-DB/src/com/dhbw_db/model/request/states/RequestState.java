@@ -6,6 +6,9 @@ package com.dhbw_db.model.request.states;
 import com.dhbw_db.model.exceptions.NotAllowedException;
 
 /**
+ * This interface must be implemented by every possible state the request can
+ * have. It has methods for every transition the request can take.
+ * 
  * @author jhoppmann
  * @version 0.1
  * @since 0.1

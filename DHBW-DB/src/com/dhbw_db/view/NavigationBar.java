@@ -12,7 +12,11 @@ import com.dhbw_db.model.beans.User;
 import com.vaadin.ui.MenuBar;
 
 /**
+ * This class builds the navigation bar for the application and links it to the
+ * controller
+ * 
  * @author jhoppmann
+ * @author Flo Hauck
  * @version 0.1
  * @since
  */

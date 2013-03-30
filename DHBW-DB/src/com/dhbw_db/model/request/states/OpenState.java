@@ -9,6 +9,9 @@ import com.dhbw_db.model.request.Request;
 import com.dhbw_db.model.request.Request.Status;
 
 /**
+ * This represents the state in which the request is open and needs to be
+ * approved.
+ * 
  * @author jhoppmann
  * @version 0.1
  * @since 0.1

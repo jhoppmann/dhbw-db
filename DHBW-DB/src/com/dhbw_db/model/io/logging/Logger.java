@@ -6,8 +6,9 @@ package com.dhbw_db.model.io.logging;
 import com.dhbw_db.model.io.logging.LoggingService.LogLevel;
 
 /**
- * A Logger provides a concrete implementation of a type of logging, handles the
- * logging itself and decides if and how messages are logged.
+ * A class implementing this interface provides a concrete implementation of a
+ * type of logging, handles the logging itself and decides if and how messages
+ * are logged.
  * 
  * @author jhoppmann
  * @version 0.1

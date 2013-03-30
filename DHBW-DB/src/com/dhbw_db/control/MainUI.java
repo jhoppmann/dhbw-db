@@ -82,6 +82,11 @@ public class MainUI extends UI {
 		return mc;
 	}
 
+	/**
+	 * Replace the application's main frame with a new one
+	 * 
+	 * @param c The component to display in the frame
+	 */
 	public void repaint(Component c) {
 		ApplicationWindow view = null;
 		view = new ApplicationWindow(c);

@@ -8,7 +8,8 @@ import java.util.List;
 
 /**
  * The LoggingService class is a singleton responsible for handling the
- * different loggers the application utilizes and forward messages to them.
+ * different loggers the application utilizes and forward messages to them. It
+ * is observable, while the loggers are observers.
  * 
  * @author jhoppmann
  * @version 0.1
